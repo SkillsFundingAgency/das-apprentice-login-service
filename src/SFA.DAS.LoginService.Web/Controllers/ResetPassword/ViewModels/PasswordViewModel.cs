@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Mvc.DataAnnotations.Internal;
 
 namespace SFA.DAS.LoginService.Web.Controllers.ResetPassword.ViewModels
 {
