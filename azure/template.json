@@ -221,7 +221,7 @@
                         "value": "[reference('app-service').outputs.managedServiceIdentityId.value]"
                     },
                     "assignmentType": {
-                        "value": "ServiceBusReader"
+                        "value": "ServiceBusSender"
                     },
                     "resourceName": {
                         "value": "[parameters('sharedServiceBusName')]"
