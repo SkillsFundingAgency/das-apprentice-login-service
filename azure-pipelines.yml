@@ -7,8 +7,9 @@ trigger:
 pr: none
 
 variables:
-  buildConfiguration: 'release'
-  buildPlatform: 'anycpu'
+  - group: Prod Management Resources
+  - name: buildConfiguration
+    value: release
 
 resources:
   repositories:
