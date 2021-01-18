@@ -207,7 +207,7 @@
         },
         {
             "apiVersion": "2020-06-01",
-            "name": "[concat('role-assignments-eas', copyIndex())]",
+            "name": "appservice-sb-role-assignment",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
             "properties": {
@@ -218,20 +218,19 @@
                 },
                 "parameters": {
                     "principalId": {
-                        "value": "[createArray(reference('ui-app-service').outputs.managedServiceIdentityId.value, reference('ui-app-service').outputs.stagingManagedServiceIdentityId.value, reference('api-app-service').outputs.managedServiceIdentityId.value, reference('api-app-service').outputs.stagingManagedServiceIdentityId.value)[copyIndex()]]"
+                        "value": "[reference('app-service').outputs.managedServiceIdentityId.value]"
                     },
                     "assignmentType": {
-                        "value": "ServiceBusOwner"
+                        "value": "ServiceBusReader"
                     },
                     "resourceName": {
                         "value": "[parameters('sharedServiceBusName')]"
                     }
                 }
             },
-            "copy": {
-                "name": "role-assignments",
-                "count": 4
-            }
+            "dependsOn": [
+                "app-service"
+            ]
         },
         {
             "apiVersion": "2020-06-01",
