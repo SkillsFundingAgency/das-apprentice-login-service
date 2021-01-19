@@ -65,8 +65,8 @@ namespace SFA.DAS.LoginService.Web
                     jwt.RequireHttpsMetadata = false;
                     jwt.Audience = "api1";
                 });
-            
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
@@ -86,12 +86,8 @@ namespace SFA.DAS.LoginService.Web
             app.UseSession();
             app.UseIdentityServer();
             app.UseCookiePolicy();
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseRouting();
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
     }
 }
