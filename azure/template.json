@@ -192,12 +192,6 @@
                                 }
                             ]
                         }
-                    },
-                    "customHostName": {
-                        "value": "[parameters('customHostName')]"
-                    },
-                    "certificateThumbprint": {
-                        "value": "[reference('app-service-certificate').outputs.certificateThumbprint.value]"
                     }
                 }
             }
