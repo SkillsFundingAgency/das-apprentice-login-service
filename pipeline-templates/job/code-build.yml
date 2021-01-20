@@ -37,6 +37,6 @@ jobs:
       OverWrite: true
 
   - task: PublishBuildArtifacts@1
-    displayName: Publish Artifact - ApprenticeLoginDacpac
+    displayName: Publish Artifact - WebsiteAndAzureFolder
     inputs:
       PathtoPublish: $(build.artifactstagingdirectory)/publish
