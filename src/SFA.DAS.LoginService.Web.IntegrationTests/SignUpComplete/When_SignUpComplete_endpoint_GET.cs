@@ -13,7 +13,7 @@ namespace SFA.DAS.LoginService.Web.IntegrationTests.SignUpComplete
         [Test]
         public async Task Then_404_NotFound_is_not_returned()
         {
-            var client = new WebApplicationFactory<Startup>().CreateClient();
+            var client = new CustomWebApplicationFactory<Startup>().CreateClient();
 
             var response = await client.GetAsync("/Invitations/SignUpComplete/" + Guid.NewGuid());
 

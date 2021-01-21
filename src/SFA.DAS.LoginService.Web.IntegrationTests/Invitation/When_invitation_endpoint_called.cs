@@ -14,7 +14,7 @@ namespace SFA.DAS.LoginService.Web.IntegrationTests.Invitation
         [Test]
         public async Task Then_404_is_not_returned()
         {
-            var client = new WebApplicationFactory<Startup>().CreateClient();
+            var client = new CustomWebApplicationFactory<Startup>().CreateClient();
 
             var response = await client.PostAsync("/Invitations/" + Guid.NewGuid(), new StringContent(""));
 

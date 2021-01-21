@@ -13,7 +13,7 @@ namespace SFA.DAS.LoginService.Web.IntegrationTests.ConfirmCode
         [Test]
         public async Task Then_404_NotFound_Is_Not_Returned()
         {
-            var client = new WebApplicationFactory<Startup>().CreateClient();
+            var client = new CustomWebApplicationFactory<Startup>().CreateClient();
 
             var response = await client.PostAsync("/Invitations/Reinvite/" + Guid.NewGuid(), new StringContent(""));
 

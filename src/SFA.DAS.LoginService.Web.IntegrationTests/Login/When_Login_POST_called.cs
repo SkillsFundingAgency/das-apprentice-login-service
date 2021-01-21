@@ -13,7 +13,7 @@ namespace SFA.DAS.LoginService.Web.IntegrationTests.Login
         [Test]
         public async Task Then_404_NotFound_Is_Not_Returned()
         {
-            var client = new WebApplicationFactory<Startup>().CreateClient();
+            var client = new CustomWebApplicationFactory<Startup>().CreateClient();
 
             var response = await client.PostAsync("/Account/Login", new StringContent(""));
 
