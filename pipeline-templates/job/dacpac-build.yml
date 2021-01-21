@@ -1,6 +1,5 @@
 jobs:
 - job: DACPACBuild
-  dependsOn: CodeBuild
   pool:
     name: DAS - Continuous Integration
     demands: Agent.OS -equals Windows_NT
