@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using NServiceBus;
+using SFA.DAS.LoginService.Configuration;
 using SFA.DAS.Notifications.Messages.Commands;
 using SFA.DAS.NServiceBus.Configuration;
 using SFA.DAS.NServiceBus.Configuration.AzureServiceBus;
@@ -23,8 +23,8 @@ namespace SFA.DAS.LoginService.Web.Infrastructure
                 .AddSingleton(p =>
                 {
                     var sp = services.BuildServiceProvider();
-                    var configuration = sp.GetService<IOptions<NServiceBusConfiguration>>().Value;
-                    
+                    var configuration = sp.GetService<NServiceBusConfiguration>();
+
                     try
                     {
                         var hostingEnvironment = p.GetService<IWebHostEnvironment>();
@@ -48,7 +48,7 @@ namespace SFA.DAS.LoginService.Web.Infrastructure
                     }
                     catch (System.Exception e)
                     {
-                        throw new System.Exception($"Failed to start NServiceBus for endpoint `{configuration?.SharedServiceBusEndpointUrl}", e);
+                        throw new System.Exception($"Failed to start NServiceBus for endpoint `{configuration?.SharedServiceBusEndpointUrl}`", e);
                     }
                 })
                 .AddSingleton<IMessageSession>(s => s.GetService<IEndpointInstance>())
@@ -66,18 +66,5 @@ namespace SFA.DAS.LoginService.Web.Infrastructure
                 config.License(licenseText);
             return config;
         }
-    }
-
-    public class NServiceBusConfiguration
-    {
-        public string SharedServiceBusEndpointUrl { get; set; }
-
-        public string NServiceBusLicense
-        {
-            get => _nServiceBusLicense;
-            set => _nServiceBusLicense = System.Net.WebUtility.HtmlDecode(value);
-        }
-
-        private string _nServiceBusLicense;
     }
 }

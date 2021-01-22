@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +10,6 @@ using SFA.DAS.LoginService.Configuration;
 using SFA.DAS.LoginService.Data;
 using SFA.DAS.LoginService.Web.Infrastructure;
 using System;
-using System.Data.SqlClient;
 
 namespace SFA.DAS.LoginService.Web
 {
@@ -52,7 +50,7 @@ namespace SFA.DAS.LoginService.Web
 
             services.AddIdentityServer(_loginConfig, _environment, _logger);
 
-            services.AddAntiforgery(options => options.Cookie = new CookieBuilder() {Name = ".Login.AntiForgery", HttpOnly = true});
+            services.AddAntiforgery(options => options.Cookie = new CookieBuilder() { Name = ".Login.AntiForgery", HttpOnly = true });
 
             services.AddSession(opt =>
             {
@@ -62,7 +60,7 @@ namespace SFA.DAS.LoginService.Web
                     Name = ".Login.Session",
                     HttpOnly = true,
                     IsEssential = true
-            };
+                };
             });
 
             services.AddAuthentication()
@@ -75,7 +73,10 @@ namespace SFA.DAS.LoginService.Web
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
-            services.Configure<NServiceBusConfiguration>(Configuration.GetSection("NServiceBusConfiguration")); 
+            var a = Configuration.GetSection("ConnectionStrings");
+            var nsbConfig = _loginConfig.NServiceBusConfiguration;
+            _logger.LogInformation("NServiceBusConfigration: {@config}", nsbConfig?.SharedServiceBusEndpointUrl);
+            services.AddSingleton(nsbConfig);
             services.AddNServiceBus();
         }
 
@@ -87,7 +88,7 @@ namespace SFA.DAS.LoginService.Web
             }
             else
             {
-                app.UseExceptionHandler("/Error");       
+                app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
 
