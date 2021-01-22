@@ -74,6 +74,9 @@ namespace SFA.DAS.LoginService.Web
                 });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+
+            services.Configure<NServiceBusConfiguration>(Configuration.GetSection("NServiceBusConfiguration")); 
+            services.AddNServiceBus();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)

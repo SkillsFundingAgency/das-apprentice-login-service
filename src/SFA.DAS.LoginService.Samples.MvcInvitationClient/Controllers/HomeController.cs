@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.LoginService.Samples.MvcInvitationClient.Models;
+using System.Diagnostics;
 
 namespace SFA.DAS.LoginService.Samples.MvcInvitationClient.Controllers
 {
