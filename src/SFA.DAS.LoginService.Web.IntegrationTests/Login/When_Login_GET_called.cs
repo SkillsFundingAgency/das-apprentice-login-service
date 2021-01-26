@@ -12,7 +12,7 @@ namespace SFA.DAS.LoginService.Web.IntegrationTests.Login
         [Test]
         public async Task Then_NotFound_is_not_returned()
         {
-            var client = new WebApplicationFactory<Startup>().CreateClient();
+            var client = new CustomWebApplicationFactory<Startup>().CreateClient();
 
             var response = await client.GetAsync("/Account/Login");
 

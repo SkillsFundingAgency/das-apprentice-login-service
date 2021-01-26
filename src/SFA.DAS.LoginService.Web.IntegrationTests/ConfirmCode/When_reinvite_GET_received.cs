@@ -1,9 +1,8 @@
+using FluentAssertions;
+using NUnit.Framework;
 using System;
 using System.Net;
 using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.AspNetCore.Mvc.Testing;
-using NUnit.Framework;
 
 namespace SFA.DAS.LoginService.Web.IntegrationTests.ConfirmCode
 {
@@ -13,7 +12,7 @@ namespace SFA.DAS.LoginService.Web.IntegrationTests.ConfirmCode
         [Test]
         public async Task Then_404_NotFound_is_not_returned()
         {
-            var client = new WebApplicationFactory<Startup>().CreateClient();
+            var client = new CustomWebApplicationFactory<Startup>().CreateClient();
 
             var response = await client.GetAsync("/Invitations/Reinvite/" + Guid.NewGuid());
 

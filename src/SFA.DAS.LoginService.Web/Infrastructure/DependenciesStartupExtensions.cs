@@ -1,9 +1,5 @@
-using System;
-using System.Net;
-using System.Net.Http;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +10,9 @@ using SFA.DAS.LoginService.Application.Invitations.CreateInvitation;
 using SFA.DAS.LoginService.Application.Services;
 using SFA.DAS.LoginService.Configuration;
 using SFA.DAS.LoginService.Data.Entities;
+using System;
+using System.Net;
+using System.Net.Http;
 
 namespace SFA.DAS.LoginService.Web.Infrastructure
 {
@@ -30,7 +29,7 @@ namespace SFA.DAS.LoginService.Web.Infrastructure
                     configuration["EnvironmentName"],
                     configuration["ConfigurationStorageConnectionString"],
                     "1.0",
-                    "SFA.DAS.LoginService", environment).Result;
+                    "SFA.DAS.ApprenticeLoginService", environment).Result;
 
             services.AddTransient(sp => loginConfig);
 
