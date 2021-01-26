@@ -1,20 +1,22 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Azure.Services.AppAuthentication;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.LoginService.Configuration;
 using SFA.DAS.LoginService.Data;
 using SFA.DAS.LoginService.Data.Entities;
 using System;
-using System.Data.SqlClient;
 
 namespace SFA.DAS.LoginService.Web.Infrastructure
 {
     public static class IdentityServerStartupExtensions
     {
-        public static void AddIdentityServer(this IServiceCollection services, ILoginConfig loginConfig, IHostingEnvironment environment, ILogger logger)
+        public static void AddIdentityServer(
+            this IServiceCollection services,
+            ILoginConfig loginConfig,
+            Microsoft.AspNetCore.Hosting.IHostingEnvironment environment,
+            ILogger logger)
         {
             services.AddIdentity<LoginUser, IdentityRole>(
                      options =>
@@ -29,7 +31,9 @@ namespace SFA.DAS.LoginService.Web.Infrastructure
                 .AddEntityFrameworkStores<LoginUserContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddSingleton<IManagedIdentityTokenProvider>(_ => new ManagedIdentityAzureTokenProvider());
+            services.AddSingleton<ManagedIdentityAzureTokenProvider>();
+            services.AddSingleton<IContextSecurityProvider>(s =>
+                s.GetRequiredService<ManagedIdentityAzureTokenProvider>());
 
             services.ConfigureApplicationCookie(options =>
             {
@@ -39,6 +43,9 @@ namespace SFA.DAS.LoginService.Web.Infrastructure
                 options.ExpireTimeSpan = TimeSpan.FromHours(1);
             });
 
+            var securityProvider = services.BuildServiceProvider()
+                .GetRequiredService<IContextSecurityProvider>();
+
             var isBuilder = services
                 .AddIdentityServer(options =>
                 {
@@ -47,23 +54,13 @@ namespace SFA.DAS.LoginService.Web.Infrastructure
                 .AddConfigurationStore(options =>
                 {
                     options.ConfigureDbContext = builder =>
-                    {
-                        var sqlConnection = new SqlConnection(loginConfig.SqlConnectionString);
-
-                        if(!environment.IsDevelopment())
-                        {
-                            var prov = services.BuildServiceProvider()
-                                .GetRequiredService<IManagedIdentityTokenProvider>();
-                            sqlConnection.AccessToken = prov.GetAccessToken();
-                        }
-
-                        builder.UseSqlServer(sqlConnection);
-                    };
+                        securityProvider.Secure(builder, loginConfig.SqlConnectionString);
                     options.DefaultSchema = "IdentityServer";
                 })
                 .AddOperationalStore(options =>
                 {
-                    options.ConfigureDbContext = builder => builder.UseSqlServer(loginConfig.SqlConnectionString);
+                    options.ConfigureDbContext = builder =>
+                        securityProvider.Secure(builder, loginConfig.SqlConnectionString);
                     options.DefaultSchema = "IdentityServer";
                     options.EnableTokenCleanup = true;
                 })
@@ -77,21 +74,6 @@ namespace SFA.DAS.LoginService.Web.Infrastructure
             {
                 isBuilder.AddCertificateFromStore(loginConfig.CertificateThumbprint, logger);
             }
-        }
-    }
-
-    public interface IManagedIdentityTokenProvider
-    {
-        string GetAccessToken();
-    }
-
-    public class ManagedIdentityAzureTokenProvider : IManagedIdentityTokenProvider
-    {
-        public string GetAccessToken()
-        {
-            return new AzureServiceTokenProvider()
-                .GetAccessTokenAsync("https://database.windows.net/")
-                .GetAwaiter().GetResult();
         }
     }
 }

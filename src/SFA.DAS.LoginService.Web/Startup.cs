@@ -10,6 +10,8 @@ using Microsoft.Extensions.Logging;
 using SFA.DAS.LoginService.Configuration;
 using SFA.DAS.LoginService.Data;
 using SFA.DAS.LoginService.Web.Infrastructure;
+using System;
+using System.Data.SqlClient;
 
 namespace SFA.DAS.LoginService.Web
 {
@@ -40,8 +42,13 @@ namespace SFA.DAS.LoginService.Web
 
             _loginConfig = services.WireUpDependencies(_loginConfig, Configuration, _environment, _serviceProvider);
 
-            services.AddDbContext<LoginContext>(options => options.UseSqlServer(_loginConfig.SqlConnectionString));
-            services.AddDbContext<LoginUserContext>(options => options.UseSqlServer(_loginConfig.SqlConnectionString));
+            services.AddDbContext<LoginContext>((services, options) =>
+                services.GetRequiredService<IContextSecurityProvider>()
+                    .Secure(options, _loginConfig.SqlConnectionString));
+
+            services.AddDbContext<LoginUserContext>((services, options) =>
+                services.GetRequiredService<IContextSecurityProvider>()
+                    .Secure(options, _loginConfig.SqlConnectionString));
 
             services.AddIdentityServer(_loginConfig, _environment, _logger);
 
