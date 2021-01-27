@@ -1,0 +1,16 @@
+﻿@model InvitationModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "Invitation";
+}
+<h1>@ViewData["Title"]</h1>
+
+
+<p>Request an invitation:</p>
+
+<form method="post">
+    Name:
+    <input asp-for="Email" />
+    <input type="submit" />
+</form>

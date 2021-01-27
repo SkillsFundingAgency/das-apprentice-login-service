@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.LoginService.Samples.MvcInvitationClient.Models;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.LoginService.Samples.MvcInvitationClient.Controllers
 {
@@ -16,8 +13,15 @@ namespace SFA.DAS.LoginService.Samples.MvcInvitationClient.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        [HttpGet]
+        public IActionResult Invitation() => View();
+
+        [HttpPost]
+        public async Task<IActionResult> Invitation(
+            InvitationModel invitation,
+            [FromServices] InvitationService inviter)
         {
+            await inviter.Invite(invitation);
             return View();
         }
 

@@ -39,7 +39,7 @@ namespace SFA.DAS.LoginService.Web.Infrastructure
             }
             else
             {
-                services.AddHttpClient<IEmailService, EmailService.EmailService>();
+                services.AddTransient<IEmailService, EmailService.EmailService>();
             }
 
             services.AddTransient<IUserService, UserService>();

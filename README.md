@@ -7,7 +7,7 @@ Licensed under the [MIT license](https://github.com/SkillsFundingAgency/das-logi
 | ------------- | ------------- |
 |![crest](https://assets.publishing.service.gov.uk/government/assets/crests/org_crest_27px-916806dcf065e7273830577de490d5c7c42f36ddec83e907efe62086785f24fb.png)|Login Service Web|
 | Info | An [OpenID Connect](https://openid.net/connect/) implementation built using Identity Server 4 on Asp.Net Core 2.2 |
-| Build | [![Build Status](https://sfa-gov-uk.visualstudio.com/Digital%20Apprenticeship%20Service/_apis/build/status/Endpoint%20Assessment%20Organisation/das-login-service?branchName=master)](https://sfa-gov-uk.visualstudio.com/Digital%20Apprenticeship%20Service/_build/latest?definitionId=1496&branchName=master) |
+| Build | [![Build Status](https://sfa-gov-uk.visualstudio.com/Digital%20Apprenticeship%20Service/_apis/build/status/Endpoint%20Assessment%20Organisation/das-apprentice-login-service?branchName=master)](https://sfa-gov-uk.visualstudio.com/Digital%20Apprenticeship%20Service/_build/latest?definitionId=1496&branchName=master) |
 | Web  | N/A  |
 
 See [Support Site](https://skillsfundingagency.atlassian.net/wiki/spaces/NDL/pages/1731559639/Login+Service+-+Developer+Overview) for EFSA developer details.
@@ -36,22 +36,22 @@ See [Support Site](https://skillsfundingagency.atlassian.net/wiki/spaces/NDL/pag
 
 	or
 
-- Create a database manually named {{database name}} on {{local instance name}} and run each of the `.sql` scripts in the SFA.DAS.LoginService.Database project.
+- Create a database manually named {{database name}} on {{local instance name}} and run each of the `.sql` scripts in the SFA.DAS.ApprenticeLoginService.Database project.
 
 ##### Config
 
-- Get the das-login-service configuration json file from [das-employer-config](https://github.com/SkillsFundingAgency/das-employer-config/blob/master/das-login-service/SFA.DAS.LoginService.json); which is a non-public repository.
+- Get the das-login-service configuration json file from [das-employer-config](https://github.com/SkillsFundingAgency/das-employer-config/blob/master/das-apprentice-login-service/SFA.DAS.LoginService.json); which is a non-public repository.
 - Create a Configuration table in your (Development) local Azure Storage account.
 - Add a row to the Configuration table with fields: PartitionKey: LOCAL, RowKey: SFA.DAS.LoginService_1.0, Data: {{The contents of the local config json file}}.
 - Update Configuration SFA.DAS.LoginService_1.0, Data { "SqlConnectionstring":"Server={{local instance name}};Initial Catalog={{database name}};Trusted_Connection=True;" }
 
 ##### Complete Data Setup
 
-For an example follow the [EPAO Dev Setup Guide](https://skillsfundingagency.atlassian.net/wiki/spaces/NDL/pages/1731395918/EPAO+-+Data+Setup+Guide#Login-Service---Initial-Setup) to populate a local database; scripts show the Assessor service being added to the Login service as a client.
+For an example follow the [Setup Guide]() to populate a local database; scripts show the Assessor service being added to the Login service as a client.
 
 ##### Run the Solution
 
-- Navigate to src/SFA.DAS.LoginService.Web/
+- Navigate to src/SFA.DAS.ApprenticeLoginService.Web/
 - run `dotnet restore`
 - run `dotnet run`
 
@@ -67,7 +67,7 @@ If you want to integrate your client application with the Login service then the
 In the data setup guide above is an example of the database entries required to declare that a client application depends on the Login service for authentication; the example above is for the Assessor service.
 
 ### Client setup
-The following example client configuration is taken from the Assessor service when running locally and configured with a Login service running locally.
+The following example client configuration is taken from the Apprentice service when running locally and configured with a Login service running locally.
 
 ```json
 {
@@ -98,64 +98,7 @@ To invite users, your client app needs to POST the following JSON to the `ApiUrl
 }
 ```
 
-The POST should have a Bearer authentication token, signed as per the discovery document spec found here: [https://yourloginserviceurl/.well-known/openid-configuration](https://yourloginserviceurl/.well-known/openid-configuration).  It's currently RS256. 
-
-(This example is using [IdentityModel](https://www.nuget.org/packages/identitymodel/) in C#):
-
-```c#
-var client = new HttpClient();
-var disco = client.GetDiscoveryDocumentAsync("https://at-aslogin.apprenticeships.education.gov.uk").Result;
-if (disco.IsError)
-{
-    _logger.LogError("Error obtaining discovery document", disco.Error);
-}
-
-var tokenResponse = client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
-{
-    Address = disco.TokenEndpoint,
-    ClientId = "client",
-    ClientSecret = config.DfeSignIn.ApiClientSecret,
-    Scope = "api1"
-}).Result;
-
-if (tokenResponse.IsError)
-{
-    _logger.LogError("Error obtaining token", tokenResponse.Error);
-}
-
-using (var httpClient = new HttpClient())
-{
-    httpClient.SetBearerToken(tokenResponse.AccessToken);
-
-    var inviteJson = JsonConvert.SerializeObject(new
-    {
-        sourceId = userId.ToString(),
-        given_name = givenName,
-        family_name = familyName,
-        email = email,
-        userRedirect = config.DfeSignIn.RedirectUri,
-        callback = config.DfeSignIn.CallbackUri
-    });
-    
-    var response = httpClient.PostAsync(config.DfeSignIn.ApiUri,
-        new StringContent(inviteJson, Encoding.UTF8, "application/json")
-    ).Result;
-    
-    var content = await response.Content.ReadAsStringAsync();
-    
-    _logger.LogInformation("Returned from Invitation Service. Status Code: {0}. Message: {0}",
-        (int) response.StatusCode, content);
-    
-    if (!response.IsSuccessStatusCode)
-    {
-        _logger.LogError("Error from Invitation Service. Status Code: {0}. Message: {0}",
-            (int) response.StatusCode, content);
-        return new InviteUserResponse() {IsSuccess = false};
-    }
-    
-   return new InviteUserResponse();
-}
-```
+See [The sample invitation example](https://github.com/SkillsFundingAgency/das-apprentice-login-service/blob/main/src/SFA.DAS.LoginService.Samples.MvcInvitationClient/Controllers/InvitationService.cs)
 
 #### Callback
 

@@ -8,5 +8,6 @@ namespace SFA.DAS.LoginService.Configuration
         string CertificateThumbprint { get; set; }
         NotificationsApiConfiguration NotificationsApiClientConfiguration { get; set; }
         int MaxFailedAccessAttempts { get; set; }
+        NServiceBusConfiguration NServiceBusConfiguration { get; set; }
     }
 }
