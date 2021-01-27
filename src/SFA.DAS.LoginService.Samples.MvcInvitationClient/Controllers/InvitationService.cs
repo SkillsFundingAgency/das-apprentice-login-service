@@ -10,10 +10,18 @@ namespace SFA.DAS.LoginService.Samples.MvcInvitationClient
 {
     public class InvitationService
     {
+        private const string IdentityServiceHost =
+                /*
+                "https://localhost:7070"
+                /*/
+                "https://das-at-aplogin-as.azurewebsites.net"
+                //*/
+                ;
+
         internal async Task Invite(InvitationModel invitation)
         {
             var client = new HttpClient();
-            var disco = client.GetDiscoveryDocumentAsync("https://das-at-aplogin-as.azurewebsites.net/").Result;
+            var disco = await client.GetDiscoveryDocumentAsync(IdentityServiceHost);
             if (disco.IsError) throw new Exception(disco.Error);
 
             var tokenResponse = await client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
@@ -41,7 +49,7 @@ namespace SFA.DAS.LoginService.Samples.MvcInvitationClient
                 });
 
                 var response = await httpClient.PostAsync(
-                    "https://das-at-aplogin-as.azurewebsites.net/Invitations/36BCFAAD-1FF7-49CB-8EEF-19877B7AD0C9",
+                    $"{IdentityServiceHost}/Invitations/36BCFAAD-1FF7-49CB-8EEF-19877B7AD0C9",
                     new StringContent(inviteJson, Encoding.UTF8, "application/json")
                                                    );
 

@@ -58,16 +58,6 @@ namespace SFA.DAS.LoginService.EmailService
                     viewModel.TemplateId.ToString(),
                     viewModel.EmailAddress,
                     tokens));
-
-            //await _notificationApi.SendEmail(new Email()
-            //{
-            //    RecipientsAddress = viewModel.EmailAddress,
-            //    TemplateId = viewModel.TemplateId.ToString(),
-            //    Tokens = tokens,
-            //    SystemId = "ApplyService",
-            //    ReplyToAddress = "digital.apprenticeship.service@notifications.service.gov.uk",
-            //    Subject = viewModel.Subject
-            //});
         }
 
         private Dictionary<string, string> GetTokens(EmailViewModel vm)
