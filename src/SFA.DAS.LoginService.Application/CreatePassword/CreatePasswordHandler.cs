@@ -32,8 +32,7 @@ namespace SFA.DAS.LoginService.Application.CreatePassword
                 {
                     UserName = invitation.Email, 
                     Email = invitation.Email,
-                    GivenName = invitation.GivenName,
-                    FamilyName = invitation.FamilyName
+                    Name = invitation.Name,
                 }, request.Password);
 
             if (newUserResponse.Result != IdentityResult.Success)
@@ -41,8 +40,7 @@ namespace SFA.DAS.LoginService.Application.CreatePassword
                 return new CreatePasswordResponse(){PasswordValid = false};    
             }
 
-            await _userService.AddUserClaim(newUserResponse.User, JwtClaimTypes.GivenName, invitation.GivenName);
-            await _userService.AddUserClaim(newUserResponse.User, JwtClaimTypes.FamilyName, invitation.FamilyName);
+            await _userService.AddUserClaim(newUserResponse.User, JwtClaimTypes.GivenName, invitation.Name);
             
             invitation.IsUserCreated = true;
 

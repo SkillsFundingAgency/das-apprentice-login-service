@@ -20,7 +20,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ResetPassword.RequestPasswo
         [SetUp]
         public async Task Arrange()
         {
-            UserService.FindByEmail(Arg.Any<string>()).Returns(new LoginUser(){GivenName = "GivenName1"});
+            UserService.FindByEmail(Arg.Any<string>()).Returns(new LoginUser(){Name = "GivenName1"});
             LoginContext.Clients.Add(new Client()
             {
                 Id = ClientId, 

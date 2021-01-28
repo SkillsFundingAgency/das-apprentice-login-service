@@ -1,8 +1,8 @@
-using System.Threading;
-using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.LoginService.Application.GetInvitationById;
 using SFA.DAS.LoginService.Application.Invitations.CreateInvitation;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.LoginService.Application.Reinvite
 {
@@ -22,12 +22,13 @@ namespace SFA.DAS.LoginService.Application.Reinvite
             var response = await _mediator.Send(
                 new CreateInvitationRequest
                 {
-                    Callback = invitation.CallbackUri, 
-                    ClientId = invitation.ClientId, 
+                    Callback = invitation.CallbackUri,
+                    ClientId = invitation.ClientId,
                     SourceId = invitation.SourceId,
                     Email = invitation.Email,
-                    FamilyName = invitation.FamilyName,
-                    GivenName = invitation.GivenName,
+                    Name = invitation.Name,
+                    OrganisationName = invitation.OrganisationName,
+                    ApprenticeshipName = invitation.ApprenticeshipName,
                     UserRedirect = invitation.UserRedirectUri
                 }, CancellationToken.None);
 

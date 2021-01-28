@@ -64,7 +64,7 @@ namespace SFA.DAS.LoginService.Application.ResetPassword
             {
                 Subject = "Password has been reset",
                 TemplateId = client.ServiceDetails.EmailTemplates.Single(t => t.Name == "LoginPasswordWasReset").TemplateId,
-                Contact = user.GivenName,
+                Contact = user.Name,
                 EmailAddress = resetRequest.Email,
                 ServiceName = client.ServiceDetails.ServiceName,
                 ServiceTeam = client.ServiceDetails.ServiceTeam,

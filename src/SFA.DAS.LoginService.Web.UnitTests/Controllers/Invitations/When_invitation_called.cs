@@ -36,8 +36,7 @@ namespace SFA.DAS.LoginService.Web.UnitTests.Controllers.Invitations
             var invitationRequest = new InvitationRequestViewModel()
             {
                 Email = "email@email.com",
-                GivenName = "Dave",
-                FamilyName = "Smith",
+                Name = "Dave Smith",
                 SourceId = _sourceId.ToString(),
                 Callback = new Uri("https://callback"),
                 UserRedirect = new Uri("https://userRedirect")
@@ -47,8 +46,7 @@ namespace SFA.DAS.LoginService.Web.UnitTests.Controllers.Invitations
             _controller.Invite(clientId, invitationRequest).Wait();
 
             _mediator.Received().Send(Arg.Is<CreateInvitationRequest>(r => r.Email == "email@email.com"
-                                                                          && r.GivenName == "Dave"
-                                                                          && r.FamilyName == "Smith"
+                                                                          && r.Name == "Dave Smith"
                                                                           && r.SourceId == _sourceId.ToString()
                                                                           && r.Callback == new Uri("https://callback")
                                                                           && r.UserRedirect == new Uri("https://userRedirect")
@@ -63,8 +61,7 @@ namespace SFA.DAS.LoginService.Web.UnitTests.Controllers.Invitations
             var invitationRequest = new InvitationRequestViewModel()
             {
                 Email = "email@email.com",
-                GivenName = "Dave",
-                FamilyName = "Smith",
+                Name = "Dave Smith",
                 SourceId = _sourceId.ToString(),
                 Callback = new Uri("https://callback"),
                 UserRedirect = new Uri("https://userRedirect")
@@ -84,8 +81,7 @@ namespace SFA.DAS.LoginService.Web.UnitTests.Controllers.Invitations
             var invitationRequest = new InvitationRequestViewModel()
             {
                 Email = "email@email.com",
-                GivenName = "Dave",
-                FamilyName = "Smith",
+                Name = "Dave Smith",
                 SourceId = _sourceId.ToString(),
                 Callback = new Uri("https://callback"),
                 UserRedirect = new Uri("https://userRedirect")

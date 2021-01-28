@@ -40,8 +40,9 @@ namespace SFA.DAS.LoginService.Application.UnitTests.GetInvitationByIdHandlerTes
             {
                 Id = GoodInvitationId,
                 Email = "email@address.com",
-                FamilyName = "Picard",
-                GivenName = "Jean Luc",
+                Name = "Jean Luc Picard",
+                OrganisationName = "Starfleet",
+                ApprenticeshipName = "Captain",
                 SourceId = Guid.NewGuid().ToString(),
                 CallbackUri = new Uri("https://callback"),
                 UserRedirectUri = new Uri("https://redirect"),
@@ -58,8 +59,9 @@ namespace SFA.DAS.LoginService.Application.UnitTests.GetInvitationByIdHandlerTes
             {
                 Id = ExpiredInvitationId,
                 Email = "email@address.com",
-                FamilyName = "Picard",
-                GivenName = "Jean Luc",
+                Name = "Jean Luc Picard",
+                OrganisationName = "Starfleet",
+                ApprenticeshipName = "Captain",
                 SourceId = Guid.NewGuid().ToString(),
                 CallbackUri = new Uri("https://callback"),
                 UserRedirectUri = new Uri("https://redirect"),

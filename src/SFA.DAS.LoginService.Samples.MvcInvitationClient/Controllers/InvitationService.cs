@@ -41,8 +41,9 @@ namespace SFA.DAS.LoginService.Samples.MvcInvitationClient
                 var inviteJson = JsonConvert.SerializeObject(new
                 {
                     sourceId = Guid.NewGuid().ToString(),
-                    givenName = "Bobby",
-                    familyName = "Bob",
+                    Name = "Bobby Bob",
+                    OrganisationName = "My Employer",
+                    ApprenticeshipName = "Basket Weaving",
                     email = invitation.Email,
                     userRedirect = "https://localhost:44385/",
                     callback = "https://localhost:44385/"

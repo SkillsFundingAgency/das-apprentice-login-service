@@ -1,7 +1,3 @@
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SFA.DAS.LoginService.Application.Interfaces;
@@ -10,6 +6,10 @@ using SFA.DAS.LoginService.Application.Services.EmailServiceViewModels;
 using SFA.DAS.LoginService.Configuration;
 using SFA.DAS.LoginService.Data;
 using SFA.DAS.LoginService.Data.Entities;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.LoginService.Application.ResetPassword
 {
@@ -32,20 +32,20 @@ namespace SFA.DAS.LoginService.Application.ResetPassword
         public async Task<Unit> Handle(RequestPasswordResetRequest request, CancellationToken cancellationToken)
         {
             var client = await _loginContext.Clients.SingleOrDefaultAsync(c => c.Id == request.ClientId, cancellationToken);
-            
+
             var loginUser = await _userService.FindByEmail(request.Email);
             if (loginUser == null)
             {
                 _loginContext.UserLogs.Add(new UserLog()
                 {
-                    Id = GuidGenerator.NewGuid(), 
-                    Action = "Request reset password link", 
-                    Email = request.Email,  
+                    Id = GuidGenerator.NewGuid(),
+                    Action = "Request reset password link",
+                    Email = request.Email,
                     DateTime = SystemTime.UtcNow(),
                     Result = "Sent no account email"
                 });
                 await _loginContext.SaveChangesAsync(cancellationToken);
-                
+
                 await _emailService.SendResetNoAccountPassword(new PasswordResetNoAccountEmailViewModel()
                 {
                     EmailAddress = request.Email,
@@ -54,7 +54,7 @@ namespace SFA.DAS.LoginService.Application.ResetPassword
                     TemplateId = client.ServiceDetails.EmailTemplates.Single(t => t.Name == "PasswordResetNoAccount").TemplateId,
                     ServiceName = client.ServiceDetails.ServiceName,
                     ServiceTeam = client.ServiceDetails.ServiceTeam
-                });    
+                });
                 return Unit.Value;
             }
 
@@ -65,34 +65,34 @@ namespace SFA.DAS.LoginService.Application.ResetPassword
             var resetPasswordRequest = await SavePasswordRequest(request, cancellationToken, identityToken);
 
             var resetUri = new Uri(new Uri(_loginConfig.BaseUrl), $"NewPassword/{request.ClientId}/{resetPasswordRequest.Id}");
-            
+
             await _emailService.SendResetPassword(new ResetPasswordEmailViewModel()
             {
-                Contact = loginUser.GivenName,
+                Contact = loginUser.Name,
                 EmailAddress = request.Email,
-                LoginLink = resetUri.ToString(), 
-                ServiceName = client.ServiceDetails.ServiceName, 
-                ServiceTeam = client.ServiceDetails.ServiceTeam, 
-                Subject = "Password reset", 
-                TemplateId = client.ServiceDetails.EmailTemplates.Single(t => t.Name == "PasswordReset").TemplateId 
+                LoginLink = resetUri.ToString(),
+                ServiceName = client.ServiceDetails.ServiceName,
+                ServiceTeam = client.ServiceDetails.ServiceTeam,
+                Subject = "Password reset",
+                TemplateId = client.ServiceDetails.EmailTemplates.Single(t => t.Name == "PasswordReset").TemplateId
             });
-            
+
             _loginContext.UserLogs.Add(new UserLog()
             {
-                Id = GuidGenerator.NewGuid(), 
-                Action = "Request reset password link", 
-                Email = request.Email,  
+                Id = GuidGenerator.NewGuid(),
+                Action = "Request reset password link",
+                Email = request.Email,
                 DateTime = SystemTime.UtcNow(),
                 Result = "Sent reset password email"
             });
             await _loginContext.SaveChangesAsync(cancellationToken);
-            
+
             return Unit.Value;
         }
 
         private async Task ClearOutAnyPreviousStillValidRequests(string email)
         {
-            var stillValidRequests = await _loginContext.ResetPasswordRequests.Where(r => r.ValidUntil > SystemTime.UtcNow() 
+            var stillValidRequests = await _loginContext.ResetPasswordRequests.Where(r => r.ValidUntil > SystemTime.UtcNow()
                                                                                           && r.IsComplete == false
                                                                                           && r.Email == email).ToListAsync();
             stillValidRequests.ForEach(r => r.ValidUntil = SystemTime.UtcNow().AddDays(-1));

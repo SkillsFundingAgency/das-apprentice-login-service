@@ -6,8 +6,9 @@ namespace SFA.DAS.LoginService.Data.Entities
     {
         public Guid Id { get; set; }
         public string Email { get; set; }
-        public string GivenName { get; set; }
-        public string FamilyName { get; set; }
+        public string Name { get; set; }
+        public string OrganisationName { get; set; }
+        public string ApprenticeshipName { get; set; }
         public string SourceId { get; set; }
         public DateTime ValidUntil { get; set; }
         public Uri CallbackUri { get; set; }

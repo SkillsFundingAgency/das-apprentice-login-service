@@ -27,8 +27,9 @@ namespace SFA.DAS.LoginService.Web.Controllers.InvitationsApi
                var response = await _mediator.Send(new CreateInvitationRequest()
                {
                    Email = createInvitationRequest.Email,
-                   GivenName = createInvitationRequest.GivenName,
-                   FamilyName = createInvitationRequest.FamilyName,
+                   Name = createInvitationRequest.Name,
+                   OrganisationName = createInvitationRequest.OrganisationName,
+                   ApprenticeshipName = createInvitationRequest.ApprenticeshipName,
                    SourceId = createInvitationRequest.SourceId,
                    Callback = createInvitationRequest.Callback,
                    UserRedirect = createInvitationRequest.UserRedirect,
@@ -52,15 +53,14 @@ namespace SFA.DAS.LoginService.Web.Controllers.InvitationsApi
                 var response = await _mediator.Send(new CreateInvitationRequest()
                 {
                     Email = createInvitationRequest.Email,
-                    GivenName = createInvitationRequest.GivenName,
-                    FamilyName = createInvitationRequest.FamilyName,
+                    Name = createInvitationRequest.Name,
+                    OrganisationName = createInvitationRequest.OrganisationName,
+                    ApprenticeshipName = createInvitationRequest.ApprenticeshipName,
                     SourceId = createInvitationRequest.SourceId,
                     Callback = createInvitationRequest.Callback,
                     UserRedirect = createInvitationRequest.UserRedirect,
                     ClientId = clientId,
-                    IsInvitationToOrganisation = true,
-                    Inviter = createInvitationRequest.Inviter,
-                    OrganisationName = createInvitationRequest.OrganisationName
+                    IsInvitationToOrganisation = false,
                 });
                 _logger.LogDebug($"Received Response from CreateInvitationHandler: Invited: {response.Invited} Message: {response.Message}");
                 return response;

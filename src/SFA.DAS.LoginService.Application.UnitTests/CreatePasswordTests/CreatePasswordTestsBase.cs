@@ -1,13 +1,12 @@
-using System;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using NSubstitute;
 using NUnit.Framework;
 using SFA.DAS.LoginService.Application.CreatePassword;
 using SFA.DAS.LoginService.Application.Interfaces;
-using SFA.DAS.LoginService.Application.UnitTests.Helpers;
 using SFA.DAS.LoginService.Data;
 using SFA.DAS.LoginService.Data.Entities;
+using System;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.LoginService.Application.UnitTests.CreatePasswordTests
 {
@@ -35,9 +34,10 @@ namespace SFA.DAS.LoginService.Application.UnitTests.CreatePasswordTests
             {
                 Id = InvitationId,
                 Email = "email@provider.com",
-                SourceId = "ABC123", 
-                GivenName = "GN1", 
-                FamilyName = "FN1"
+                SourceId = "ABC123",
+                Name = "GN1",
+                OrganisationName = "ON1",
+                ApprenticeshipName = "AN1",
             });
             LoginContext.SaveChanges();
 

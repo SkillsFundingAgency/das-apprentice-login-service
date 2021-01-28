@@ -1,13 +1,12 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.LoginService.Application.ResetPassword;
 using SFA.DAS.LoginService.Data;
 using SFA.DAS.LoginService.Data.Entities;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.LoginService.Web.Controllers.MigrationsApi
 {
@@ -25,7 +24,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.MigrationsApi
             _logger = logger;
             _loginContext = loginContext;
         }
-        
+
         [HttpPost("/Migrate")]
         public async Task<IActionResult> Migrate([FromBody] MigrateUser user)
         {
@@ -37,12 +36,11 @@ namespace SFA.DAS.LoginService.Web.Controllers.MigrationsApi
             {
                 var newUser = new LoginUser()
                 {
-                    Email = user.Email, 
-                    UserName = user.Email, 
-                    FamilyName = user.FamilyName, 
-                    GivenName = user.GivenName
+                    Email = user.Email,
+                    UserName = user.Email,
+                    Name = user.GivenName
                 };
-            
+
                 var result = await _userManager.CreateAsync(newUser, Guid.NewGuid().ToString());
 
                 if (!result.Succeeded)
@@ -50,14 +48,12 @@ namespace SFA.DAS.LoginService.Web.Controllers.MigrationsApi
                     _logger.LogError($"User {user.Email} could not be created: {result}");
                 }
 
-                return Ok(new {newUserId = newUser.Id});    
+                return Ok(new { newUserId = newUser.Id });
             }
             else
             {
-                return Ok(new {newUserId = existingUser.Id});
+                return Ok(new { newUserId = existingUser.Id });
             }
-            
-            
         }
     }
 
