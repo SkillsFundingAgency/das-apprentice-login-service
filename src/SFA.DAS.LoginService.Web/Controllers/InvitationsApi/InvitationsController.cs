@@ -27,8 +27,10 @@ namespace SFA.DAS.LoginService.Web.Controllers.InvitationsApi
                var response = await _mediator.Send(new CreateInvitationRequest()
                {
                    Email = createInvitationRequest.Email,
-                   GivenName = createInvitationRequest.GivenName,
-                   FamilyName = createInvitationRequest.FamilyName,
+                   GivenName = createInvitationRequest.GivenName ?? "Unknown",
+                   FamilyName = createInvitationRequest.FamilyName ?? "Unknown",
+                   OrganisationName = createInvitationRequest.OrganisationName ?? "Unknown",
+                   ApprenticeshipName = createInvitationRequest.ApprenticeshipName ?? "Unknown",
                    SourceId = createInvitationRequest.SourceId,
                    Callback = createInvitationRequest.Callback,
                    UserRedirect = createInvitationRequest.UserRedirect,

@@ -64,11 +64,15 @@ namespace SFA.DAS.LoginService.Application.UnitTests.Invitations.CreateInvitatio
             
             var insertedInvitation = LoginContext.Invitations.Single();
 
-            EmailService.Received().SendInvitationEmail(Arg.Is<InvitationEmailViewModel>(vm => 
-                vm.Contact == "InvitedGivenName" && 
+            EmailService.Received().SendInvitationEmail(Arg.Is<InvitationEmailViewModel>(vm =>
+                vm.GivenName == "InvitedGivenName" &&
+                vm.FamilyName == "InvitedFamilyName" &&
+                vm.OrganisationName == "InvitedOrganisationName" &&
+                vm.ApprenticeshipName == "InvitedApprenticeshipName" &&
                 vm.ServiceName == "Acme Service" &&
                 vm.ServiceTeam == "Acme Service Team" &&
                 vm.LoginLink == "https://goodurl/Invitations/CreatePassword/" + insertedInvitation.Id &&
+                vm.CreateAccountLink == "https://goodurl/Invitations/CreatePassword/" + insertedInvitation.Id &&
                 vm.EmailAddress == createInvitationRequest.Email &&
                 vm.TemplateId == InvitationTemplateId));
         }
