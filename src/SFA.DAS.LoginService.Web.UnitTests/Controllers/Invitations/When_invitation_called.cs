@@ -38,6 +38,7 @@ namespace SFA.DAS.LoginService.Web.UnitTests.Controllers.Invitations
                 Email = "email@email.com",
                 GivenName = "Dave",
                 FamilyName = "Smith",
+                OrganisationName = "WWF",
                 SourceId = _sourceId.ToString(),
                 Callback = new Uri("https://callback"),
                 UserRedirect = new Uri("https://userRedirect")
@@ -49,6 +50,7 @@ namespace SFA.DAS.LoginService.Web.UnitTests.Controllers.Invitations
             _mediator.Received().Send(Arg.Is<CreateInvitationRequest>(r => r.Email == "email@email.com"
                                                                           && r.GivenName == "Dave"
                                                                           && r.FamilyName == "Smith"
+                                                                          && r.OrganisationName == "WWF"
                                                                           && r.SourceId == _sourceId.ToString()
                                                                           && r.Callback == new Uri("https://callback")
                                                                           && r.UserRedirect == new Uri("https://userRedirect")

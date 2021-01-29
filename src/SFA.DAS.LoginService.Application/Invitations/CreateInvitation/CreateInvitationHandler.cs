@@ -116,10 +116,11 @@ namespace SFA.DAS.LoginService.Application.Invitations.CreateInvitation
                 await _emailService.SendInvitationEmail(new InvitationEmailViewModel()
                 {
                     Subject = "Sign up",
-                    Contact = newInvitation.GivenName, 
-                    LoginLink = linkUrl, 
-                    ServiceName = client.ServiceDetails.ServiceName, 
-                    ServiceTeam = client.ServiceDetails.ServiceTeam, 
+                    Contact = newInvitation.GivenName,
+                    OrganisationName = request.OrganisationName,
+                    LoginLink = linkUrl,
+                    ServiceName = client.ServiceDetails.ServiceName,
+                    ServiceTeam = client.ServiceDetails.ServiceTeam,
                     EmailAddress = newInvitation.Email,
                     TemplateId = client.ServiceDetails.EmailTemplates.Single(t => t.Name == "SignUpInvitation").TemplateId,
                     Inviter = ""

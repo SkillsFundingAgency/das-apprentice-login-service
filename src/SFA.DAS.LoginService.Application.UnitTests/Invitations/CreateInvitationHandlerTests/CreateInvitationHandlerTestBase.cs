@@ -76,6 +76,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.Invitations.CreateInvitatio
                 Email = "invited@email.com",
                 GivenName = "InvitedGivenName",
                 FamilyName = "InvitedFamilyName",
+                OrganisationName = "InvitedOrganisationName",
                 SourceId = "InvitedSourceId",
                 UserRedirect = new Uri("https://localhost/userredirect"),
                 Callback = new Uri("https://localhost/callback"),

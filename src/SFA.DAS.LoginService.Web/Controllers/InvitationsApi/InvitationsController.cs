@@ -29,6 +29,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.InvitationsApi
                    Email = createInvitationRequest.Email,
                    GivenName = createInvitationRequest.GivenName,
                    FamilyName = createInvitationRequest.FamilyName,
+                   OrganisationName = createInvitationRequest.OrganisationName,
                    SourceId = createInvitationRequest.SourceId,
                    Callback = createInvitationRequest.Callback,
                    UserRedirect = createInvitationRequest.UserRedirect,
