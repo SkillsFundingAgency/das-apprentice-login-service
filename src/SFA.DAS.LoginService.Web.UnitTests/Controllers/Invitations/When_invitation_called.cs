@@ -39,6 +39,7 @@ namespace SFA.DAS.LoginService.Web.UnitTests.Controllers.Invitations
                 GivenName = "Dave",
                 FamilyName = "Smith",
                 OrganisationName = "WWF",
+                ApprenticeshipName = "Apprenticeship",
                 SourceId = _sourceId.ToString(),
                 Callback = new Uri("https://callback"),
                 UserRedirect = new Uri("https://userRedirect")
@@ -51,6 +52,7 @@ namespace SFA.DAS.LoginService.Web.UnitTests.Controllers.Invitations
                                                                           && r.GivenName == "Dave"
                                                                           && r.FamilyName == "Smith"
                                                                           && r.OrganisationName == "WWF"
+                                                                          && r.ApprenticeshipName == "Apprenticeship"
                                                                           && r.SourceId == _sourceId.ToString()
                                                                           && r.Callback == new Uri("https://callback")
                                                                           && r.UserRedirect == new Uri("https://userRedirect")

@@ -67,6 +67,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.Invitations.CreateInvitatio
             EmailService.Received().SendInvitationEmail(Arg.Is<InvitationEmailViewModel>(vm => 
                 vm.Contact == "InvitedGivenName" &&
                 vm.OrganisationName == "InvitedOrganisationName" &&
+                vm.ApprenticeshipName == "InvitedApprenticeshipName" && 
                 vm.ServiceName == "Acme Service" &&
                 vm.ServiceTeam == "Acme Service Team" &&
                 vm.LoginLink == "https://goodurl/Invitations/CreatePassword/" + insertedInvitation.Id &&

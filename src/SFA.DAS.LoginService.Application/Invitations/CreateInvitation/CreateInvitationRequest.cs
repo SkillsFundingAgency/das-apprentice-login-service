@@ -16,5 +16,6 @@ namespace SFA.DAS.LoginService.Application.Invitations.CreateInvitation
         public bool IsInvitationToOrganisation { get; set; }
         public string Inviter { get; set; }
         public string OrganisationName { get; set; }
+        public string ApprenticeshipName { get; set; }
     }
 }

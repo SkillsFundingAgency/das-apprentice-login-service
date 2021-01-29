@@ -118,6 +118,7 @@ namespace SFA.DAS.LoginService.Application.Invitations.CreateInvitation
                     Subject = "Sign up",
                     Contact = newInvitation.GivenName,
                     OrganisationName = request.OrganisationName,
+                    ApprenticeshipName = request.ApprenticeshipName,
                     LoginLink = linkUrl,
                     ServiceName = client.ServiceDetails.ServiceName,
                     ServiceTeam = client.ServiceDetails.ServiceTeam,
