@@ -66,6 +66,7 @@ namespace SFA.DAS.LoginService.EmailService
 
             return vm.GetType()
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                .Where(x => x.GetValue(vm) != null)
                 .ToDictionary(propertyInfo => propertyInfo.Name, propertyInfo => propertyInfo.GetValue(vm).ToString());
         }
     }
