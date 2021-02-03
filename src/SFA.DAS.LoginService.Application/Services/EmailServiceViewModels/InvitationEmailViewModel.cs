@@ -2,6 +2,7 @@ namespace SFA.DAS.LoginService.Application.Services.EmailServiceViewModels
 {
     public class InvitationEmailViewModel : EmailViewModel
     {
+        public override string EmailAddress { get; set; }
         public string GivenName { get; set; }
         public string FamilyName { get; set; }
         public string Contact { get; set; }
