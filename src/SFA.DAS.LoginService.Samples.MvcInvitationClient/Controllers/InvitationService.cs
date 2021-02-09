@@ -1,5 +1,6 @@
 ﻿using IdentityModel.Client;
 using Newtonsoft.Json;
+using SFA.DAS.LoginService.Application.Invitations.CreateInvitation;
 using SFA.DAS.LoginService.Samples.MvcInvitationClient.Models;
 using System;
 using System.Net.Http;
@@ -18,7 +19,7 @@ namespace SFA.DAS.LoginService.Samples.MvcInvitationClient
                 //*/
                 ;
 
-        internal async Task Invite(InvitationModel invitation)
+        internal async Task<CreateInvitationResponse> Invite(InvitationModel invitation)
         {
             var client = new HttpClient();
             var disco = await client.GetDiscoveryDocumentAsync(IdentityServiceHost);
@@ -51,11 +52,15 @@ namespace SFA.DAS.LoginService.Samples.MvcInvitationClient
                 var response = await httpClient.PostAsync(
                     $"{IdentityServiceHost}/Invitations/36BCFAAD-1FF7-49CB-8EEF-19877B7AD0C9",
                     new StringContent(inviteJson, Encoding.UTF8, "application/json")
-                                                   );
+                                                         );
+
+                response.EnsureSuccessStatusCode();
 
                 var content = await response.Content.ReadAsStringAsync();
 
-                response.EnsureSuccessStatusCode();
+                var result = JsonConvert.DeserializeObject<CreateInvitationResponse>(content);
+                result.LoginLink = $"{IdentityServiceHost}/Invitations/CreatePassword/{result.InvitationId}";
+                return result;
             }
         }
     }

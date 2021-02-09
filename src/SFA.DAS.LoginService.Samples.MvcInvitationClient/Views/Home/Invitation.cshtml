@@ -6,7 +6,6 @@
 }
 <h1>@ViewData["Title"]</h1>
 
-
 <p>Request an invitation:</p>
 
 <form method="post">
@@ -14,3 +13,27 @@
     <input asp-for="Email" />
     <input type="submit" />
 </form>
+
+@if (Model?.InvitationResponse != null)
+{
+    <p>Invitation result:</p>
+    <ul>
+        @if (!string.IsNullOrEmpty(@Model.InvitationResponse.Message))
+        {
+            <li>Message <strong>@Model.InvitationResponse.Message</strong></li>
+        }
+        @if (!string.IsNullOrEmpty(@Model.InvitationResponse.ExistingUserId))
+        {
+            <li>Existing user ID <strong>@Model.InvitationResponse.ExistingUserId</strong></li>
+        }
+        @if (Model.InvitationResponse.InvitationId != Guid.Empty)
+        {
+            <li>
+                Invitation ID
+                <a href="@Model.InvitationResponse.LoginLink">
+                    @Model.InvitationResponse.InvitationId
+                </a>
+            </li>
+        }
+    </ul>
+}
