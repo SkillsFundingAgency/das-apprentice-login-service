@@ -21,8 +21,12 @@ namespace SFA.DAS.LoginService.Samples.MvcInvitationClient.Controllers
             InvitationModel invitation,
             [FromServices] InvitationService inviter)
         {
-            await inviter.Invite(invitation);
-            return View();
+            var result = await inviter.Invite(invitation);
+            return View(new InvitationModel
+            {
+                Email = invitation.Email,
+                InvitationResponse = result,
+            });
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -32,6 +36,7 @@ namespace SFA.DAS.LoginService.Samples.MvcInvitationClient.Controllers
         }
 
         [Authorize]
+        [Route("/Account/SignIn")]
         public IActionResult Secure()
         {
             var claims = new SecureModel(User.Claims);
