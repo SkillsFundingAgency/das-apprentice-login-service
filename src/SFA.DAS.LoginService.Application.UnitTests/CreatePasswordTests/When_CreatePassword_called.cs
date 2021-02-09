@@ -23,25 +23,16 @@ namespace SFA.DAS.LoginService.Application.UnitTests.CreatePasswordTests
         }
         
         [Test]
-        public void Then_UserService_Create_user_is_called()
+        public async Task Then_UserService_Create_user_is_called()
         {
             Handler.Handle(new CreatePasswordRequest {InvitationId = InvitationId, Password = "Password"}, CancellationToken.None).Wait();
 
-            UserService.Received().CreateUser(Arg.Is<LoginUser>(u => 
+            await UserService.Received().CreateUser(Arg.Is<LoginUser>(u => 
                 u.UserName == "email@provider.com" 
                 && u.Email == "email@provider.com" 
                 && u.GivenName == "GN1" 
-                && u.FamilyName == "FN1"), "Password");
-        }
-
-        [Test]
-        public async Task Then_profile_claims_are_created()
-        {
-            
-            await Handler.Handle(new CreatePasswordRequest {InvitationId = InvitationId, Password = "Password"}, CancellationToken.None);
-
-            await UserService.Received(1).AddUserClaim(Arg.Is<LoginUser>(lu => lu.Id == NewLoginUserId.ToString()), "given_name", "GN1");
-            await UserService.Received(1).AddUserClaim(Arg.Is<LoginUser>(lu => lu.Id == NewLoginUserId.ToString()), "family_name", "FN1");
+                && u.FamilyName == "FN1"
+                && u.RegistrationId == InvitationId), "Password");
         }
         
         [Test]
