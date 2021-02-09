@@ -28,6 +28,7 @@ namespace SFA.DAS.LoginService.Web.Infrastructure
                          options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromDays(14);
                      })
                 .AddPasswordValidator<CustomPasswordValidator<LoginUser>>()
+                .AddClaimsPrincipalFactory<LoginUserClaimsPrincipalFactory>()
                 .AddEntityFrameworkStores<LoginUserContext>()
                 .AddDefaultTokenProviders();
 
