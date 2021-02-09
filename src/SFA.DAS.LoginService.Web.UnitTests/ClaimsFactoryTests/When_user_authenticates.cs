@@ -12,14 +12,14 @@ namespace SFA.DAS.LoginService.Web.UnitTests.ClaimsFactoryTests
     [TestFixture]
     public class When_user_authenticates
     {
-        [Test, NSubsittuteAutoData]
+        [Test, NSubstituteAutoData]
         public async Task Adds_claims(LoginUserClaimsPrincipalFactory sut, LoginUser user)
         {
             var claims = await sut.CreateAsync(user);
             claims.Should().NotBeNull();
         }
 
-        [Test, NSubsittuteAutoData]
+        [Test, NSubstituteAutoData]
         public async Task Adds_given_name(LoginUserClaimsPrincipalFactory sut, LoginUser user)
         {
             var claims = await sut.CreateAsync(user);
@@ -30,7 +30,7 @@ namespace SFA.DAS.LoginService.Web.UnitTests.ClaimsFactoryTests
             });
         }
 
-        [Test, NSubsittuteAutoData]
+        [Test, NSubstituteAutoData]
         public async Task Adds_family_name(LoginUserClaimsPrincipalFactory sut, LoginUser user)
         {
             var claims = await sut.CreateAsync(user);
@@ -41,7 +41,7 @@ namespace SFA.DAS.LoginService.Web.UnitTests.ClaimsFactoryTests
             });
         }
 
-        [Test, NSubsittuteAutoData]
+        [Test, NSubstituteAutoData]
         public async Task Adds_registration_id(LoginUserClaimsPrincipalFactory sut, LoginUser user)
         {
             var claims = await sut.CreateAsync(user);
@@ -53,9 +53,9 @@ namespace SFA.DAS.LoginService.Web.UnitTests.ClaimsFactoryTests
         }
     }
 
-    internal class NSubsittuteAutoDataAttribute : AutoDataAttribute
+    internal class NSubstituteAutoDataAttribute : AutoDataAttribute
     {
-        public NSubsittuteAutoDataAttribute() : base(() =>
+        public NSubstituteAutoDataAttribute() : base(() =>
             new Fixture().Customize(
                 new AutoNSubstituteCustomization { ConfigureMembers = true }))
         { }
