@@ -11,8 +11,8 @@ namespace SFA.DAS.LoginService.Samples.MvcInvitationClient
     public class InvitationService
     {
         private const string IdentityServiceHost =
-                /*
-                "https://localhost:7070"
+                //*
+                "https://localhost:5001"
                 /*/
                 "https://das-at-aplogin-as.azurewebsites.net"
                 //*/
@@ -44,8 +44,8 @@ namespace SFA.DAS.LoginService.Samples.MvcInvitationClient
                     givenName = "Bobby",
                     familyName = "Bob",
                     email = invitation.Email,
-                    userRedirect = "https://localhost:44385/",
-                    callback = "https://localhost:44385/"
+                    userRedirect = "https://localhost:7070/Account/SignIn",
+                    callback = "https://localhost:7070/Account/Callback"
                 });
 
                 var response = await httpClient.PostAsync(
