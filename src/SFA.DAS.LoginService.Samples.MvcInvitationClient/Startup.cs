@@ -41,13 +41,14 @@ namespace SFA.DAS.LoginService.Samples.MvcInvitationClient
                     options.Authority = "https://localhost:5001";
                     options.RequireHttpsMetadata = false;
 
-                    options.ClientId = "apply";
+                    options.ClientId = "apprentice";
 
                     options.SaveTokens = true;
                     options.GetClaimsFromUserInfoEndpoint = true;
 
                     options.Scope.Clear();
                     options.Scope.Add("openid");
+                    options.Scope.Add("profile");
                 });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
@@ -70,6 +71,7 @@ namespace SFA.DAS.LoginService.Samples.MvcInvitationClient
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {

@@ -28,13 +28,14 @@ namespace SFA.DAS.LoginService.Samples.MvcInvitationClient.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
         [Authorize]
         public IActionResult Secure()
         {
-            return View();
+            var claims = new SecureModel(User.Claims);
+            return View(claims);
         }
     }
 }
