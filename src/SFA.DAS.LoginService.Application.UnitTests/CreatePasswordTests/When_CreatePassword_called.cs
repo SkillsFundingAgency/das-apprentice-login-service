@@ -45,11 +45,11 @@ namespace SFA.DAS.LoginService.Application.UnitTests.CreatePasswordTests
         }
 
         [Test]
-        public void Then_callback_service_is_called()
+        public void Then_callback_service_is_not_called()
         {           
             Handler.Handle(new CreatePasswordRequest {InvitationId = InvitationId, Password = "Password"}, CancellationToken.None).Wait();
 
-            CallbackService.Received().Callback(Arg.Is<Invitation>(i => i.SourceId == "ABC123"), NewLoginUserId.ToString());
+            CallbackService.DidNotReceiveWithAnyArgs().Callback(null, null);
         }
         
         [Test]

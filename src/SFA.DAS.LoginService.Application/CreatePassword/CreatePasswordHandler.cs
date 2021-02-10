@@ -55,8 +55,6 @@ namespace SFA.DAS.LoginService.Application.CreatePassword
             
             await _loginContext.SaveChangesAsync(cancellationToken);
             
-            await _callbackService.Callback(invitation, newUserResponse.User.Id);
-            
             return new CreatePasswordResponse(){PasswordValid = true};
         }
     }
