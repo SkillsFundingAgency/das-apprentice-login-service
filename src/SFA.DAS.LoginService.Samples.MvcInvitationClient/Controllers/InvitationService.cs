@@ -1,5 +1,6 @@
 ﻿using IdentityModel.Client;
 using Newtonsoft.Json;
+using SFA.DAS.LoginService.Application.Invitations.CreateInvitation;
 using SFA.DAS.LoginService.Samples.MvcInvitationClient.Models;
 using System;
 using System.Net.Http;
@@ -11,14 +12,14 @@ namespace SFA.DAS.LoginService.Samples.MvcInvitationClient
     public class InvitationService
     {
         private const string IdentityServiceHost =
-                /*
-                "https://localhost:7070"
+                //*
+                "https://localhost:5001"
                 /*/
                 "https://das-at-aplogin-as.azurewebsites.net"
                 //*/
                 ;
 
-        internal async Task Invite(InvitationModel invitation)
+        internal async Task<CreateInvitationResponse> Invite(InvitationModel invitation)
         {
             var client = new HttpClient();
             var disco = await client.GetDiscoveryDocumentAsync(IdentityServiceHost);
@@ -44,18 +45,22 @@ namespace SFA.DAS.LoginService.Samples.MvcInvitationClient
                     givenName = "Bobby",
                     familyName = "Bob",
                     email = invitation.Email,
-                    userRedirect = "https://localhost:44385/",
-                    callback = "https://localhost:44385/"
+                    userRedirect = "https://localhost:7070/Account/SignIn",
+                    callback = "https://localhost:7070/Account/Callback"
                 });
 
                 var response = await httpClient.PostAsync(
                     $"{IdentityServiceHost}/Invitations/36BCFAAD-1FF7-49CB-8EEF-19877B7AD0C9",
                     new StringContent(inviteJson, Encoding.UTF8, "application/json")
-                                                   );
+                                                         );
+
+                response.EnsureSuccessStatusCode();
 
                 var content = await response.Content.ReadAsStringAsync();
 
-                response.EnsureSuccessStatusCode();
+                var result = JsonConvert.DeserializeObject<CreateInvitationResponse>(content);
+                result.LoginLink = $"{IdentityServiceHost}/Invitations/CreatePassword/{result.InvitationId}";
+                return result;
             }
         }
     }
