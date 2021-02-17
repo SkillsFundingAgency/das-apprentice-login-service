@@ -1,13 +1,12 @@
-using System;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using NSubstitute;
 using NUnit.Framework;
 using SFA.DAS.LoginService.Application.CreatePassword;
 using SFA.DAS.LoginService.Application.Interfaces;
-using SFA.DAS.LoginService.Application.UnitTests.Helpers;
 using SFA.DAS.LoginService.Data;
 using SFA.DAS.LoginService.Data.Entities;
+using System;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.LoginService.Application.UnitTests.CreatePasswordTests
 {
@@ -17,6 +16,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.CreatePasswordTests
         protected IUserService UserService;
         protected LoginContext LoginContext;
         protected Guid InvitationId;
+        protected Guid SourceId;
         protected CreatePasswordHandler Handler;
         protected Guid NewLoginUserId;
         protected ICallbackService CallbackService;
@@ -31,13 +31,14 @@ namespace SFA.DAS.LoginService.Application.UnitTests.CreatePasswordTests
             LoginContext = new LoginContext(dbContextOptions);
 
             InvitationId = Guid.NewGuid();
+            SourceId = Guid.NewGuid();
             LoginContext.Invitations.Add(new Invitation()
             {
                 Id = InvitationId,
                 Email = "email@provider.com",
-                SourceId = "ABC123", 
-                GivenName = "GN1", 
-                FamilyName = "FN1"
+                SourceId = SourceId.ToString(),
+                GivenName = "GN1",
+                FamilyName = "FN1",
             });
             LoginContext.SaveChanges();
 

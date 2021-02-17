@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using IdentityModel;
@@ -34,7 +35,7 @@ namespace SFA.DAS.LoginService.Application.CreatePassword
                     Email = invitation.Email,
                     GivenName = invitation.GivenName,
                     FamilyName = invitation.FamilyName,
-                    RegistrationId = invitation.Id,
+                    RegistrationId = Guid.TryParse(invitation.SourceId, out var rid) ? rid : default,
                 }, request.Password);
 
             if (newUserResponse.Result != IdentityResult.Success)
