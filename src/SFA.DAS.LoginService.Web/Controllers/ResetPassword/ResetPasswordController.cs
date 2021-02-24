@@ -70,6 +70,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.ResetPassword
             return RedirectToAction("PasswordResetSuccessful", new {clientId = clientId});
         }
 
+        [HttpGet("/PasswordResetSuccessful")]
         public async Task<IActionResult> PasswordResetSuccessful(Guid clientId)
         {
             SetViewBagClientId(clientId);
