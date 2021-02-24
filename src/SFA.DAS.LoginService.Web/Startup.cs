@@ -10,6 +10,8 @@ using SFA.DAS.LoginService.Configuration;
 using SFA.DAS.LoginService.Data;
 using SFA.DAS.LoginService.Web.Infrastructure;
 using System;
+using SFA.DAS.LoginService.Application.Interfaces;
+using SFA.DAS.LoginService.Application.Services;
 
 namespace SFA.DAS.LoginService.Web
 {
@@ -63,13 +65,13 @@ namespace SFA.DAS.LoginService.Web
                 };
             });
 
-            services.AddAuthentication()
-                .AddJwtBearer(jwt =>
-                {
-                    jwt.Authority = "http://localhost:5000";
-                    jwt.RequireHttpsMetadata = false;
-                    jwt.Audience = "api1";
-                });
+            //services.AddAuthentication()
+            //    .AddJwtBearer(jwt =>
+            //    {
+            //        jwt.Authority = "http://localhost:5000";
+            //        jwt.RequireHttpsMetadata = false;
+            //        jwt.Audience = "api1";
+            //    });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
@@ -98,6 +100,7 @@ namespace SFA.DAS.LoginService.Web
             app.UseIdentityServer();
             app.UseCookiePolicy();
             app.UseRouting();
+            app.UseAuthorization();
             app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
     }

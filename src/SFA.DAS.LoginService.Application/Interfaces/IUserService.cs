@@ -15,6 +15,7 @@ namespace SFA.DAS.LoginService.Application.Interfaces
         Task<UserResponse> ResetPassword(string email, string password, string identityToken);
         Task<string> GeneratePasswordResetToken(LoginUser user);
         Task AddUserClaim(LoginUser user, string claimType, string value);
+        Task<string> GenerateChangeEmailToken(LoginUser user, string newEmail);
     }
 
     public class UserResponse

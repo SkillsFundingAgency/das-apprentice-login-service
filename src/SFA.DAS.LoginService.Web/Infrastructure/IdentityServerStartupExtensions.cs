@@ -7,6 +7,8 @@ using SFA.DAS.LoginService.Configuration;
 using SFA.DAS.LoginService.Data;
 using SFA.DAS.LoginService.Data.Entities;
 using System;
+using SFA.DAS.LoginService.Application.Interfaces;
+using SFA.DAS.LoginService.Application.Services;
 
 namespace SFA.DAS.LoginService.Web.Infrastructure
 {
@@ -35,6 +37,9 @@ namespace SFA.DAS.LoginService.Web.Infrastructure
             services.AddSingleton<ManagedIdentityAzureTokenProvider>();
             services.AddSingleton<IContextSecurityProvider>(s =>
                 s.GetRequiredService<ManagedIdentityAzureTokenProvider>());
+
+            
+            services.AddTransient<ICodeGenerator, RandomCodeGenerator>();
 
             services.ConfigureApplicationCookie(options =>
             {
