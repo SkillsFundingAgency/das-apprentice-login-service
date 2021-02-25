@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.LoginService.Application.Invitations.CreateInvitation;
+using SFA.DAS.LoginService.Application.Invitations.GetInvitations;
 using SFA.DAS.LoginService.Web.Controllers.InvitationsApi.ViewModels;
 
 namespace SFA.DAS.LoginService.Web.Controllers.InvitationsApi
@@ -68,6 +69,20 @@ namespace SFA.DAS.LoginService.Web.Controllers.InvitationsApi
                 return response;
             }
             catch (ArgumentException e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet("/Invitations/{clientId}/{sourceId}")]
+        public async Task<ActionResult<GetInvitationsResponse>> GetInvitationsForSource(Guid clientId, string sourceId)
+        {
+            try
+            {
+                var response = await _mediator.Send(new GetInvitationsRequest(clientId, sourceId));
+                return response;
+            }
+            catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
