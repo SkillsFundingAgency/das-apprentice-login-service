@@ -25,7 +25,8 @@ namespace SFA.DAS.LoginService.Web.Infrastructure
             if (string.IsNullOrWhiteSpace(password) ||
                 password.Length < 8 || 
                 password.All(char.IsDigit) || 
-                password.All(char.IsLetter) || !PasswordContainsBothLettersAndDigits(password))
+                password.All(char.IsLetter) || 
+                !PasswordContainsBothLettersAndDigits(password))
             {
                 return IdentityResult.Failed(new IdentityError(){Code = "PasswordValidity", Description = "Password does not meet validity rules"});
             }
