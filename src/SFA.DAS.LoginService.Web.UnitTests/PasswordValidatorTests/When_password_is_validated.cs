@@ -54,6 +54,8 @@ namespace SFA.DAS.LoginService.Web.UnitTests.PasswordValidatorTests
         [TestCase("11aaa222", true)]
         [TestCase(" 11AAA 222 ", true)]
         [TestCase("11AAA222!!", true)]
+        [TestCase("113113113#", false)]
+        [TestCase("DFGDFGDFG#", false)]
         public async Task Then_password_is_validated_against_rules_correctly(string newpassword, bool expectedValidity)
         {                       
             var result = await _validator.ValidateAsync(_userManager, new LoginUser(), newpassword);
