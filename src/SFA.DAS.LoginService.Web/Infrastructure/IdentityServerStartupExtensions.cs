@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.LoginService.Configuration;
 using SFA.DAS.LoginService.Data;
@@ -14,7 +15,7 @@ namespace SFA.DAS.LoginService.Web.Infrastructure
         public static void AddIdentityServer(
             this IServiceCollection services,
             ILoginConfig loginConfig,
-            IHostingEnvironment environment,
+            Microsoft.AspNetCore.Hosting.IHostingEnvironment environment,
             ILogger logger)
         {
             services.AddIdentity<LoginUser, IdentityRole>(
@@ -26,6 +27,7 @@ namespace SFA.DAS.LoginService.Web.Infrastructure
                          options.Lockout.MaxFailedAccessAttempts = loginConfig.MaxFailedAccessAttempts;
                          options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromDays(14);
                      })
+                .AddPasswordValidator<CustomPasswordValidator<LoginUser>>()
                 .AddClaimsPrincipalFactory<LoginUserClaimsPrincipalFactory>()
                 .AddEntityFrameworkStores<LoginUserContext>()
                 .AddDefaultTokenProviders();
