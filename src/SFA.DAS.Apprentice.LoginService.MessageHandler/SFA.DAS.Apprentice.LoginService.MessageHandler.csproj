@@ -30,8 +30,6 @@
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
   </ItemGroup>
 
-
-
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Apprentice.LoginService.Messages\SFA.DAS.Apprentice.LoginService.Messages.csproj" />
     <ProjectReference Include="..\SFA.DAS.LoginService.Application\SFA.DAS.LoginService.Application.csproj" />

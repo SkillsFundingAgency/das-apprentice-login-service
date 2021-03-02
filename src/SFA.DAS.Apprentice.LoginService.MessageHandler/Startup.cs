@@ -64,8 +64,6 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler
             builder.Services.AddTransient<IClientService, ClientService>();
             builder.Services.AddTransient<IConnectionFactory, SqlServerConnectionFactory>();
 
-            builder.Services.AddHttpClient<ICallbackService, CallbackService>();
-
             builder.Services.AddDbContext<LoginContext>((services, options) =>
             {
                 var connectionFactory = services.GetRequiredService<IConnectionFactory>();
