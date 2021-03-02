@@ -39,11 +39,14 @@ namespace SFA.DAS.LoginService.Application.UnitTests.Invitations.CreateInvitatio
             insertedInvitation.ClientId.Should().Be(createInvitationRequest.ClientId.ToString());
         }
 
-        [Test]
-        public void Then_new_Invitation_is_inserted_with_Valid_until_set_one_hour_ahead()
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(7)]
+        public void Then_new_Invitation_is_inserted_with_Valid_until_set_N_days_and_1_hour_ahead(int days)
         {
+            LoginConfig.DaysInvitationIsValidFor.Returns(days);
             SystemTime.UtcNow = () => new DateTime(2019,7,9,08,12,43);
-            var expectedValidUntilTime = SystemTime.UtcNow().AddHours(1); 
+            var expectedValidUntilTime = SystemTime.UtcNow().AddDays(LoginConfig.DaysInvitationIsValidFor).AddHours(1); 
             
             var createInvitationRequest = BuildCreateInvitationRequest();
             CreateInvitationHandler.Handle(createInvitationRequest, CancellationToken.None).Wait();
