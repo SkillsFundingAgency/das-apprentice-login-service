@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.421
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.LoginService.Web.UnitTests", "SFA.DAS.LoginService.Web.UnitTests\SFA.DAS.LoginService.Web.UnitTests.csproj", "{A839DC78-980E-4BDD-A094-4AC15BA3B82A}"
 EndProject
@@ -28,6 +28,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.LoginService.Configuration", "SFA.DAS.LoginService.Configuration\SFA.DAS.LoginService.Configuration.csproj", "{EBCABC30-0E66-44A1-B400-CA6050AAC687}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.LoginService.Types", "SFA.DAS.LoginService.Types\SFA.DAS.LoginService.Types.csproj", "{E6B09C38-2A50-4C24-957D-E91DDA2B7AB6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.Apprentice.LoginService.Messages", "SFA.DAS.Apprentice.LoginService.Messages\SFA.DAS.Apprentice.LoginService.Messages.csproj", "{3845C458-82FA-4F79-B984-416E50092403}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.Apprentice.LoginService.MessageHandler", "SFA.DAS.Apprentice.LoginService.MessageHandler\SFA.DAS.Apprentice.LoginService.MessageHandler.csproj", "{2920D258-AD5D-4375-94D4-0D057886820C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -85,6 +89,14 @@ Global
 		{E6B09C38-2A50-4C24-957D-E91DDA2B7AB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6B09C38-2A50-4C24-957D-E91DDA2B7AB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6B09C38-2A50-4C24-957D-E91DDA2B7AB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3845C458-82FA-4F79-B984-416E50092403}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3845C458-82FA-4F79-B984-416E50092403}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3845C458-82FA-4F79-B984-416E50092403}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3845C458-82FA-4F79-B984-416E50092403}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2920D258-AD5D-4375-94D4-0D057886820C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2920D258-AD5D-4375-94D4-0D057886820C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2920D258-AD5D-4375-94D4-0D057886820C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2920D258-AD5D-4375-94D4-0D057886820C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

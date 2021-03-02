@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Description>NServiceBus messages published by SFA.DAS.Apprentice.LoginService</Description>
+    <Authors>ESFA</Authors>
+    <Company>ESFA</Company>
+    <PackageLicense>https://github.com/SkillsFundingAgency/das-apprentice-login-service/master/LICENSE</PackageLicense>
+    <PackageProjectUrl>https://github.com/SkillsFundingAgency/das-apprentice-login-service</PackageProjectUrl>
+    <PackageId>SFA.DAS.Apprentice.LoginService.Messages</PackageId>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageOutputPath>..\NugetPackages</PackageOutputPath>
+    <PackageVersion>0.0.0.1</PackageVersion>
+
+  </PropertyGroup>
+
+</Project>
