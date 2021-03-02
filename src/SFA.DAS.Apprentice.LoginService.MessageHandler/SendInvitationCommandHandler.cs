@@ -1,9 +1,7 @@
 using System;
-using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
@@ -27,8 +25,11 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler
 
         [FunctionName("HandleSendInvitationCommand")]
         public async Task RunCommand(
-            [NServiceBusTrigger(Endpoint = QueueNames.SendInvitationCommand)] SendInvitationCommand sendInvitationCommand)
+            [NServiceBusTrigger(Endpoint = QueueNames.SendInvitationCommand)] SendInvitationCommand sendInvitationCommand,
+            ILogger log)
         {
+            log.LogInformation($"Received {typeof(SendInvitationCommand)} SourceId : {sendInvitationCommand.SourceId} ClientId : {sendInvitationCommand.ClientId}");
+
             var response = await _mediator.Send(new CreateInvitationRequest
             {
                 Email = sendInvitationCommand.Email,
@@ -44,8 +45,11 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler
                 Inviter = "Automatic",
                 OrganisationName = sendInvitationCommand.OrganisationName
             });
+
+            log.LogInformation($"Completed {typeof(SendInvitationCommand)} InvitationId : {response.InvitationId} Invited : {response.Invited}");
         }
 
+#if DEBUG
         [FunctionName("HandleSendInvitationCommandTrigger")]
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "POST", Route = "test-send-invitation-command")] HttpRequestMessage req,
@@ -56,7 +60,7 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler
             try
             {
                 var command = JsonConvert.DeserializeObject<SendInvitationCommand>(await req.Content.ReadAsStringAsync());
-                await RunCommand(command);
+                await RunCommand(command, log);
                 return new AcceptedResult();
             }
             catch (Exception e)
@@ -65,6 +69,6 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler
                 return new BadRequestResult();
             }
         }
-
+#endif
     }
 }

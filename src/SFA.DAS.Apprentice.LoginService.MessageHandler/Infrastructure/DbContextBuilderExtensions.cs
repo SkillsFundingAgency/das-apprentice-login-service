@@ -16,7 +16,7 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler.Infrastructure
             return connectionFactory.AddConnection(builder, connection);
         }
 
-        public static DbContextOptionsBuilder UseLocalSqlLogger<TContext>(
+        public static DbContextOptionsBuilder UseLocalSqlLogger(
             this DbContextOptionsBuilder builder, ILoggerFactory loggerFactory, IConfiguration config)
         {
             if (config.IsLocalAcceptanceOrDev())

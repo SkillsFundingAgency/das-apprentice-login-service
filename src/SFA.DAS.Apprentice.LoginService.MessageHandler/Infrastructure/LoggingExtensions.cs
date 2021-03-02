@@ -13,8 +13,8 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler.Infrastructure
         {
             builder.Services.AddLogging(logBuilder =>
             {
-                // all logging is filtered out by defualt
-                logBuilder.AddFilter(typeof(Startup).Namespace, LogLevel.Information);
+                // all logging is filtered out by default
+                logBuilder.AddFilter("SFA.DAS", LogLevel.Information);
                 var rootDirectory = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), ".."));
                 var files = Directory.GetFiles(rootDirectory, "nlog.config", SearchOption.AllDirectories)[0];
                 logBuilder.AddNLog(files);
