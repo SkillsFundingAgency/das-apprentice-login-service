@@ -22,16 +22,16 @@ namespace SFA.DAS.LoginService.Application.Invitations.CreateInvitation
         private readonly LoginContext _loginContext;
         private readonly IEmailService _emailService;
         private readonly ILoginConfig _loginConfig;
-        private readonly IUserService _userService;
+        private readonly IAccountService _accountService;
         private readonly ILogger<CreateInvitationHandler> _logger;
 
         public CreateInvitationHandler(LoginContext loginContext, IEmailService emailService, ILoginConfig loginConfig,
-            IUserService userService, ILogger<CreateInvitationHandler> logger)
+            IAccountService accountService, ILogger<CreateInvitationHandler> logger)
         {
             _loginContext = loginContext;
             _emailService = emailService;
             _loginConfig = loginConfig;
-            _userService = userService;
+            _accountService = accountService;
             _logger = logger;
         }
 
@@ -55,8 +55,8 @@ namespace SFA.DAS.LoginService.Application.Invitations.CreateInvitation
             }
             
             _logger.LogInformation($"CreateInvitationHandler : Client: {JsonConvert.SerializeObject(client)}");
-            
-            var existingUser = await _userService.FindByEmail(request.Email);
+
+            LoginUser existingUser = await _accountService.FindByEmail(request.Email);
             if (existingUser != null)
             {
                 await _emailService.SendUserExistsEmail(new UserExistsEmailViewModel
@@ -94,8 +94,6 @@ namespace SFA.DAS.LoginService.Application.Invitations.CreateInvitation
 
             var linkUri = new Uri(_loginConfig.BaseUrl);
             var linkUrl = new Uri(linkUri, "Invitations/CreatePassword/" + newInvitation.Id).ToString();
-
-            
             
             if (request.IsInvitationToOrganisation)
             {

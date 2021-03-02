@@ -5,7 +5,6 @@ using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
 using SFA.DAS.LoginService.Application.Invitations.CreateInvitation;
-using SFA.DAS.LoginService.Application.Services;
 using SFA.DAS.LoginService.Application.Services.EmailServiceViewModels;
 using SFA.DAS.LoginService.Data.Entities;
 
@@ -20,7 +19,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.Invitations.CreateInvitatio
         public void Arrange()
         {
             _userId = Guid.NewGuid().ToString();
-            UserService.FindByEmail("invited@email.com").Returns(new LoginUser(){Id = _userId});
+            AccountService.FindByEmail("invited@email.com").Returns(new LoginUser(){Id = _userId});
             _createInvitationRequest = BuildCreateInvitationRequest();
         }
         
@@ -29,7 +28,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.Invitations.CreateInvitatio
         {
             CreateInvitationHandler.Handle(_createInvitationRequest, CancellationToken.None).Wait();
 
-            UserService.Received().FindByEmail("invited@email.com");
+            AccountService.Received().FindByEmail("invited@email.com");
         }
 
         [Test]

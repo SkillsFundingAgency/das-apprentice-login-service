@@ -21,6 +21,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.Invitations.CreateInvitatio
         protected IEmailService EmailService;
         protected ILoginConfig LoginConfig;
         protected IUserService UserService;
+        protected IAccountService AccountService;
         protected static Guid ClientId;
         protected Guid InvitationTemplateId;
 
@@ -33,6 +34,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.Invitations.CreateInvitatio
             LoginConfig = Substitute.For<ILoginConfig>();
             LoginConfig.BaseUrl.Returns("https://baseurl");
             UserService = Substitute.For<IUserService>();
+            AccountService = Substitute.For<IAccountService>();
             
             CreateInvitationHandler = BuildCreateInvitationHandler();
         }
@@ -94,7 +96,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.Invitations.CreateInvitatio
 
         private CreateInvitationHandler BuildCreateInvitationHandler()
         {
-            return new CreateInvitationHandler(LoginContext, EmailService, LoginConfig, UserService, Substitute.For<ILogger<CreateInvitationHandler>>());
+            return new CreateInvitationHandler(LoginContext, EmailService, LoginConfig, AccountService, Substitute.For<ILogger<CreateInvitationHandler>>());
         }
     }
 }
