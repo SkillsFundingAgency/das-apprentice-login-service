@@ -23,17 +23,12 @@ namespace SFA.DAS.LoginService.Web.Infrastructure
         public async Task<IdentityResult> ValidateAsync(UserManager<TUser> manager, TUser user, string password)
         {
             if (string.IsNullOrWhiteSpace(password) ||
-                password.Length < 8 || 
-                password.All(char.IsDigit) || 
-                password.All(char.IsLetter) || 
+                password.Length < 8 ||
+                password.All(char.IsDigit) ||
+                password.All(char.IsLetter) ||
                 !PasswordContainsBothLettersAndDigits(password))
             {
-                return IdentityResult.Failed(new IdentityError(){Code = "PasswordValidity", Description = "Password does not meet validity rules"});
-            }
-
-            if (await _loginContext.InvalidPasswords.AnyAsync(p => password.Contains(p.Password, StringComparison.InvariantCultureIgnoreCase)))
-            {
-                return IdentityResult.Failed(new IdentityError(){Code = "CommonPassword", Description = "Password must not be a common password"});
+                return IdentityResult.Failed(new IdentityError() { Code = "PasswordValidity", Description = "Password does not meet validity rules" });
             }
 
             return IdentityResult.Success;
