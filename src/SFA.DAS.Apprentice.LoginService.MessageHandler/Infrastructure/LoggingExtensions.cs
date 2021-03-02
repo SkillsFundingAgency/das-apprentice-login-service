@@ -7,7 +7,7 @@ using NLog.Extensions.Logging;
 
 namespace SFA.DAS.Apprentice.LoginService.MessageHandler.Infrastructure
 {
-    internal static class LoggingExtension
+    internal static class LoggingExtensions
     {
         internal static void ConfigureLogging(this IFunctionsHostBuilder builder)
         {

@@ -3,7 +3,7 @@ using SFA.DAS.LoginService.Data.Entities;
 
 namespace SFA.DAS.LoginService.Application.Interfaces
 {
-    public interface IAccountService
+    public interface IUserAccountService
     {
         Task<LoginUser> FindByEmail(string email);
     }

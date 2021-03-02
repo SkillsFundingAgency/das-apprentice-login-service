@@ -19,7 +19,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.Invitations.CreateInvitatio
         public void Arrange()
         {
             _userId = Guid.NewGuid().ToString();
-            AccountService.FindByEmail("invited@email.com").Returns(new LoginUser(){Id = _userId});
+            UserAccountService.FindByEmail("invited@email.com").Returns(new LoginUser(){Id = _userId});
             _createInvitationRequest = BuildCreateInvitationRequest();
         }
         
@@ -28,7 +28,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.Invitations.CreateInvitatio
         {
             CreateInvitationHandler.Handle(_createInvitationRequest, CancellationToken.None).Wait();
 
-            AccountService.Received().FindByEmail("invited@email.com");
+            UserAccountService.Received().FindByEmail("invited@email.com");
         }
 
         [Test]

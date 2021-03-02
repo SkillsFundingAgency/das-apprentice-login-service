@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using System;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
@@ -43,52 +44,39 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler
             builder.ConfigureLogging();
             builder.ConfigureNServiceBus();
 
-            //builder.Services.ConfigureOptions<LoginConfig>();
+            //var serviceProvider = builder.Services.BuildServiceProvider();
+            //var configuration = serviceProvider.GetService<IConfiguration>();
 
             builder.Services
                 .AddOptions<LoginConfig>()
                 .Configure<IConfiguration>((settings, configuration) =>
                     configuration.Bind("SFA.DAS.ApprenticeLoginService", settings));
 
-
             builder.Services.AddSingleton<ILoginConfig>(s =>
                 s.GetRequiredService<IOptions<LoginConfig>>().Value);
 
-            //builder.Services.WireUpDependencies();
             builder.Services.AddMediatR(typeof(CreateInvitationHandler).Assembly);
             builder.Services.AddTransient<IEmailService, DevEmailService>();
-            builder.Services.AddTransient<IUserService, UserService>();
+            builder.Services.AddTransient<IUserAccountService, UserAccountService>();
             builder.Services.AddTransient<IClientService, ClientService>();
-            builder.Services.AddTransient<SignInManager<LoginUser>>();
+            builder.Services.AddTransient<IConnectionFactory, SqlServerConnectionFactory>();
+
             builder.Services.AddHttpClient<ICallbackService, CallbackService>();
 
-
             builder.Services.AddDbContext<LoginContext>((services, options) =>
-                    options.Secure(services.GetRequiredService<ILoginConfig>().SqlConnectionString));
+            {
+                var connectionFactory = services.GetRequiredService<IConnectionFactory>();
+                var config = services.GetRequiredService<ILoginConfig>();
+                options.UseDataStorage(connectionFactory, config.SqlConnectionString);
+            });
 
             builder.Services.AddDbContext<LoginUserContext>((services, options) =>
-                    options.Secure(services.GetRequiredService<ILoginConfig>().SqlConnectionString));
+            {
+                var connectionFactory = services.GetRequiredService<IConnectionFactory>();
+                var config = services.GetRequiredService<ILoginConfig>();
+                options.UseDataStorage(connectionFactory, config.SqlConnectionString);
+            });
+
         }
     }
-
-    public static class R
-    {
-
-        public static DbContextOptionsBuilder Secure(this DbContextOptionsBuilder builder, string sqlConnectionString)
-        {
-            var sqlConnection = new SqlConnection(sqlConnectionString);
-
-            //if (!_environment.IsDevelopment())
-            //{
-            //    sqlConnection.AccessToken = GetAccessToken();
-            //}
-
-            builder.UseSqlServer(sqlConnection);
-
-            return builder;
-        }
-    }
-
-
-
 }

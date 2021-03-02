@@ -22,16 +22,16 @@ namespace SFA.DAS.LoginService.Application.Invitations.CreateInvitation
         private readonly LoginContext _loginContext;
         private readonly IEmailService _emailService;
         private readonly ILoginConfig _loginConfig;
-        private readonly IAccountService _accountService;
+        private readonly IUserAccountService _userAccountService;
         private readonly ILogger<CreateInvitationHandler> _logger;
 
         public CreateInvitationHandler(LoginContext loginContext, IEmailService emailService, ILoginConfig loginConfig,
-            IAccountService accountService, ILogger<CreateInvitationHandler> logger)
+            IUserAccountService userAccountService, ILogger<CreateInvitationHandler> logger)
         {
             _loginContext = loginContext;
             _emailService = emailService;
             _loginConfig = loginConfig;
-            _accountService = accountService;
+            _userAccountService = userAccountService;
             _logger = logger;
         }
 
@@ -56,7 +56,7 @@ namespace SFA.DAS.LoginService.Application.Invitations.CreateInvitation
             
             _logger.LogInformation($"CreateInvitationHandler : Client: {JsonConvert.SerializeObject(client)}");
 
-            LoginUser existingUser = await _accountService.FindByEmail(request.Email);
+            var existingUser = await _userAccountService.FindByEmail(request.Email);
             if (existingUser != null)
             {
                 await _emailService.SendUserExistsEmail(new UserExistsEmailViewModel
