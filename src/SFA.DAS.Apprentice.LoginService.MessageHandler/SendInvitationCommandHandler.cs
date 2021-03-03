@@ -28,25 +28,33 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler
             [NServiceBusTrigger(Endpoint = QueueNames.SendInvitationCommand)] SendInvitationCommand sendInvitationCommand,
             ILogger log)
         {
-            log.LogInformation($"Received {typeof(SendInvitationCommand)} SourceId : {sendInvitationCommand.SourceId} ClientId : {sendInvitationCommand.ClientId}");
-
-            var response = await _mediator.Send(new CreateInvitationRequest
+            try
             {
-                Email = sendInvitationCommand.Email,
-                GivenName = sendInvitationCommand.GivenName,
-                FamilyName = sendInvitationCommand.FamilyName,
-                
-                SourceId = sendInvitationCommand.SourceId.ToString(),
+                log.LogInformation(
+                    $"Received {typeof(SendInvitationCommand)} SourceId : {sendInvitationCommand.SourceId} ClientId : {sendInvitationCommand.ClientId}");
 
-                Callback = new Uri(sendInvitationCommand.Callback),
-                UserRedirect = new Uri(sendInvitationCommand.UserRedirect),
-                ClientId = sendInvitationCommand.ClientId,
-                IsInvitationToOrganisation = true,
-                Inviter = "Automatic",
-                OrganisationName = sendInvitationCommand.OrganisationName
-            });
+                var response = await _mediator.Send(new CreateInvitationRequest
+                {
+                    Email = sendInvitationCommand.Email,
+                    GivenName = sendInvitationCommand.GivenName,
+                    FamilyName = sendInvitationCommand.FamilyName,
+                    SourceId = sendInvitationCommand.SourceId.ToString(),
+                    Callback = new Uri(sendInvitationCommand.Callback),
+                    UserRedirect = new Uri(sendInvitationCommand.UserRedirect),
+                    ClientId = sendInvitationCommand.ClientId,
+                    IsInvitationToOrganisation = false,
+                    Inviter = "Automatic",
+                    ApprenticeshipName = sendInvitationCommand.ApprenticeshipName,
+                    OrganisationName = sendInvitationCommand.OrganisationName
+                });
 
-            log.LogInformation($"Completed {typeof(SendInvitationCommand)} InvitationId : {response.InvitationId} Invited : {response.Invited}");
+                log.LogInformation(
+                    $"Completed {typeof(SendInvitationCommand)} InvitationId : {response.InvitationId} Invited : {response.Invited}");
+            }
+            catch (Exception e)
+            {
+                log.LogError($"Errored when processing {typeof(SendInvitationCommand)}", e);
+            }
         }
 
 #if DEBUG

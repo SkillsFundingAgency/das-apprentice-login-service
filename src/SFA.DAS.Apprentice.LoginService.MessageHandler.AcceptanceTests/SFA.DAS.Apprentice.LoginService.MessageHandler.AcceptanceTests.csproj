@@ -5,7 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoFixture" Version="4.15.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.12" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.12" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="NServiceBus" Version="7.1.7" />
+    <PackageReference Include="SFA.DAS.NServiceBus" Version="16.0.21" />
     <PackageReference Include="SpecFlow.Plus.LivingDocPlugin" Version="3.7.10" />
 
     
@@ -27,9 +33,12 @@
 
   <ItemGroup>
     <Folder Include="Drivers\" />
-    <Folder Include="Features\" />
     <Folder Include="Hooks\" />
-    <Folder Include="Steps\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.Apprentice.LoginService.MessageHandler\SFA.DAS.Apprentice.LoginService.MessageHandler.csproj" />
+    <ProjectReference Include="..\SFA.DAS.Apprentice.LoginService.Messages\SFA.DAS.Apprentice.LoginService.Messages.csproj" />
   </ItemGroup>
 
 </Project>

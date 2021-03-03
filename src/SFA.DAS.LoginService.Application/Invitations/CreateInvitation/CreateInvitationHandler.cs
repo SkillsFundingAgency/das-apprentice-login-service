@@ -40,7 +40,7 @@ namespace SFA.DAS.LoginService.Application.Invitations.CreateInvitation
         {
             
             _logger.LogInformation($"CreateInvitationHandler : Create Invitation call received: {JsonConvert.SerializeObject(request)}");
-            
+
             ValidateRequest(request);
 
             var client = await _loginContext.Clients.SingleOrDefaultAsync(c => c.Id == request.ClientId, cancellationToken: cancellationToken);
