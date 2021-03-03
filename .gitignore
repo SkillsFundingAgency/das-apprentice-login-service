@@ -278,3 +278,6 @@ src/Tools/PhantomJS/tools/phantomjs/ChangeLog
 
 # feature files
 *.feature.cs
+
+#Test generated nservicebus queues
+.learningtransport/
