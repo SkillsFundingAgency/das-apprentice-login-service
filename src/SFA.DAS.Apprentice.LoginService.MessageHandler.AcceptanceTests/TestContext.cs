@@ -8,16 +8,12 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler.AcceptanceTests
     {
         public TestContext()
         {
-            DatabaseConnectionString = "Data Source=AcceptanceTestDb";
             LoginBaseUrl = "https://login/";
         }
-        public string DatabaseConnectionString { get; set; }
         public string LoginBaseUrl { get; set; }
         public TestMessageBus TestMessageBus { get; set; }
         public List<IHook> Hooks { get; } = new List<IHook>();
         public MessageHandlerTestHost MessageHandlerHost { get; set; }
-        public LoginUserContext LoginUserContext { get; set; }
-        public LoginContext LoginContext { get; set; }
     }
 
     public interface IHook { }

@@ -9,7 +9,6 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SFA.DAS.Apprentice.LoginService.MessageHandler.Infrastructure.NServiceBus;
 using SFA.DAS.Apprentice.LoginService.Messages;
-using SFA.DAS.LoginService.Application.Invitations.CreateInvitation;
 using SFA.DAS.NServiceBus.AzureFunction.Attributes;
 
 namespace SFA.DAS.Apprentice.LoginService.MessageHandler
@@ -30,26 +29,26 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler
         {
             try
             {
-                log.LogInformation(
-                    $"Received {typeof(SendInvitationCommand)} SourceId : {sendInvitationCommand.SourceId} ClientId : {sendInvitationCommand.ClientId}");
+                //log.LogInformation(
+                //    $"Received {typeof(SendInvitationCommand)} SourceId : {sendInvitationCommand.SourceId} ClientId : {sendInvitationCommand.ClientId}");
 
-                var response = await _mediator.Send(new CreateInvitationRequest
-                {
-                    Email = sendInvitationCommand.Email,
-                    GivenName = sendInvitationCommand.GivenName,
-                    FamilyName = sendInvitationCommand.FamilyName,
-                    SourceId = sendInvitationCommand.SourceId.ToString(),
-                    Callback = new Uri(sendInvitationCommand.Callback),
-                    UserRedirect = new Uri(sendInvitationCommand.UserRedirect),
-                    ClientId = sendInvitationCommand.ClientId,
-                    IsInvitationToOrganisation = false,
-                    Inviter = "Automatic",
-                    ApprenticeshipName = sendInvitationCommand.ApprenticeshipName,
-                    OrganisationName = sendInvitationCommand.OrganisationName
-                });
+                //var response = await _mediator.Send(new CreateInvitationRequest
+                //{
+                //    Email = sendInvitationCommand.Email,
+                //    GivenName = sendInvitationCommand.GivenName,
+                //    FamilyName = sendInvitationCommand.FamilyName,
+                //    SourceId = sendInvitationCommand.SourceId.ToString(),
+                //    Callback = new Uri(sendInvitationCommand.Callback),
+                //    UserRedirect = new Uri(sendInvitationCommand.UserRedirect),
+                //    ClientId = sendInvitationCommand.ClientId,
+                //    IsInvitationToOrganisation = false,
+                //    Inviter = "Automatic",
+                //    ApprenticeshipName = sendInvitationCommand.ApprenticeshipName,
+                //    OrganisationName = sendInvitationCommand.OrganisationName
+                //});
 
-                log.LogInformation(
-                    $"Completed {typeof(SendInvitationCommand)} InvitationId : {response.InvitationId} Invited : {response.Invited}");
+                //log.LogInformation(
+                //    $"Completed {typeof(SendInvitationCommand)} InvitationId : {response.InvitationId} Invited : {response.Invited}");
             }
             catch (Exception e)
             {

@@ -26,15 +26,13 @@
     <PackageReference Include="NServiceBus" Version="7.1.7" />
     <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
-    <PackageReference Include="SFA.DAS.NServiceBus.AzureFunction" Version="16.0.20" />
+    <PackageReference Include="SFA.DAS.NServiceBus.AzureFunction" Version="16.0.21" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Apprentice.LoginService.Messages\SFA.DAS.Apprentice.LoginService.Messages.csproj" />
-    <ProjectReference Include="..\SFA.DAS.LoginService.Application\SFA.DAS.LoginService.Application.csproj" />
-    <ProjectReference Include="..\SFA.DAS.LoginService.EmailService\SFA.DAS.LoginService.EmailService.csproj" />
-    <ProjectReference Include="..\SFA.DAS.LoginService.UserService\SFA.DAS.LoginService.UserService.csproj" />
+    <ProjectReference Include="..\SFA.DAS.LoginService.Configuration\SFA.DAS.LoginService.Configuration.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">

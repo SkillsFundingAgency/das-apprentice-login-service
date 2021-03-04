@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NServiceBus;
 using NServiceBus.Transport;
-using SFA.DAS.Apprentice.LoginService.MessageHandler.Infrastructure;
 using SFA.DAS.Apprentice.LoginService.MessageHandler.Infrastructure.NServiceBus;
-using SFA.DAS.LoginService.Application.Interfaces;
 
 namespace SFA.DAS.Apprentice.LoginService.MessageHandler.AcceptanceTests.Services
 {
@@ -33,7 +30,6 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler.AcceptanceTests.Service
                 {"ConfigNames", "SFA.DAS.EmployerIncentives.Functions"},
                 {"NServiceBusConnectionString", "UseDevelopmentStorage=true"},
                 {"AzureWebJobsStorage", "UseDevelopmentStorage=true"},
-                {"SFA.DAS.ApprenticeLoginService:SqlConnectionString", _context.DatabaseConnectionString},
                 {"SFA.DAS.ApprenticeLoginService:BaseUrl", _context.LoginBaseUrl}
             };
         }
@@ -61,10 +57,6 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler.AcceptanceTests.Service
 
             hostBuilder.ConfigureServices((s) =>
             {
-                s.AddEntityFrameworkSqlite();
-                s.AddTransient<IConnectionFactory, SqLiteConnectionFactory>();
-                s.AddTransient<IUserAccountService, FakeUserAccountService>();
-
                 s.AddNServiceBus<MessageHandlerTestHost>(o =>
                 {
                     o.EndpointConfiguration = (endpoint) =>
