@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using SFA.DAS.Apprentice.LoginService.MessageHandler.Infrastructure;
 using SFA.DAS.Apprentice.LoginService.MessageHandler.Infrastructure.NServiceBus;
 using SFA.DAS.Configuration.AzureTableStorage;
+using SFA.DAS.Http.Configuration;
 using SFA.DAS.LoginService.Configuration;
 
 [assembly: FunctionsStartup(typeof(SFA.DAS.Apprentice.LoginService.MessageHandler.Startup))]
@@ -40,6 +41,12 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler
 
             builder.Services.AddSingleton<ILoginConfig>(s =>
                 s.GetRequiredService<IOptions<LoginConfig>>().Value);
+
+            var sp = builder.Services.BuildServiceProvider();
+            var configuration = sp.GetRequiredService<IConfiguration>();
+            var login = sp.GetRequiredService<ILoginConfig>();
+
+            builder.Services.AddInvitationService(configuration, login.ApprenticeLoginApi);
         }
     }
 }

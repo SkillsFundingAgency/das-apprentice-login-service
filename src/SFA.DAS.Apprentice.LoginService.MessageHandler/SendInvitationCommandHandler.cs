@@ -1,13 +1,13 @@
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SFA.DAS.Apprentice.LoginService.MessageHandler.Infrastructure.NServiceBus;
+using SFA.DAS.Apprentice.LoginService.MessageHandler.InvitationService;
 using SFA.DAS.Apprentice.LoginService.Messages;
 using SFA.DAS.NServiceBus.AzureFunction.Attributes;
 
@@ -15,11 +15,11 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler
 {
     public class SendInvitationCommandHandler
     {
-        private readonly IMediator _mediator;
+        private readonly IInvitationApi _api;
 
-        public SendInvitationCommandHandler(IMediator mediator)
+        public SendInvitationCommandHandler(IInvitationApi api)
         {
-            _mediator = mediator;
+            _api = api;
         }
 
         [FunctionName("HandleSendInvitationCommand")]
@@ -29,26 +29,21 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler
         {
             try
             {
-                //log.LogInformation(
-                //    $"Received {typeof(SendInvitationCommand)} SourceId : {sendInvitationCommand.SourceId} ClientId : {sendInvitationCommand.ClientId}");
+                var response = await _api.SendInvitation(sendInvitationCommand.ClientId, new SendInvitationRequest
+                {
+                    Email = sendInvitationCommand.Email,
+                    GivenName = sendInvitationCommand.GivenName,
+                    FamilyName = sendInvitationCommand.FamilyName,
+                    SourceId = sendInvitationCommand.SourceId,
+                    Callback = new Uri(sendInvitationCommand.Callback),
+                    UserRedirect = new Uri(sendInvitationCommand.UserRedirect),
+                    OrganisationName = sendInvitationCommand.OrganisationName,
+                    ApprenticeshipName = sendInvitationCommand.ApprenticeshipName,
+                    Inviter = null
+                });
 
-                //var response = await _mediator.Send(new CreateInvitationRequest
-                //{
-                //    Email = sendInvitationCommand.Email,
-                //    GivenName = sendInvitationCommand.GivenName,
-                //    FamilyName = sendInvitationCommand.FamilyName,
-                //    SourceId = sendInvitationCommand.SourceId.ToString(),
-                //    Callback = new Uri(sendInvitationCommand.Callback),
-                //    UserRedirect = new Uri(sendInvitationCommand.UserRedirect),
-                //    ClientId = sendInvitationCommand.ClientId,
-                //    IsInvitationToOrganisation = false,
-                //    Inviter = "Automatic",
-                //    ApprenticeshipName = sendInvitationCommand.ApprenticeshipName,
-                //    OrganisationName = sendInvitationCommand.OrganisationName
-                //});
-
-                //log.LogInformation(
-                //    $"Completed {typeof(SendInvitationCommand)} InvitationId : {response.InvitationId} Invited : {response.Invited}");
+                log.LogInformation(
+                    $"Completed {typeof(SendInvitationCommand)} InvitationId : {response?.InvitationId} Invited : {response?.Invited}, Message : { response?.Message}");
             }
             catch (Exception e)
             {

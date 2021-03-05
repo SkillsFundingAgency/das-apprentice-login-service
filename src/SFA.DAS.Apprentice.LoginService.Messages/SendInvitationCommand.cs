@@ -5,7 +5,7 @@ namespace SFA.DAS.Apprentice.LoginService.Messages
     public class SendInvitationCommand
     {
         public Guid ClientId { get; set; }
-        public Guid SourceId { get; set; }
+        public string SourceId { get; set; }
         public string Email { get; set; }
         public string GivenName { get; set; }
         public string FamilyName { get; set; }
