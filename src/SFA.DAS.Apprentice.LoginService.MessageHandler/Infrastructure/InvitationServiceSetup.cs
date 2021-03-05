@@ -5,7 +5,7 @@ using SFA.DAS.Apprentice.LoginService.MessageHandler.InvitationService;
 using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.LoginService.Configuration;
 
-namespace SFA.DAS.Apprentice.LoginService.MessageHandler.Infrastructure.NServiceBus
+namespace SFA.DAS.Apprentice.LoginService.MessageHandler.Infrastructure
 {
     public static class InvitationServiceSetup
     {
