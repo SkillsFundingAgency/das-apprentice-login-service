@@ -1,9 +1,17 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using AutoFixture;
+using FluentAssertions;
+using Newtonsoft.Json;
 using NServiceBus.Transport;
 using SFA.DAS.Apprentice.LoginService.MessageHandler.AcceptanceTests.Services;
+using SFA.DAS.Apprentice.LoginService.MessageHandler.InvitationService;
 using SFA.DAS.Apprentice.LoginService.Messages;
 using TechTalk.SpecFlow;
+using WireMock.RequestBuilders;
+using WireMock.ResponseBuilders;
 
 namespace SFA.DAS.Apprentice.LoginService.MessageHandler.AcceptanceTests.Steps
 {
@@ -15,23 +23,45 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler.AcceptanceTests.Steps
         private Fixture _f;
         private string _userEmail;
         private SendInvitationCommand _message;
+        private Guid _clientId;
+        private SendInvitationResponse _response;
 
         public SendInvitationSteps(TestContext context)
         {
             _context = context;
             _userEmail = "new-user@test,com";
+            _clientId = Guid.NewGuid();
             _f = new Fixture();
+            _response = _f.Create<SendInvitationResponse>();
         }
 
-        [When(@"the SendInvitationCommand is received")]
-        public async Task WhenTheSendInvitationCommandIsReceived()
+        [Given(@"we have created a valid SendInvitationCommand")]
+        public void GivenWeHaveCreatedAValidSendInvitationCommand()
         {
             _message = _f.Build<SendInvitationCommand>()
+                .With(x=>x.ClientId, _clientId)
                 .With(x => x.Email, _userEmail)
                 .With(x => x.UserRedirect, "https://test.com/")
                 .With(x => x.Callback, "https://test.com/")
                 .Create();
+        }
 
+        [Given(@"the login service api is ready to respond")]
+        public void GivenTheLoginServiceApiIsReadyToRespond()
+        {
+            _context.LoginServiceApi.MockServer
+                .Given(
+                    Request.Create().WithPath($"/Invitations/{_message.ClientId}")
+                        .UsingPost())
+                .RespondWith(Response.Create()
+                    .WithStatusCode((int)HttpStatusCode.OK)
+                    .WithBodyAsJson(_response));
+        }
+
+
+        [When(@"the SendInvitationCommand is received")]
+        public async Task WhenTheSendInvitationCommandIsReceived()
+        {
             await _context.WaitFor<MessageContext>(async () =>
                 await _context.TestMessageBus.Send(_message));
         }
@@ -39,41 +69,18 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler.AcceptanceTests.Steps
         [Then(@"the invitation is forwarded to the api correctly")]
         public void ThenTheInvitationIsForwardedToTheApiCorrectly()
         {
-            //ScenarioContext.Current.Pending();
+            var logs = _context.LoginServiceApi.MockServer.LogEntries;
+            logs.Should().HaveCount(1);
+            var request = JsonConvert.DeserializeObject<SendInvitationRequest>(logs.First().RequestMessage.Body);
+
+            request.Email.Should().Be(_message.Email);
+            request.SourceId.Should().Be(_message.SourceId);
+            request.GivenName.Should().Be(_message.GivenName);
+            request.FamilyName.Should().Be(_message.FamilyName);
+            request.OrganisationName.Should().Be(_message.OrganisationName);
+            request.ApprenticeshipName.Should().Be(_message.ApprenticeshipName);
+            request.Callback.Should().Be(_message.Callback);
+            request.UserRedirect.Should().Be(_message.UserRedirect);
         }
-
-
-
-        //[Then(@"the invitation is recorded")]
-        //public void ThenTheInvitationIsRecorded()
-        //{
-        //    var invitation = _context.LoginContext.Invitations.SingleOrDefault(x => x.Email == _userEmail);
-        //    invitation.Should().NotBeNull();
-        //    invitation.Email.Should().Be(_userEmail);
-        //    invitation.GivenName.Should().Be(_message.GivenName);
-        //    invitation.FamilyName.Should().Be(_message.FamilyName);
-        //    invitation.SourceId.Should().Be(_message.SourceId.ToString());
-        //    invitation.ValidUntil.Should().BeAfter(DateTime.UtcNow);
-        //    invitation.ClientId.Should().Be(_client.Id);
-
-        //    invitation.CallbackUri.Should().NotBeNull();
-        //    invitation.CallbackUri.AbsoluteUri.Should().Be(_message.Callback);
-
-        //    invitation.UserRedirectUri.Should().NotBeNull();
-        //    invitation.UserRedirectUri.AbsoluteUri.Should().Be(_message.UserRedirect);
-
-        //}
-
-        //[Then(@"the invitation is logged")]
-        //public void ThenTheInvitationIsLogged()
-        //{
-        //    var log = _context.LoginContext.UserLogs.SingleOrDefault(x => x.Email == _userEmail);
-        //    log.Should().NotBeNull();
-        //    log.Action.Should().Be("Invite");
-        //    log.Result.Should().Be("Invited");
-        //    log.DateTime.Should().BeBefore(DateTime.UtcNow);
-        //}
-
-
     }
 }

@@ -1,19 +1,15 @@
 ﻿using System.Collections.Generic;
 using SFA.DAS.Apprentice.LoginService.MessageHandler.AcceptanceTests.Services;
-using SFA.DAS.LoginService.Data;
 
 namespace SFA.DAS.Apprentice.LoginService.MessageHandler.AcceptanceTests
 {
     public class TestContext
     {
-        public TestContext()
-        {
-            LoginBaseUrl = "https://login/";
-        }
-        public string LoginBaseUrl { get; set; }
+        public string LoginServiceBaseUrl { get; set; }
         public TestMessageBus TestMessageBus { get; set; }
         public List<IHook> Hooks { get; } = new List<IHook>();
         public MessageHandlerTestHost MessageHandlerHost { get; set; }
+        public MockApi LoginServiceApi { get; set; }
     }
 
     public interface IHook { }

@@ -30,7 +30,8 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler.AcceptanceTests.Service
                 {"ConfigNames", "SFA.DAS.EmployerIncentives.Functions"},
                 {"NServiceBusConnectionString", "UseDevelopmentStorage=true"},
                 {"AzureWebJobsStorage", "UseDevelopmentStorage=true"},
-                {"SFA.DAS.ApprenticeLoginService:BaseUrl", _context.LoginBaseUrl}
+                {"SFA.DAS.ApprenticeLoginService:BaseUrl", _context.LoginServiceBaseUrl},
+                {"SFA.DAS.ApprenticeLoginService:ApprenticeLoginApi:ApiBaseUrl", _context.LoginServiceBaseUrl}
             };
         }
 
