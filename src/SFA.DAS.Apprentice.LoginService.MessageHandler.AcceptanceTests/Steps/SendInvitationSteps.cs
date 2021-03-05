@@ -25,6 +25,7 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler.AcceptanceTests.Steps
         private SendInvitationCommand _message;
         private Guid _clientId;
         private SendInvitationResponse _response;
+        private WaitForResult _waitResult;
 
         public SendInvitationSteps(TestContext context)
         {
@@ -58,11 +59,10 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler.AcceptanceTests.Steps
                     .WithBodyAsJson(_response));
         }
 
-
         [When(@"the SendInvitationCommand is received")]
         public async Task WhenTheSendInvitationCommandIsReceived()
         {
-            await _context.WaitFor<MessageContext>(async () =>
+           _waitResult = await _context.WaitFor<MessageContext>(async () =>
                 await _context.TestMessageBus.Send(_message));
         }
 

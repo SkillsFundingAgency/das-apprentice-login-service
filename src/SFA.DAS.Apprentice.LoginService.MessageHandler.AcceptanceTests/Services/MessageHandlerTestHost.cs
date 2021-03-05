@@ -49,6 +49,7 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler.AcceptanceTests.Service
                     {
                         a.Sources.Clear();
                         a.AddInMemoryCollection(_appConfig);
+                        a.SetBasePath(_context.TestMessageBus.StorageDirectory.FullName);
                     })
                     .ConfigureWebJobs(c =>
                     {
@@ -62,7 +63,7 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler.AcceptanceTests.Service
                 {
                     o.EndpointConfiguration = (endpoint) =>
                     {
-                        endpoint.UseTransport<LearningTransport>();
+                        endpoint.UseTransport<LearningTransport>().StorageDirectory(_context.TestMessageBus.StorageDirectory.FullName);
                         return endpoint;
                     };
 

@@ -7,7 +7,6 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler.AcceptanceTests.Binding
     [Binding]
     public class MessageHandler
     {
-        public static MessageHandlerTestHost MessageHandlerHost { get; set; }
         private readonly TestContext _context;
 
         public MessageHandler(TestContext context)
@@ -18,20 +17,14 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler.AcceptanceTests.Binding
         [BeforeScenario(Order = 3)]
         public async Task InitialiseFunctions()
         {
-            if (MessageHandlerHost == null)
-            {
-                MessageHandlerHost = new MessageHandlerTestHost(_context);
-                await MessageHandlerHost.Start();
-            }
-
-            _context.MessageHandlerHost = MessageHandlerHost;
+            _context.MessageHandlerHost = new MessageHandlerTestHost(_context);
+            await _context.MessageHandlerHost.Start();
         }
 
-        [AfterFeature()]
-        public static void CleanUpFeature()
+        [AfterScenario()]
+        public void CleanUp()
         {
-            MessageHandlerHost?.Dispose();
-            MessageHandlerHost = null;
+            _context.MessageHandlerHost?.Dispose();
         }
     }
 }

@@ -17,13 +17,20 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler.AcceptanceTests.Service
         public bool IsRunning { get; private set; }
         public DirectoryInfo StorageDirectory { get; private set; }
 
-        public async Task Start()
+        public async Task Start(DirectoryInfo testDirectory)
         {
+            StorageDirectory = new DirectoryInfo(Path.Combine(testDirectory.FullName, ".learningtransport"));
+            if (!StorageDirectory.Exists)
+            {
+                Directory.CreateDirectory(StorageDirectory.FullName);
+            }
+
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.ApprenticeLoginService.MessageHandler.TestMessageBus");
             endpointConfiguration
                 .UseNewtonsoftJsonSerializer()
                 .UseMessageConventions()
-                .UseTransport<LearningTransport>();
+                .UseTransport<LearningTransport>()
+                .StorageDirectory(StorageDirectory.FullName);
 
             endpointConfiguration.UseLearningTransport(s => s.RouteToEndpoint(typeof(SendInvitationCommand), QueueNames.SendInvitationCommand));
 
