@@ -281,3 +281,6 @@ src/Tools/PhantomJS/tools/phantomjs/ChangeLog
 
 #Test generated nservicebus queues
 .learningtransport/
+
+# exclude temp directory
+temp/

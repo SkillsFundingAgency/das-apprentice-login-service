@@ -48,6 +48,7 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler
             catch (Exception e)
             {
                 log.LogError($"Errored when processing {typeof(SendInvitationCommand)}", e);
+                throw;
             }
         }
 

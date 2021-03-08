@@ -3,7 +3,6 @@ using System.IO;
 using System.Threading.Tasks;
 using NServiceBus.Transport;
 using SFA.DAS.Apprentice.LoginService.MessageHandler.AcceptanceTests.Services;
-using SQLitePCL;
 using TechTalk.SpecFlow;
 
 namespace SFA.DAS.Apprentice.LoginService.MessageHandler.AcceptanceTests.Bindings
@@ -21,15 +20,15 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler.AcceptanceTests.Binding
         [BeforeScenario(Order = 2)]
         public async Task InitialiseFunctions()
         {
-            _context.TestDirectory = new DirectoryInfo(Path.Combine(Directory.GetCurrentDirectory(), Guid.NewGuid().ToString()));
-            if (!_context.TestDirectory.Exists)
+            _context.WorkingDirectory = GetWorkDirectory();
+            if (!_context.WorkingDirectory.Exists)
             {
-                Directory.CreateDirectory(_context.TestDirectory.FullName);
+                Directory.CreateDirectory(_context.WorkingDirectory.FullName);
             }
 
             _context.TestMessageBus = new TestMessageBus();
             _context.Hooks.Add(new MessageBusHook<MessageContext>());
-            await _context.TestMessageBus.Start(_context.TestDirectory);
+            await _context.TestMessageBus.Start(_context.WorkingDirectory);
         }
 
         [AfterScenario()]
@@ -40,10 +39,23 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler.AcceptanceTests.Binding
                 await _context.TestMessageBus.Stop();
             }
 
-            if (_context?.TestDirectory != null && _context.TestDirectory.Exists)
+            if (_context?.WorkingDirectory != null)
             {
-                Directory.Delete(_context.TestDirectory.FullName, true);
+                _context.WorkingDirectory.Refresh();
+                if (_context.WorkingDirectory.Exists)
+                {
+                    Directory.Delete(_context.WorkingDirectory.FullName, true);
+                }
             }
         }
+
+        private DirectoryInfo GetWorkDirectory()
+        {
+            var directory = Directory.GetCurrentDirectory();
+            var srcDirectory = directory.Substring(0, directory.IndexOf(@"\src\", StringComparison.Ordinal));
+
+            return new DirectoryInfo(Path.Combine(srcDirectory, @"temp\" + DateTime.UtcNow.ToString("yyyy-MM-dd hhmmss")));
+        }
+
     }
 }

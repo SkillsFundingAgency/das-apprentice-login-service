@@ -21,11 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Drivers\" />
-    <Folder Include="Hooks\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Apprentice.LoginService.MessageHandler\SFA.DAS.Apprentice.LoginService.MessageHandler.csproj" />
     <ProjectReference Include="..\SFA.DAS.Apprentice.LoginService.Messages\SFA.DAS.Apprentice.LoginService.Messages.csproj" />
   </ItemGroup>

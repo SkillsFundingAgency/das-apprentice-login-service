@@ -20,7 +20,7 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler.AcceptanceTests.Steps
     public class SendInvitationSteps
     {
         private readonly TestContext _context;
-        private Fixture _f;
+        private Fixture _fixture;
         private string _userEmail;
         private SendInvitationCommand _message;
         private Guid _clientId;
@@ -33,13 +33,13 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler.AcceptanceTests.Steps
             _userEmail = "new-user@test,com";
             _clientId = Guid.NewGuid();
             _fixture = new Fixture();
-            _response = _f.Create<SendInvitationResponse>();
+            _response = _fixture.Create<SendInvitationResponse>();
         }
 
         [Given(@"we have created a valid SendInvitationCommand")]
         public void GivenWeHaveCreatedAValidSendInvitationCommand()
         {
-            _message = _f.Build<SendInvitationCommand>()
+            _message = _fixture.Build<SendInvitationCommand>()
                 .With(x=>x.ClientId, _clientId)
                 .With(x => x.Email, _userEmail)
                 .With(x => x.UserRedirect, "https://test.com/")

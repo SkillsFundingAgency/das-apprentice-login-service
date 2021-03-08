@@ -11,7 +11,7 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler.AcceptanceTests
         public List<IHook> Hooks { get; } = new List<IHook>();
         public MessageHandlerTestHost MessageHandlerHost { get; set; }
         public MockApi LoginServiceApi { get; set; }
-        public DirectoryInfo TestDirectory { get; set; }
+        public DirectoryInfo WorkingDirectory { get; set; }
     }
 
     public interface IHook { }
