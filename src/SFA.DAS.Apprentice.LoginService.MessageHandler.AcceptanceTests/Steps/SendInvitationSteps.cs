@@ -32,7 +32,7 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler.AcceptanceTests.Steps
             _context = context;
             _userEmail = "new-user@test,com";
             _clientId = Guid.NewGuid();
-            _f = new Fixture();
+            _fixture = new Fixture();
             _response = _f.Create<SendInvitationResponse>();
         }
 
