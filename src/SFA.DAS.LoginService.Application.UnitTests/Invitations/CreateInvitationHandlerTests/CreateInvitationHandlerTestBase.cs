@@ -20,7 +20,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.Invitations.CreateInvitatio
         protected LoginContext LoginContext; 
         protected IEmailService EmailService;
         protected ILoginConfig LoginConfig;
-        protected IUserService UserService;
+        protected IWebUserService UserService;
         protected IUserAccountService UserAccountService;
         protected static Guid ClientId;
         protected Guid InvitationTemplateId;
@@ -33,7 +33,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.Invitations.CreateInvitatio
             EmailService = Substitute.For<IEmailService>();
             LoginConfig = Substitute.For<ILoginConfig>();
             LoginConfig.BaseUrl.Returns("https://baseurl");
-            UserService = Substitute.For<IUserService>();
+            UserService = Substitute.For<IWebUserService>();
             UserAccountService = Substitute.For<IUserAccountService>();
             
             CreateInvitationHandler = BuildCreateInvitationHandler();

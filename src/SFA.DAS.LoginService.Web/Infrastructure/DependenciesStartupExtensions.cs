@@ -43,7 +43,7 @@ namespace SFA.DAS.LoginService.Web.Infrastructure
             }
 
             services.AddTransient<IUserAccountService, UserAccountService>();
-            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IWebUserService, UserService>();
             services.AddTransient<IClientService, ClientService>();
             services.AddTransient<SignInManager<LoginUser>>();
             services.AddHttpClient<ICallbackService, CallbackService>()

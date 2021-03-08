@@ -19,11 +19,11 @@ namespace SFA.DAS.LoginService.Application.BuildLogoutViewModel
     {
         private readonly IIdentityServerInteractionService _interactionService;
         private readonly LoginContext _loginContext;
-        private readonly IUserService _userService;
+        private readonly IWebUserService _userService;
         private readonly IEventService _eventService;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public LogoutHandler(IIdentityServerInteractionService interactionService, LoginContext loginContext, IUserService userService, IEventService eventService, IHttpContextAccessor httpContextAccessor)
+        public LogoutHandler(IIdentityServerInteractionService interactionService, LoginContext loginContext, IWebUserService userService, IEventService eventService, IHttpContextAccessor httpContextAccessor)
         {
             _interactionService = interactionService;
             _loginContext = loginContext;

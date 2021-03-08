@@ -10,7 +10,7 @@ using SFA.DAS.LoginService.Data.Entities;
 namespace SFA.DAS.LoginService.Application.Services
 {
     [ExcludeFromCodeCoverage]
-    public class UserService : IUserService
+    public class UserService : IWebUserService
     {
         private readonly UserManager<LoginUser> _userManager;
         private readonly SignInManager<LoginUser> _signInManager;
