@@ -499,7 +499,7 @@
             "type": "string",
             "value": "[reference('app-service-certificate').outputs.certificateThumbprint.value]"
         },
-        "FunctionApp[Name": {
+        "FunctionAppName": {
             "type": "string",
             "value": "[variables('functionAppName')]"
         },
