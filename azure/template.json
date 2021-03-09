@@ -340,6 +340,7 @@
             "apiVersion": "2020-06-01",
             "name": "app-service-plan",
             "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[variables('resourceGroupName')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -366,6 +367,7 @@
             "apiVersion": "2020-06-01",
             "name": "function-app-application-insights",
             "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[variables('resourceGroupName')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -389,6 +391,7 @@
             "apiVersion": "2020-06-01",
             "name": "function-app",
             "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[variables('resourceGroupName')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
