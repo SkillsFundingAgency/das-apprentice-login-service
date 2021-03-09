@@ -25,7 +25,15 @@ jobs:
     inputs:
       command: publish
       publishWebProjects: true
-      projects: src/**/*.csproj
+      projects: src/SFA.DAS.LoginService.Web/SFA.DAS.LoginService.Web.csproj
+      arguments: --configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore --no-build
+
+  - task: DotNetCoreCLI@2
+    displayName: Publish Function
+    inputs:
+      command: publish
+      publishWebProjects: false
+      projects: src/SFA.DAS.Apprentice.LoginService.MessageHandler/SFA.DAS.Apprentice.LoginService.MessageHandler.csproj
       arguments: --configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore --no-build
 
   - task: CopyFiles@2
