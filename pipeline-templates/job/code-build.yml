@@ -36,7 +36,6 @@ jobs:
       projects: src/SFA.DAS.Apprentice.LoginService.MessageHandler/SFA.DAS.Apprentice.LoginService.MessageHandler.csproj
       arguments: --configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore --no-build
 
-
   - task: CopyFiles@2
     displayName: Copy Files to - $(build.artifactstagingdirectory)
     inputs:
