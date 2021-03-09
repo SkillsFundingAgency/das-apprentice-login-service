@@ -32,7 +32,7 @@ jobs:
     displayName: Publish Function
     inputs:
       command: publish
-      publishWebProjects: true
+      publishWebProjects: false
       projects: src/SFA.DAS.Apprentice.LoginService.MessageHandler/SFA.DAS.Apprentice.LoginService.MessageHandler.csproj
       arguments: --configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore --no-build
 
