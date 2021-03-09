@@ -52,10 +52,15 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler.AcceptanceTests.Binding
         private DirectoryInfo GetWorkDirectory()
         {
             var directory = Directory.GetCurrentDirectory();
-            var srcDirectory = directory.Substring(0, directory.IndexOf(@"\src\", StringComparison.Ordinal));
+            var len = directory.IndexOf(@"\src\", StringComparison.Ordinal);
+            var temp = @"temp\" + DateTime.UtcNow.ToString("yyyy-MM-dd hhmmss");
 
-            return new DirectoryInfo(Path.Combine(srcDirectory, @"temp\" + DateTime.UtcNow.ToString("yyyy-MM-dd hhmmss")));
+            if (len > 0)
+            {
+                var srcDirectory = directory.Substring(0, len);
+                return new DirectoryInfo(Path.Combine(srcDirectory, temp));
+            }
+            return new DirectoryInfo(Path.Combine(directory, temp));
         }
-
     }
 }
