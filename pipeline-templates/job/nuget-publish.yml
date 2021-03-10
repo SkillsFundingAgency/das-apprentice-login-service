@@ -1,9 +1,9 @@
-pool:
-  name: DAS - Continuous Deployment
-workspace:
-  clean: all
 jobs:
 - deployment: NugetPush
+  pool:
+    name: DAS - Continuous Deployment
+  workspace:
+    clean: all 
   environment: Nuget
   strategy:
     runOnce:

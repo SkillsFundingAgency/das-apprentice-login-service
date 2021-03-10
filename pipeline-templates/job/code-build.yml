@@ -21,6 +21,14 @@ jobs:
   - template: azure-pipelines-templates/build/step/dependency-check.yml@das-platform-building-blocks
 
   - task: DotNetCoreCLI@2
+    displayName: dotnet pack
+    inputs:
+      command: pack
+      packagesToPack: src/SFA.DAS.Apprentice.LoginService.Messages/SFA.DAS.Apprentice.LoginService.Messages.csproj
+      versioningScheme: byBuildNumber
+      packDirectory: $(build.artifactstagingdirectory)/NugetPackages
+
+  - task: DotNetCoreCLI@2
     displayName: Publish Website
     inputs:
       command: publish
