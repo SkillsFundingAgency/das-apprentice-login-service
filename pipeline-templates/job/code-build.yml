@@ -56,3 +56,6 @@ jobs:
     displayName: Publish Artifact - CodeBuild
     inputs:
       PathtoPublish: $(build.artifactstagingdirectory)/publish
+
+  - publish: $(build.artifactstagingdirectory)/NugetPackages
+    artifact: NugetPackages
