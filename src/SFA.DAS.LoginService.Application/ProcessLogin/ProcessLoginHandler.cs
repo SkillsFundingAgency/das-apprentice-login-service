@@ -12,12 +12,12 @@ namespace SFA.DAS.LoginService.Application.ProcessLogin
 {
   public class ProcessLoginHandler : IRequestHandler<ProcessLoginRequest, ProcessLoginResponse>
   {
-    private readonly IUserService _userService;
+    private readonly IWebUserService _userService;
     private readonly IEventService _eventService;
     private readonly IIdentityServerInteractionService _interactionService;
     private readonly LoginContext _loginContext;
 
-    public ProcessLoginHandler(IUserService userService, IEventService eventService,
+    public ProcessLoginHandler(IWebUserService userService, IEventService eventService,
         IIdentityServerInteractionService interactionService, LoginContext loginContext)
     {
       _userService = userService;

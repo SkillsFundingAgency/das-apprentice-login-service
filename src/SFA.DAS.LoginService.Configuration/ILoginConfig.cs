@@ -10,5 +10,6 @@ namespace SFA.DAS.LoginService.Configuration
         int MaxFailedAccessAttempts { get; set; }
         int DaysInvitationIsValidFor { get; set; }
         NServiceBusConfiguration NServiceBusConfiguration { get; set; }
+        ApprenticeLoginApiConfiguration ApprenticeLoginApi { get; set; }
     }
 }

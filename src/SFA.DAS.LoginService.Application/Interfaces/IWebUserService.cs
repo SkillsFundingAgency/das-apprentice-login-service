@@ -4,7 +4,7 @@ using SFA.DAS.LoginService.Data.Entities;
 
 namespace SFA.DAS.LoginService.Application.Interfaces
 {
-    public interface IUserService
+    public interface IWebUserService
     {
         Task<bool> UserExists(string email);
         Task<UserResponse> CreateUser(LoginUser newUser, string password);

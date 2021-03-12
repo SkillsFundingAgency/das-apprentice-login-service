@@ -21,11 +21,27 @@ jobs:
   - template: azure-pipelines-templates/build/step/dependency-check.yml@das-platform-building-blocks
 
   - task: DotNetCoreCLI@2
+    displayName: dotnet pack
+    inputs:
+      command: pack
+      packagesToPack: src/SFA.DAS.Apprentice.LoginService.Messages/SFA.DAS.Apprentice.LoginService.Messages.csproj
+      versioningScheme: byBuildNumber
+      packDirectory: $(build.artifactstagingdirectory)/NugetPackages
+
+  - task: DotNetCoreCLI@2
     displayName: Publish Website
     inputs:
       command: publish
       publishWebProjects: true
-      projects: src/**/*.csproj
+      projects: src/SFA.DAS.LoginService.Web/SFA.DAS.LoginService.Web.csproj
+      arguments: --configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore --no-build
+
+  - task: DotNetCoreCLI@2
+    displayName: Publish Function
+    inputs:
+      command: publish
+      publishWebProjects: false
+      projects: src/SFA.DAS.Apprentice.LoginService.MessageHandler/SFA.DAS.Apprentice.LoginService.MessageHandler.csproj
       arguments: --configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore --no-build
 
   - task: CopyFiles@2
@@ -40,3 +56,6 @@ jobs:
     displayName: Publish Artifact - CodeBuild
     inputs:
       PathtoPublish: $(build.artifactstagingdirectory)/publish
+
+  - publish: $(build.artifactstagingdirectory)/NugetPackages
+    artifact: NugetPackages

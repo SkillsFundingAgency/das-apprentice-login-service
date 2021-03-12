@@ -10,5 +10,6 @@ namespace SFA.DAS.LoginService.Configuration
         public string CertificateThumbprint { get; set; }
         public NotificationsApiConfiguration NotificationsApiClientConfiguration { get; set; }
         public NServiceBusConfiguration NServiceBusConfiguration { get; set; }
+        public ApprenticeLoginApiConfiguration ApprenticeLoginApi { get; set; }
     }
 }

@@ -42,7 +42,8 @@ namespace SFA.DAS.LoginService.Web.Infrastructure
                 services.AddTransient<IEmailService, EmailService.EmailService>();
             }
 
-            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IUserAccountService, UserAccountService>();
+            services.AddTransient<IWebUserService, UserService>();
             services.AddTransient<IClientService, ClientService>();
             services.AddTransient<SignInManager<LoginUser>>();
             services.AddHttpClient<ICallbackService, CallbackService>()

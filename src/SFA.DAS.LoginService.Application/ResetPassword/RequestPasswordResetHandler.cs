@@ -18,10 +18,10 @@ namespace SFA.DAS.LoginService.Application.ResetPassword
         private readonly IEmailService _emailService;
         private readonly ILoginConfig _loginConfig;
         private readonly LoginContext _loginContext;
-        private readonly IUserService _userService;
+        private readonly IWebUserService _userService;
 
         public RequestPasswordResetHandler(IEmailService emailService,
-            ILoginConfig loginConfig, LoginContext loginContext, IUserService userService)
+            ILoginConfig loginConfig, LoginContext loginContext, IWebUserService userService)
         {
             _emailService = emailService;
             _loginConfig = loginConfig;

@@ -275,3 +275,12 @@ src/Tools/PhantomJS/tools/phantomjs/ChangeLog
 
 # Development app settings
 *.Development.json
+
+# feature files
+*.feature.cs
+
+#Test generated nservicebus queues
+.learningtransport/
+
+# exclude temp directory
+temp/

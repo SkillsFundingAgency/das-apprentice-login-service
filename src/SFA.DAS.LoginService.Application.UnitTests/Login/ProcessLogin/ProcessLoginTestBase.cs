@@ -12,7 +12,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.Login.ProcessLogin
     [TestFixture]
     public class ProcessLoginTestBase
     {
-        protected IUserService UserService;
+        protected IWebUserService UserService;
         protected ProcessLoginHandler Handler;
         protected IEventService EventService;
         protected IIdentityServerInteractionService InteractionService;
@@ -22,7 +22,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.Login.ProcessLogin
         public void SetUp()
         {
             EventService = Substitute.For<IEventService>();
-            UserService = Substitute.For<IUserService>();
+            UserService = Substitute.For<IWebUserService>();
             InteractionService = Substitute.For<IIdentityServerInteractionService>();
             var dbContextOptions = new DbContextOptionsBuilder<LoginContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
