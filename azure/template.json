@@ -17,6 +17,9 @@
         "sharedFrontEndSubnetResourceId": {
             "type": "string"
         },
+        "frontEndAccessRestrictions": {
+            "type": "array"
+        },
         "sharedSqlServerName": {
             "type": "string"
         },
@@ -85,6 +88,9 @@
             "type": "array"
         },
         "subnetDelegations": {
+            "type": "array"
+        },
+        "workerAccessRestrictions": {
             "type": "array"
         },
         "appServicePlanInstances": {
@@ -229,6 +235,9 @@
                     },
                     "certificateThumbprint": {
                         "value": "[reference('app-service-certificate').outputs.certificateThumbprint.value]"
+                    },
+                    "ipSecurityRestrictions": {
+                        "value": "[parameters('frontEndAccessRestrictions')]"
                     }
                 }
             },
@@ -456,6 +465,9 @@
                                 }
                             ]
                         }
+                    },
+                    "ipSecurityRestrictions": {
+                        "value": "[parameters('workerAccessRestrictions')]"
                     }
                 }
             },
