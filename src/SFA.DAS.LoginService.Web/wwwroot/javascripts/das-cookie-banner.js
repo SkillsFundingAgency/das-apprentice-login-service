@@ -256,7 +256,8 @@ CookieSettings.prototype.showConfirmationMessage = function () {
 };
 
 CookieSettings.prototype.getReferrerLink = function () {
-    return document.referrer ? new URL(document.referrer).pathname : false;
+    // Login page requires the querystring parameters
+    return document.referrer ? document.referrer : false;
 };
 
 CookieSettings.prototype.hideCookieSettings = function () {
