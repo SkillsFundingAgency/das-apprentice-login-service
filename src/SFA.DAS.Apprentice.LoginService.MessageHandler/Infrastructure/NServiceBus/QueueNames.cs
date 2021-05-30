@@ -2,6 +2,6 @@
 {
     public static class QueueNames
     {
-        public const string SendInvitationCommand = "SFA.DAS.ApprenticeLoginService.SendInvitation";
+        public const string ApprenticeLoginService = "SFA.DAS.ApprenticeLoginService";
     }
 }

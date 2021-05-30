@@ -1,11 +1,11 @@
 ﻿using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NServiceBus;
 using SFA.DAS.Apprentice.LoginService.MessageHandler.Infrastructure;
 using SFA.DAS.Apprentice.LoginService.MessageHandler.Infrastructure.NServiceBus;
-using SFA.DAS.Configuration.AzureTableStorage;
-using SFA.DAS.Http.Configuration;
 using SFA.DAS.LoginService.Configuration;
 
 [assembly: FunctionsStartup(typeof(SFA.DAS.Apprentice.LoginService.MessageHandler.Startup))]
@@ -15,25 +15,32 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler
     public class Startup : FunctionsStartup
     {
         public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)
-        {
-            builder.ConfigurationBuilder.AddJsonFile("local.settings.json", optional: true);
-
-            var preConfig = builder.ConfigurationBuilder.Build();
-
-            builder.ConfigurationBuilder.AddAzureTableStorage(options =>
-            {
-                options.ConfigurationKeys = preConfig["ConfigNames"].Split(",");
-                options.StorageConnectionString = preConfig["ConfigurationStorageConnectionString"];
-                options.EnvironmentName = preConfig["EnvironmentName"];
-                options.PreFixConfigurationKeys = true;
-            });
-        }
+            => builder.ConfigureConfiguration();
 
         public override void Configure(IFunctionsHostBuilder builder)
         {
             builder.ConfigureLogging();
-            builder.ConfigureNServiceBus();
 
+            var logger = LoggerFactory.Create(b => b.ConfigureLogging()).CreateLogger<Startup>();
+            AutoSubscribeToQueues.CreateQueuesWithReflection(
+                builder.GetContext().Configuration,
+                connectionStringName: "NServiceBusConnectionString",
+                logger: logger)
+                .GetAwaiter().GetResult();
+
+            builder.UseNServiceBus(() =>
+            {
+                var configuration = new ServiceBusTriggeredEndpointConfiguration(
+                    endpointName: QueueNames.ApprenticeLoginService,
+                    connectionStringName: "NServiceBusConnectionString");
+
+                configuration.AdvancedConfiguration.SendFailedMessagesTo($"{QueueNames.ApprenticeLoginService}-error");
+                configuration.LogDiagnostics();
+
+                configuration.Transport.SubscriptionRuleNamingConvention(AzureQueueNameShortener.Shorten);
+
+                return configuration;
+            });
             builder.Services
                 .AddOptions<LoginConfig>()
                 .Configure<IConfiguration>((settings, configuration) =>
@@ -45,6 +52,8 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler
             var sp = builder.Services.BuildServiceProvider();
             var configuration = sp.GetRequiredService<IConfiguration>();
             var login = sp.GetRequiredService<ILoginConfig>();
+
+            login.ApprenticeLoginApi ??= new ApprenticeLoginApiConfiguration { ApiBaseUrl = "https://bob.com/" };
 
             builder.Services.AddInvitationService(configuration, login.ApprenticeLoginApi);
         }
