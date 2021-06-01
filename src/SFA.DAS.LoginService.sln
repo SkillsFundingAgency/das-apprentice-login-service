@@ -33,7 +33,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.Apprentice.LoginSer
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.Apprentice.LoginService.MessageHandler", "SFA.DAS.Apprentice.LoginService.MessageHandler\SFA.DAS.Apprentice.LoginService.MessageHandler.csproj", "{2920D258-AD5D-4375-94D4-0D057886820C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Apprentice.LoginService.MessageHandler.AcceptanceTests", "SFA.DAS.Apprentice.LoginService.MessageHandler.AcceptanceTests\SFA.DAS.Apprentice.LoginService.MessageHandler.AcceptanceTests.csproj", "{1CBD58FC-E0D0-47CF-B787-F196380AF8EB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Apprentice.LoginService.MessageHandler.UnitTests", "SFA.DAS.Apprentice.LoginService.MessageHandler.AcceptanceTests\SFA.DAS.Apprentice.LoginService.MessageHandler.UnitTests.csproj", "{1CBD58FC-E0D0-47CF-B787-F196380AF8EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

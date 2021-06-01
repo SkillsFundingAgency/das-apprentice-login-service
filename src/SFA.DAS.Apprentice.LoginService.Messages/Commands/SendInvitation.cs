@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace SFA.DAS.Apprentice.LoginService.Messages
+namespace SFA.DAS.Apprentice.LoginService.Messages.Commands
 {
-    public class SendInvitationCommand
+    public class SendInvitation
     {
         public Guid ClientId { get; set; }
         public string SourceId { get; set; }

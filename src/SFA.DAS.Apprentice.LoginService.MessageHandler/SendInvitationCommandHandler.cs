@@ -1,13 +1,13 @@
 using Microsoft.Extensions.Logging;
 using NServiceBus;
 using SFA.DAS.Apprentice.LoginService.MessageHandler.InvitationService;
-using SFA.DAS.Apprentice.LoginService.Messages;
+using SFA.DAS.Apprentice.LoginService.Messages.Commands;
 using System;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.Apprentice.LoginService.MessageHandler
 {
-    public class SendInvitationCommandHandler : IHandleMessages<SendInvitationCommand>
+    public class SendInvitationCommandHandler : IHandleMessages<SendInvitation>
     {
         private readonly IInvitationApi _api;
         private readonly ILogger _log;
@@ -18,7 +18,7 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler
             _log = log;
         }
 
-        public async Task Handle(SendInvitationCommand message, IMessageHandlerContext context)
+        public async Task Handle(SendInvitation message, IMessageHandlerContext context)
         {
             var response = await _api.SendInvitation(message.ClientId, new SendInvitationRequest
             {
