@@ -19,7 +19,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ResetPassword.RequestPasswo
         protected RequestPasswordResetHandler Handler;
         protected Guid ClientId;
         protected LoginContext LoginContext;
-        protected IUserService UserService;
+        protected IWebUserService UserService;
 
         [SetUp]
         public void SetUp()
@@ -28,7 +28,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ResetPassword.RequestPasswo
             EmailService = Substitute.For<IEmailService>();
             
             
-            UserService = Substitute.For<IUserService>();
+            UserService = Substitute.For<IWebUserService>();
             UserService.GeneratePasswordResetToken(Arg.Any<LoginUser>()).Returns("Token");
             
             LoginConfig = Substitute.For<ILoginConfig>();

@@ -25,7 +25,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.Logout
         private IIdentityServerInteractionService _interactionService;
         private LogoutHandler _handler;
         private LoginContext _loginContext;
-        private IUserService _userService;
+        private IWebUserService _userService;
         private IEventService _eventService;
         private IHttpContextAccessor _httpContextAccessor;
 
@@ -43,7 +43,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.Logout
             _interactionService = Substitute.For<IIdentityServerInteractionService>();
             _interactionService.GetLogoutContextAsync("logoutid").Returns(new IdentityServer4.Models.LogoutRequest("iframeurl", new LogoutMessage()){ClientId = "mvc", PostLogoutRedirectUri = "https://postlogouturi"});
 
-            _userService = Substitute.For<IUserService>();
+            _userService = Substitute.For<IWebUserService>();
 
             var principal = new TestPrincipal(new Claim(JwtClaimTypes.Subject, "user123"));
             

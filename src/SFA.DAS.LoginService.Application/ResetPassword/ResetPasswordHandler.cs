@@ -14,11 +14,11 @@ namespace SFA.DAS.LoginService.Application.ResetPassword
 {
     public class ResetPasswordHandler : IRequestHandler<ResetUserPasswordRequest, ResetPasswordResponse>
     {
-        private readonly IUserService _userService;
+        private readonly IWebUserService _userService;
         private readonly LoginContext _loginContext;
         private readonly IEmailService _emailService;
 
-        public ResetPasswordHandler(IUserService userService, LoginContext loginContext, IEmailService emailService)
+        public ResetPasswordHandler(IWebUserService userService, LoginContext loginContext, IEmailService emailService)
         {
             _userService = userService;
             _loginContext = loginContext;

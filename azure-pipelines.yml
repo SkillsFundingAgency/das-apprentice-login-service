@@ -20,4 +20,9 @@ stages:
       - template: pipeline-templates/job/code-build.yml
       - template: pipeline-templates/job/dacpac-build.yml
 
+  - stage: NugetPublish
+    condition: and(succeeded(), eq(variables['Build.Reason'], 'Manual'))
+    jobs:
+      - template: pipeline-templates/job/nuget-publish.yml
+
 

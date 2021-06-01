@@ -54,29 +54,11 @@ namespace SFA.DAS.LoginService.Web.UnitTests.PasswordValidatorTests
         [TestCase("11aaa222", true)]
         [TestCase(" 11AAA 222 ", true)]
         [TestCase("11AAA222!!", true)]
+        [TestCase("113113113#", false)]
+        [TestCase("DFGDFGDFG#", false)]
+        [TestCase("AccountPassword123", true)]
         public async Task Then_password_is_validated_against_rules_correctly(string newpassword, bool expectedValidity)
         {                       
-            var result = await _validator.ValidateAsync(_userManager, new LoginUser(), newpassword);
-
-            (result == IdentityResult.Success).Should().Be(expectedValidity);
-        }
-
-        [TestCase("aa1357Test", false)]
-        [TestCase("1357Test", false)]
-        [TestCase("1357Testing", false)]
-        [TestCase("1357testinG", false)]
-        [TestCase("1357TestinG", false)]
-        [TestCase("1357TesTING", false)]
-        [TestCase("1357TESting", false)]
-        [TestCase("1357TESTING", false)]
-        [TestCase("1357Testabc@~#123", false)]
-        [TestCase("a1234Test", true)]
-        [TestCase("a1234Testa", true)]
-        public async Task Then_password_is_validated_against_blacklist_correctly(string newpassword, bool expectedValidity)
-        {
-            _loginContext.InvalidPasswords.Add(new InvalidPassword() { Password = "1357Test" });
-            await _loginContext.SaveChangesAsync();
-
             var result = await _validator.ValidateAsync(_userManager, new LoginUser(), newpassword);
 
             (result == IdentityResult.Success).Should().Be(expectedValidity);

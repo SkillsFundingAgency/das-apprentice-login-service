@@ -14,11 +14,11 @@ namespace SFA.DAS.LoginService.Application.CreatePassword
 {
     public class CreatePasswordHandler : IRequestHandler<CreatePasswordRequest, CreatePasswordResponse>
     {
-        private readonly IUserService _userService;
+        private readonly IWebUserService _userService;
         private readonly LoginContext _loginContext;
         private readonly ICallbackService _callbackService;
 
-        public CreatePasswordHandler(IUserService userService, LoginContext loginContext, ICallbackService callbackService)
+        public CreatePasswordHandler(IWebUserService userService, LoginContext loginContext, ICallbackService callbackService)
         {
             _userService = userService;
             _loginContext = loginContext;

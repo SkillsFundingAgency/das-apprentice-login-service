@@ -13,7 +13,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.CreatePasswordTests
     [TestFixture]
     public class CreatePasswordTestsBase
     {
-        protected IUserService UserService;
+        protected IWebUserService UserService;
         protected LoginContext LoginContext;
         protected Guid InvitationId;
         protected Guid SourceId;
@@ -44,7 +44,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.CreatePasswordTests
 
             CallbackService = Substitute.For<ICallbackService>();
 
-            UserService = Substitute.For<IUserService>();
+            UserService = Substitute.For<IWebUserService>();
             NewLoginUserId = Guid.NewGuid();
 
             Handler = new CreatePasswordHandler(UserService, LoginContext, CallbackService);
