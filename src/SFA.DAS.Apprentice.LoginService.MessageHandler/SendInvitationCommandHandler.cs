@@ -33,8 +33,18 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler
                 Inviter = null
             });
 
-            _log.LogInformation(
-                $"Completed {typeof(SendInvitationCommand)} InvitationId : {response?.InvitationId} Invited : {response?.Invited}, Message : { response?.Message}");
+            _log.LogInformation("Sent invitation for SourceID {SourceId} - " +
+                                "InvitationId: {InvitationId}, Invited: {Invited}, Message: {Message}",
+                                message.SourceId, response?.InvitationId, response?.Invited, response?.Message);
+
+            await context.Reply(new SendInvitationReply
+            {
+                Message = response.Message,
+                Invited = response.Invited,
+                InvitationId = response.InvitationId,
+                ExistingUserId = response.ExistingUserId,
+                LoginLink = response.LoginLink,
+            });
         }
     }
 }
