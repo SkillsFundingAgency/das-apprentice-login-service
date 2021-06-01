@@ -35,6 +35,15 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler
 
             _log.LogInformation(
                 $"Completed {typeof(SendInvitation)} InvitationId : {response?.InvitationId} Invited : {response?.Invited}, Message : { response?.Message}");
+
+            await context.Reply(new SendInvitationReply
+            {
+                Message = response.Message,
+                Invited = response.Invited,
+                InvitationId = response.InvitationId,
+                ExistingUserId = response.ExistingUserId,
+                LoginLink = response.LoginLink,
+            });
         }
     }
 }
