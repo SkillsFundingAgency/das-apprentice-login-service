@@ -1,13 +1,10 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using IdentityServer4.Validation;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using SFA.DAS.LoginService.Application.CreatePassword;
 using SFA.DAS.LoginService.Application.Interfaces;
 using SFA.DAS.LoginService.Application.Services;
+using SFA.DAS.LoginService.Application.Services.EmailServiceViewModels;
 using SFA.DAS.LoginService.Data;
 using SFA.DAS.LoginService.Data.Entities;
 
@@ -15,15 +12,17 @@ namespace SFA.DAS.LoginService.Application.StartChangeEmail
 {
     public class StartChangeEmailHandler : IRequestHandler<StartChangeEmailRequest, StartChangeEmailResponse>
     {
-        private readonly IUserService _userService;
+        private readonly IWebUserService _userService;
         private readonly LoginContext _loginContext;
-        private readonly ICallbackService _callbackService;
+        private readonly ICodeGenerator _codeGenerator;
+        private readonly IEmailService _emailService;
 
-        public StartChangeEmailHandler(IUserService userService, LoginContext loginContext, ICallbackService callbackService)
+        public StartChangeEmailHandler(IWebUserService userService, LoginContext loginContext, ICodeGenerator codeGenerator, IEmailService emailService)
         {
             _userService = userService;
             _loginContext = loginContext;
-            _callbackService = callbackService;
+            _codeGenerator = codeGenerator;
+            _emailService = emailService;
         }
 
         public async Task<StartChangeEmailResponse> Handle(StartChangeEmailRequest request, CancellationToken cancellationToken)
@@ -36,41 +35,38 @@ namespace SFA.DAS.LoginService.Application.StartChangeEmail
             }
 
             var user = await _userService.FindByEmail(request.CurrentEmailAddress);
+            if (user is null)
+            {
+                throw new ApplicationException($"Current Users email {request.CurrentEmailAddress} does not exist");
+            }
 
-            var token = await _userService.GenerateChangeEmailToken(user, request.NewEmailAddress);
-
-            //var invitation = await _loginContext.Invitations.SingleOrDefaultAsync(i => i.Id == request.InvitationId, cancellationToken: cancellationToken);
-
-            //var newUserResponse = await _userService.CreateUser(
-            //    new LoginUser()
-            //    {
-            //        UserName = invitation.Email,
-            //        Email = invitation.Email,
-            //        GivenName = invitation.GivenName,
-            //        FamilyName = invitation.FamilyName,
-            //        RegistrationId = Guid.TryParse(invitation.SourceId, out var rid) ? rid : default,
-            //    }, request.NewEmailAddress);
-
-            //if (newUserResponse.Result != IdentityResult.Success)
-            //{
-            //    return new StartChangeEmailResponse(){PasswordValid = false};    
-            //}
-            
-            //invitation.IsUserCreated = true;
+            await SendChangeEmailCode(request);
 
             _loginContext.UserLogs.Add(new UserLog()
             {
                 Id = GuidGenerator.NewGuid(), 
-                Action = "Change Email", 
+                Action = "Start Change Email", 
                 Email = "request.Email", 
-                Result = "User account created", 
+                Result = "Change Users email started", 
                 DateTime = SystemTime.UtcNow(),
                 ExtraData = request.NewEmailAddress 
             });
             
-            await _loginContext.SaveChangesAsync(cancellationToken);
-            
             return new StartChangeEmailResponse();
+        }
+
+        private async Task SendChangeEmailCode(StartChangeEmailRequest request)
+        {
+            var code = _codeGenerator.GenerateAlphaNumeric(6);
+            var templateCode = Guid.NewGuid();
+
+            await _emailService.SendChangeEmailCode(new ChangeUserEmailViewModel
+            {
+                Code = code,
+                EmailAddress = request.NewEmailAddress,
+                Subject = "Change your email",
+                TemplateId = templateCode
+            });
         }
 
         private bool ValidatedRequest(StartChangeEmailRequest request, StartChangeEmailResponse response)

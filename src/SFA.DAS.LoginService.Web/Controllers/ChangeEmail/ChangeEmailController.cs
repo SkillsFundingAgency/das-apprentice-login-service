@@ -15,8 +15,9 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
         {
         }
 
-        [Authorize]
-        [HttpGet("profile/{clientId}/changeemail")]
+        //[Authorize]
+        //[HttpGet("profile/{clientId}/changeemail")]
+        [HttpGet("profile/change-email")]
         public IActionResult ChangeEmail(Guid clientId)
         {
             var model = new ChangeEmailViewModel();
@@ -24,16 +25,16 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
             return View(model);
         }
 
-        [HttpPost]
+        //[Authorize]
+        [HttpPost("profile/change-email")]
         [ValidateAntiForgeryToken]
-        [Route("profile/{clientId}/changeemail")]
-        public async Task<IActionResult> ChangeEmail([FromRoute]Guid clientId, [FromBody]ChangeEmailViewModel model)
+        //[HttpPost("profile/{clientId}/changeemail")]
+        //public async Task<IActionResult> ChangeEmail([FromRoute]Guid clientId, [FromForm]ChangeEmailViewModel model)
+        public async Task<IActionResult> ChangeEmail([FromForm]ChangeEmailViewModel model)
         {
 
-            var user = User.Identity;
-            
-            //var id = 
-            var email = user.Name;
+            //var user = User.Identity;
+            var email = "paul.graham@coprime.co.uk";  // user.Name;
 
             var response = await Mediator.Send(new StartChangeEmailRequest
             {
@@ -47,9 +48,9 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
                 SetModelState(response);
                 return View("ChangeEmail", model);
             }
+
             TempData["EmailChangeRequested"] = true;
             TempData["EmailChangeNewEmail"] = model.NewEmailAddress;
-
             return RedirectToAction("ConfirmChangeEmail");
         }
 
@@ -62,7 +63,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
 
             if (response.ConfirmEmailAddressError != null)
             {
-                ViewData.ModelState.AddModelError("ConfirmEmailAddressError", response.ConfirmEmailAddressError);
+                ViewData.ModelState.AddModelError("ConfirmEmailAddress", response.ConfirmEmailAddressError);
             }
         }
 

@@ -47,6 +47,11 @@ namespace SFA.DAS.LoginService.EmailService
             await SendEmail(viewModel);
         }
 
+        public async Task SendChangeEmailCode(ChangeUserEmailViewModel viewModel)
+        {
+            await SendEmail(viewModel);
+        }
+
         private async Task SendEmail(EmailViewModel viewModel)
         {
             _logger.LogInformation($"CreateInvitationHandler : SendEmail : ViewModel: {JsonConvert.SerializeObject(viewModel)}");
