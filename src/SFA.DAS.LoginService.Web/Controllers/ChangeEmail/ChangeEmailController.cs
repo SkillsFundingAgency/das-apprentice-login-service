@@ -16,8 +16,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
         }
 
         //[Authorize]
-        //[HttpGet("profile/{clientId}/changeemail")]
-        [HttpGet("profile/change-email")]
+        [HttpGet("profile/{clientId}/changeemail")]
         public IActionResult ChangeEmail(Guid clientId)
         {
             var model = new ChangeEmailViewModel();
@@ -26,11 +25,9 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
         }
 
         //[Authorize]
-        [HttpPost("profile/change-email")]
+        [HttpPost("profile/{clientId}/changeemail")]
         [ValidateAntiForgeryToken]
-        //[HttpPost("profile/{clientId}/changeemail")]
-        //public async Task<IActionResult> ChangeEmail([FromRoute]Guid clientId, [FromForm]ChangeEmailViewModel model)
-        public async Task<IActionResult> ChangeEmail([FromForm]ChangeEmailViewModel model)
+        public async Task<IActionResult> ChangeEmail([FromRoute]Guid clientId, [FromForm]ChangeEmailViewModel model)
         {
 
             //var user = User.Identity;
@@ -67,11 +64,10 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
             }
         }
 
-        [HttpGet("account/ConfirmChangeEmail")]
+        [HttpGet("account/{clientId}/confirmchangeemail")]
         public IActionResult ConfirmChangeEmail()
         {
             return View();
         }
-
     }
 }

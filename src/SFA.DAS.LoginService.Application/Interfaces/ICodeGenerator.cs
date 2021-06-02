@@ -6,6 +6,6 @@ namespace SFA.DAS.LoginService.Application.Interfaces
 {
     public interface ICodeGenerator
     {
-        string GenerateAlphaNumeric(int length = 6);
+        string GenerateAlphaNumeric();
     }
 }

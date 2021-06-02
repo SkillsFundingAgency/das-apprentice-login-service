@@ -27,9 +27,9 @@ namespace SFA.DAS.LoginService.Application.StartChangeEmail
 
         public async Task<StartChangeEmailResponse> Handle(StartChangeEmailRequest request, CancellationToken cancellationToken)
         {
-            var response = new StartChangeEmailResponse();
+            var response = ValidatedRequest(request);
 
-            if (ValidatedRequest(request, response))
+            if(response.HasErrors)
             {
                 return response;
             }
@@ -46,7 +46,7 @@ namespace SFA.DAS.LoginService.Application.StartChangeEmail
             {
                 Id = GuidGenerator.NewGuid(), 
                 Action = "Start Change Email", 
-                Email = "request.Email", 
+                Email = request.CurrentEmailAddress, 
                 Result = "Change Users email started", 
                 DateTime = SystemTime.UtcNow(),
                 ExtraData = request.NewEmailAddress 
@@ -57,7 +57,7 @@ namespace SFA.DAS.LoginService.Application.StartChangeEmail
 
         private async Task SendChangeEmailCode(StartChangeEmailRequest request)
         {
-            var code = _codeGenerator.GenerateAlphaNumeric(6);
+            var code = _codeGenerator.GenerateAlphaNumeric();
             var templateCode = Guid.NewGuid();
 
             await _emailService.SendChangeEmailCode(new ChangeUserEmailViewModel
@@ -69,42 +69,48 @@ namespace SFA.DAS.LoginService.Application.StartChangeEmail
             });
         }
 
-        private bool ValidatedRequest(StartChangeEmailRequest request, StartChangeEmailResponse response)
+        private StartChangeEmailResponse ValidatedRequest(StartChangeEmailRequest request)
         {
-            bool hasError = false;
+            var response = new StartChangeEmailResponse();
 
-            if (!request.NewEmailAddress.Contains("@"))
+            if (string.IsNullOrWhiteSpace(request.NewEmailAddress))
             {
-                hasError = true;
+                response.NewEmailAddressError = "Email address cannot be blank";
+            }
+            else if (!request.NewEmailAddress.Contains("@"))
+            {
                 response.NewEmailAddressError = "Must be a valid email address";
             }
 
-            if (!request.ConfirmEmailAddress.Contains("@"))
+            if (string.IsNullOrWhiteSpace(request.ConfirmEmailAddress))
             {
-                hasError = true;
+                response.NewEmailAddressError = "Email address cannot be blank";
+            }
+            else if(!request.ConfirmEmailAddress.Contains("@"))
+            {
                 response.ConfirmEmailAddressError = "Must be a valid email address";
             }
 
-            if (hasError)
+            if (response.HasErrors)
             {
-                return true;
+                return response;
             }
 
             if (!request.NewEmailAddress.Equals(request.ConfirmEmailAddress,
                 StringComparison.InvariantCultureIgnoreCase))
             {
                 response.NewEmailAddressError = "Email addresses must match";
-                return true;
+                return response;
             }
 
             if (request.NewEmailAddress.Equals(request.CurrentEmailAddress,
                 StringComparison.InvariantCultureIgnoreCase))
             {
                 response.NewEmailAddressError = "This email is the same as you're current email address";
-                return true;
+                return response;
             }
 
-            return false;
+            return response;
         }
     }
 }
