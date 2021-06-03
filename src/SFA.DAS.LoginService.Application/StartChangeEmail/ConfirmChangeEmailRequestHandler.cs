@@ -50,7 +50,7 @@ namespace SFA.DAS.LoginService.Application.StartChangeEmail
                 ExtraData = request.NewEmailAddress
             });
 
-            return new ConfirmChangeEmailResponse();
+            return response;
         }
 
         private ConfirmChangeEmailResponse ValidatedRequest(ConfirmChangeEmailRequest request)
