@@ -1,7 +1,9 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using SFA.DAS.LoginService.Application.Interfaces;
 using SFA.DAS.LoginService.Application.Services;
 using SFA.DAS.LoginService.Application.Services.EmailServiceViewModels;
@@ -27,7 +29,7 @@ namespace SFA.DAS.LoginService.Application.StartChangeEmail
 
         public async Task<StartChangeEmailResponse> Handle(StartChangeEmailRequest request, CancellationToken cancellationToken)
         {
-            var response = ValidatedRequest(request);
+            var response = await ValidatedRequest(request);
 
             if(response.HasErrors)
             {
@@ -40,7 +42,7 @@ namespace SFA.DAS.LoginService.Application.StartChangeEmail
                 throw new ApplicationException($"Current Users email {request.CurrentEmailAddress} does not exist");
             }
 
-            await SendChangeEmailCode(request);
+            await SendChangeEmailLink(request, user, cancellationToken);
 
             _loginContext.UserLogs.Add(new UserLog()
             {
@@ -51,25 +53,40 @@ namespace SFA.DAS.LoginService.Application.StartChangeEmail
                 DateTime = SystemTime.UtcNow(),
                 ExtraData = request.NewEmailAddress 
             });
+
+            await _loginContext.SaveChangesAsync();
             
             return new StartChangeEmailResponse();
         }
 
-        private async Task SendChangeEmailCode(StartChangeEmailRequest request)
+        private async Task SendChangeEmailLink(StartChangeEmailRequest request, LoginUser user,
+            CancellationToken cancellationToken)
         {
-            var code = _codeGenerator.GenerateAlphaNumeric();
-            var templateCode = Guid.NewGuid();
+            async Task<string> BuildLink(string baseUrl)
+            {
+                string startChar = null;
+                var code = await _userService.GenerateChangeEmailToken(user, request.NewEmailAddress);
+
+                if (!baseUrl.EndsWith("/"))
+                {
+                    startChar = "/";
+                }
+
+                return baseUrl + startChar + $"profile/{request.ClientId}/confirmchangeemail?code={code}";
+            }
+
+            var client = await _loginContext.Clients.SingleAsync(c => c.Id == request.ClientId, cancellationToken);
 
             await _emailService.SendChangeEmailCode(new ChangeUserEmailViewModel
             {
-                Code = code,
+                ConfirmEmailLink = await BuildLink(client.ServiceDetails.SupportUrl),
                 EmailAddress = request.NewEmailAddress,
-                Subject = "Change your email",
-                TemplateId = templateCode
+                Subject = "Confirm your new email address",
+                TemplateId = client.ServiceDetails.EmailTemplates.Single(t=>t.Name == "ChangeEmailAddress").TemplateId
             });
         }
 
-        private StartChangeEmailResponse ValidatedRequest(StartChangeEmailRequest request)
+        private async Task<StartChangeEmailResponse> ValidatedRequest(StartChangeEmailRequest request)
         {
             var response = new StartChangeEmailResponse();
 
@@ -77,16 +94,16 @@ namespace SFA.DAS.LoginService.Application.StartChangeEmail
             {
                 response.NewEmailAddressError = "Email address cannot be blank";
             }
-            else if (!request.NewEmailAddress.Contains("@"))
+            else if (!IsValidEmail(request.NewEmailAddress))
             {
                 response.NewEmailAddressError = "Must be a valid email address";
             }
 
             if (string.IsNullOrWhiteSpace(request.ConfirmEmailAddress))
             {
-                response.NewEmailAddressError = "Email address cannot be blank";
+                response.ConfirmEmailAddressError = "Email address cannot be blank";
             }
-            else if(!request.ConfirmEmailAddress.Contains("@"))
+            else if (!IsValidEmail(request.ConfirmEmailAddress))
             {
                 response.ConfirmEmailAddressError = "Must be a valid email address";
             }
@@ -99,18 +116,46 @@ namespace SFA.DAS.LoginService.Application.StartChangeEmail
             if (!request.NewEmailAddress.Equals(request.ConfirmEmailAddress,
                 StringComparison.InvariantCultureIgnoreCase))
             {
-                response.NewEmailAddressError = "Email addresses must match";
+                response.ConfirmEmailAddressError = "Email addresses must match";
                 return response;
             }
 
             if (request.NewEmailAddress.Equals(request.CurrentEmailAddress,
                 StringComparison.InvariantCultureIgnoreCase))
             {
-                response.NewEmailAddressError = "This email is the same as you're current email address";
+                response.NewEmailAddressError = "This email is the same as your current email address";
+                return response;
+            }
+
+            var user = await _userService.FindByEmail(request.NewEmailAddress);
+            if (user != null)
+            {
+                response.NewEmailAddressError = "This email is already in use by another account";
                 return response;
             }
 
             return response;
+        }
+
+        private bool IsValidEmail(string emailAsString)
+        {
+            try
+            {
+                var email = new System.Net.Mail.MailAddress(emailAsString);
+                
+                // check it contains a top level domain 
+                var parts = email.Address.Split('@');
+                if (!parts[1].Contains(".") || parts[1].EndsWith("."))
+                {
+                    return false;
+                }
+                            
+                return email.Address == emailAsString;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

@@ -31,10 +31,11 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
         {
 
             //var user = User.Identity;
-            var email = "paul.graham@coprime.co.uk";  // user.Name;
+            var email = "paul.graham@coprime.co.uk";  // user.Name; 
 
             var response = await Mediator.Send(new StartChangeEmailRequest
             {
+                ClientId = clientId,
                 CurrentEmailAddress = email,
                 NewEmailAddress = model.NewEmailAddress,
                 ConfirmEmailAddress = model.ConfirmEmailAddress
@@ -48,7 +49,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
 
             TempData["EmailChangeRequested"] = true;
             TempData["EmailChangeNewEmail"] = model.NewEmailAddress;
-            return RedirectToAction("ConfirmChangeEmail");
+            return RedirectToAction("WaitForConfirmNewEmail", new { ClientId = clientId });
         }
 
         private void SetModelState(StartChangeEmailResponse response)
@@ -64,8 +65,8 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
             }
         }
 
-        [HttpGet("account/{clientId}/confirmchangeemail")]
-        public IActionResult ConfirmChangeEmail()
+        [HttpGet("account/{clientId}/waitforconfirmnewemail")]
+        public IActionResult WaitForConfirmNewEmail(Guid clientId)
         {
             return View();
         }
