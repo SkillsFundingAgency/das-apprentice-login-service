@@ -16,14 +16,12 @@ namespace SFA.DAS.LoginService.Application.StartChangeEmail
     {
         private readonly IWebUserService _userService;
         private readonly LoginContext _loginContext;
-        private readonly ICodeGenerator _codeGenerator;
         private readonly IEmailService _emailService;
 
-        public StartChangeEmailHandler(IWebUserService userService, LoginContext loginContext, ICodeGenerator codeGenerator, IEmailService emailService)
+        public StartChangeEmailHandler(IWebUserService userService, LoginContext loginContext, IEmailService emailService)
         {
             _userService = userService;
             _loginContext = loginContext;
-            _codeGenerator = codeGenerator;
             _emailService = emailService;
         }
 
@@ -80,6 +78,8 @@ namespace SFA.DAS.LoginService.Application.StartChangeEmail
             await _emailService.SendChangeEmailCode(new ChangeUserEmailViewModel
             {
                 ConfirmEmailLink = await BuildLink(client.ServiceDetails.SupportUrl),
+                GivenName = user.GivenName,
+                FamilyName = user.FamilyName,
                 EmailAddress = request.NewEmailAddress,
                 Subject = "Confirm your new email address",
                 TemplateId = client.ServiceDetails.EmailTemplates.Single(t=>t.Name == "ChangeEmailAddress").TemplateId
