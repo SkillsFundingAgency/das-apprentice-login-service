@@ -13,33 +13,43 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <form asp-action="Post">
-                @Html.AntiForgeryToken()
-                <input type="hidden" asp-for="NewEmailAddress" />
-                <input type="hidden" asp-for="Token" />
+            <div class="govuk-body">
+                <p>Your new email address is @Model.NewEmailAddress.</p>
+                <p>Enter your password to use this email address.</p>
+            </div>
 
-                <div class="govuk-form-group">
-                    <label class="govuk-label govuk-label--m" asp-for="TempCurrentEmail">
-                        (Temporary) Current email address
-                    </label>
-                    <input class="govuk-input" asp-for="TempCurrentEmail">
-                </div>
+                <form asp-action="Post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="NewEmailAddress" />
+                    <input type="hidden" asp-for="Token" />
 
-                <div class="govuk-form-group" sfa-validation-for="Password" sfa-validationerror-class="govuk-form-group--error">
-                    <label class="govuk-label govuk-label--m" asp-for="Password">
-                        Your password
-                    </label>
-                    @if (!ViewData.ModelState.IsValid)
+                    @if (Model.TokenInvalid)
                     {
-                        <span id="email-error" asp-validation-for="Password" class="govuk-error-message"></span>
+                        <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
+                            <h2 class="govuk-error-summary__title" id="error-summary-title">
+                                The verification code is invalid
+                            </h2>
+                            <div class="govuk-error-summary__body">
+                                <p>The link has expired or is not valid for the new email address.</p>
+                                <p>You can <a asp-controller="ChangeEmail" asp-action="ChangeEmail" asp-route-clientId="@Model.ClientId">request another verification email</a>.</p>
+                            </div>
+                        </div>
                     }
-                    <input class="govuk-input" asp-for="Password" aria-describedby="email-address-hint" sfa-validation-for="Password" sfa-validationerror-class="govuk-input--error">
-                </div>
+                    else
+                    {
+                        <div class="govuk-form-group" sfa-validation-for="Password" sfa-validationerror-class="govuk-form-group--error">
+                            <label class="govuk-label govuk-label--m" asp-for="Password">
+                                Your password
+                            </label>
+                            <span id="email-error" asp-validation-for="Password" class="govuk-error-message"></span>
+                            <input class="govuk-input" asp-for="Password" aria-describedby="email-address-hint" sfa-validation-for="Password" sfa-validationerror-class="govuk-input--error">
+                        </div>
 
-                <div class="govuk-form-group">
-                    <button class="govuk-button" type="submit">Submit</button>
-                </div>
-            </form>
+                        <div class="govuk-form-group">
+                            <button class="govuk-button" type="submit">Submit</button>
+                        </div>
+                    }
+                </form>
+            </div>
         </div>
-    </div>
 </main>

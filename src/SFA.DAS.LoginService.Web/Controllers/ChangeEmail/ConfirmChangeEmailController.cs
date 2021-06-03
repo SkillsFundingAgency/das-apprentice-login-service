@@ -20,6 +20,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
         {
             return View(new ConfirmChangeEmailViewModel
             {
+                ClientId = clientId,
                 NewEmailAddress = email,
                 Token = token,
             });
@@ -41,19 +42,19 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
 
             if (response.HasErrors)
             {
-                SetModelState(response);
+                SetModelState(response, model);
                 return View(model);
             }
 
             return Ok();
         }
 
-        private void SetModelState(ConfirmChangeEmailResponse response)
+        private void SetModelState(ConfirmChangeEmailResponse response, ConfirmChangeEmailViewModel model)
         {
+            model.TokenInvalid = response.TokenError;
+
             if (response.PasswordError != null)
                 ViewData.ModelState.AddModelError("Password", response.PasswordError);
-            if (response.TokenError)
-                ViewData.ModelState.AddModelError("Token", "Invalid token");
         }
     }
 }
