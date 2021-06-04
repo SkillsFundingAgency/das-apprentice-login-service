@@ -70,7 +70,7 @@ namespace SFA.DAS.LoginService.Application.ChangeEmail.StartChangeEmail
                     startChar = "/";
                 }
 
-                return baseUrl + startChar + $"profile/{request.ClientId}/confirmchangeemail?code={code}";
+                return $"{baseUrl}{startChar}profile/{request.ClientId}/changeemail/confirm?email={request.NewEmailAddress}&token={code}";
             }
 
             var client = await _loginContext.Clients.SingleAsync(c => c.Id == request.ClientId, cancellationToken);
