@@ -15,7 +15,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.ConfirmChangeEm
         public void Setup()
         {
             _request.CurrentEmailAddress = "unknown@example.com";
-            _userService.FindByEmail(Arg.Any<string>()).Returns((LoginUser)null);
+            _userManager.FindByEmailAsync(Arg.Any<string>()).Returns((LoginUser)null);
         }
 
         [Test]
@@ -35,8 +35,8 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.ConfirmChangeEm
             }
             catch
             { }
-            await _userService.DidNotReceiveWithAnyArgs()
-                .ChangeEmail(default, default, default, default);
+            await _userManager.DidNotReceiveWithAnyArgs()
+                .ChangeEmailAsync(default, default, default);
         }
     }
 }

@@ -13,8 +13,8 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.ConfirmChangeEm
         [SetUp]
         public void Setup()
         {
-            _userService
-                .ChangeEmail(default, default, default, default)
+            _userManager
+                .ChangeEmailAsync(default, default, default)
                 .ReturnsForAnyArgs(IdentityResult.Failed(new IdentityErrorDescriber().PasswordMismatch()));
         }
 

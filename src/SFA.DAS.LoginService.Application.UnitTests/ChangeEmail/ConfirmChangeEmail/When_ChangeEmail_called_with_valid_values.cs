@@ -13,26 +13,38 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.ConfirmChangeEm
         [SetUp]
         public void Setup()
         {
-            _userService
-                .ChangeEmail(default, default, default, default)
+            _userManager.CheckPasswordAsync(_user, _request.Password)
+                .Returns(true);
+
+            _userManager.ChangeEmailAsync(default, default, default)
                 .ReturnsForAnyArgs(IdentityResult.Success);
+
+            _userManager.SetUserNameAsync(_user, _request.NewEmailAddress)
+                .Returns(IdentityResult.Success);
         }
 
         [Test]
         public async Task Then_finds_user_based_on_current_email_address()
         {
             await _sut.Handle(_request, CancellationToken.None);
-            await _userService.Received()
-                .FindByEmail(_request.CurrentEmailAddress);
+            await _userManager.Received()
+                .FindByEmailAsync(_request.CurrentEmailAddress);
         }
 
         [Test]
-        public async Task Then_passes_form_values_to_ChangeEmail()
+        public async Task Then_changes_the_email_address()
         {
             await _sut.Handle(_request, CancellationToken.None);
+            await _userManager.Received()
+                .ChangeEmailAsync(_user, _request.NewEmailAddress, _request.Token);
+        }
 
-            await _userService.Received()
-                .ChangeEmail(_user, _request.Password, _request.NewEmailAddress, _request.Token);
+        [Test]
+        public async Task Then_updated_the_username_to_match_the_email_address()
+        {
+            await _sut.Handle(_request, CancellationToken.None);
+            await _userManager.Received()
+                .SetUserNameAsync(_user, _request.NewEmailAddress);
         }
 
         [Test]
