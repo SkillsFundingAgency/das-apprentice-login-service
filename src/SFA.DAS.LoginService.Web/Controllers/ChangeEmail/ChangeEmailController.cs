@@ -4,6 +4,7 @@ using SFA.DAS.LoginService.Application.ChangeEmail.StartChangeEmail;
 using SFA.DAS.LoginService.Web.Controllers.ChangeEmail.ViewModels;
 using System;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
 {
@@ -28,7 +29,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
         //[ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangeEmail([FromRoute] Guid clientId, [FromForm] ChangeEmailViewModel model)
         {
-            var email = User.Identity.Name;
+            var email = User.Identity.Name ?? "paul.graham@coprime.co.uk";
 
             var response = await Mediator.Send(new StartChangeEmailRequest
             {
@@ -44,9 +45,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
                 return View("ChangeEmail", model);
             }
 
-            TempData["EmailChangeRequested"] = true;
-            TempData["EmailChangeNewEmail"] = model.NewEmailAddress;
-            return RedirectToAction("WaitForConfirmNewEmail", new { ClientId = clientId });
+            return RedirectToAction("WaitForConfirmNewEmail", new { ClientId = clientId, NewEmail= HttpUtility.UrlEncode(model.NewEmailAddress) });
         }
 
         private void SetModelState(StartChangeEmailResponse response)
@@ -62,8 +61,8 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
             }
         }
 
-        [HttpGet("account/{clientId}/waitforconfirmnewemail")]
-        public IActionResult WaitForConfirmNewEmail(Guid clientId)
+        [HttpGet("account/{clientId}/waitforconfirmnewemail?newemail={email}")]
+        public IActionResult WaitForConfirmNewEmail([FromRoute]Guid clientId, [FromQuery] string email)
         {
             return View();
         }

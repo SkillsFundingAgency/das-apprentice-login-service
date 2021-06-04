@@ -9,6 +9,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace SFA.DAS.LoginService.Application.ChangeEmail.StartChangeEmail
 {
@@ -70,10 +71,15 @@ namespace SFA.DAS.LoginService.Application.ChangeEmail.StartChangeEmail
                     startChar = "/";
                 }
 
-                return $"{baseUrl}{startChar}profile/{request.ClientId}/changeemail/confirm?email={request.NewEmailAddress}&token={code}";
+                return $"{baseUrl}{startChar}profile/{request.ClientId}/changeemail/confirm?email={HttpUtility.UrlEncode(request.NewEmailAddress)}&token={HttpUtility.UrlEncode(code)}";
             }
 
             var client = await _loginContext.Clients.SingleAsync(c => c.Id == request.ClientId, cancellationToken);
+            var templateId = client.ServiceDetails.EmailTemplates.SingleOrDefault(t => t.Name == "ChangeEmailAddress")?.TemplateId;
+            if (templateId == null)
+            {
+                throw new ApplicationException("No email template id found for Change Email Address");
+            }
 
             await _emailService.SendChangeEmailCode(new ChangeUserEmailViewModel
             {
@@ -82,7 +88,7 @@ namespace SFA.DAS.LoginService.Application.ChangeEmail.StartChangeEmail
                 FamilyName = user.FamilyName,
                 EmailAddress = request.NewEmailAddress,
                 Subject = "Confirm your new email address",
-                TemplateId = client.ServiceDetails.EmailTemplates.Single(t => t.Name == "ChangeEmailAddress").TemplateId
+                TemplateId = templateId.Value
             });
         }
 

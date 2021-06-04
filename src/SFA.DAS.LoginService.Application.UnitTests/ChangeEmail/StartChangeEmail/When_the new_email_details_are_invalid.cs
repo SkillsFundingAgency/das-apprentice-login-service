@@ -14,7 +14,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.StartChangeEmai
         {
             var request = CreateStartChangeEmailRequest();
             request.NewEmailAddress = newEmail;
-            var response = await Handler.Handle(request, CancellationToken.None);
+            var response = await Sut.Handle(request, CancellationToken.None);
             response.NewEmailAddressError.Should().NotBeEmpty();
             response.NewEmailAddressError.Should().Be("Email address cannot be blank");
         }
@@ -26,7 +26,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.StartChangeEmai
         {
             var request = CreateStartChangeEmailRequest();
             request.ConfirmEmailAddress = confirmedEmail;
-            var response = await Handler.Handle(request, CancellationToken.None);
+            var response = await Sut.Handle(request, CancellationToken.None);
             response.ConfirmEmailAddressError.Should().NotBeEmpty();
             response.ConfirmEmailAddressError.Should().Be("Email address cannot be blank");
         }
@@ -40,7 +40,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.StartChangeEmai
         {
             var request = CreateStartChangeEmailRequest();
             request.NewEmailAddress = newEmail;
-            var response = await Handler.Handle(request, CancellationToken.None);
+            var response = await Sut.Handle(request, CancellationToken.None);
             response.NewEmailAddressError.Should().NotBeEmpty();
             response.NewEmailAddressError.Should().Be("Must be a valid email address");
         }
@@ -54,7 +54,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.StartChangeEmai
         {
             var request = CreateStartChangeEmailRequest();
             request.ConfirmEmailAddress = confirmEmail;
-            var response = await Handler.Handle(request, CancellationToken.None);
+            var response = await Sut.Handle(request, CancellationToken.None);
             response.ConfirmEmailAddressError.Should().NotBeEmpty();
             response.ConfirmEmailAddressError.Should().Be("Must be a valid email address");
         }
@@ -64,7 +64,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.StartChangeEmai
         {
             var request = CreateStartChangeEmailRequest();
             request.ConfirmEmailAddress = "XX" + request.NewEmailAddress;
-            var response = await Handler.Handle(request, CancellationToken.None);
+            var response = await Sut.Handle(request, CancellationToken.None);
             response.ConfirmEmailAddressError.Should().NotBeEmpty();
             response.ConfirmEmailAddressError.Should().Be("Email addresses must match");
         }
@@ -74,7 +74,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.StartChangeEmai
         {
             var request = CreateStartChangeEmailRequest();
             request.CurrentEmailAddress = request.NewEmailAddress;
-            var response = await Handler.Handle(request, CancellationToken.None);
+            var response = await Sut.Handle(request, CancellationToken.None);
             response.NewEmailAddressError.Should().NotBeEmpty();
             response.NewEmailAddressError.Should().Be("This email is the same as your current email address");
         }
@@ -87,7 +87,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.StartChangeEmai
             request.NewEmailAddress = AnotherUserEmail;
             request.ConfirmEmailAddress = AnotherUserEmail;
 
-            var response = await Handler.Handle(request, CancellationToken.None);
+            var response = await Sut.Handle(request, CancellationToken.None);
             response.NewEmailAddressError.Should().NotBeEmpty();
             response.NewEmailAddressError.Should().Be("This email is already in use by another account");
         }

@@ -17,7 +17,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.StartChangeEmai
     [TestFixture]
     public class CreateStartChangeEmailHandlerTestBase
     {
-        protected StartChangeEmailHandler Handler;
+        protected StartChangeEmailHandler Sut;
         protected LoginContext LoginContext; 
         protected IEmailService EmailService;
         protected ILoginConfig LoginConfig;
@@ -30,6 +30,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.StartChangeEmai
         protected string CurrentUserEmail = "current.user@test.com";
         protected LoginUser AnotherUser;
         protected string AnotherUserEmail = "another.user@test.com";
+        protected string Token = "Token";
 
         [SetUp]
         public void SetUp()
@@ -45,22 +46,22 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.StartChangeEmai
             UserService = Substitute.For<IWebUserService>();
             UserService.FindByEmail(CurrentUserEmail).Returns(Task.FromResult(User));
             UserService.FindByEmail(AnotherUserEmail).Returns(Task.FromResult(AnotherUser));
+            UserService.GenerateChangeEmailToken(User, "New@new.com").Returns(Token);
 
             UserAccountService = Substitute.For<IUserAccountService>();
-            User = Fixture.Build<LoginUser>().With(u => u.Email, "A@A.com").Create();
 
-            Handler = BuildStartChangeEmailHandler();
+            Sut = BuildStartChangeEmailHandler();
         }
 
         private void BuildLoginContext()
         {
             var dbContextOptions = new DbContextOptionsBuilder<LoginContext>()
-                .UseInMemoryDatabase(databaseName: "invitations_tests")
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
 
             LoginContext = new LoginContext(dbContextOptions);
             ClientId = Guid.NewGuid();
-            ChangeEmailTemplateId = Guid.Parse("a2fc2212-253e-47c1-b847-27c10f83f7f5");
+            ChangeEmailTemplateId = Guid.NewGuid();
             LoginContext.Clients.Add(new Client()
             {
                 Id = ClientId, 
@@ -90,33 +91,9 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.StartChangeEmai
                 ClientId = ClientId,
                 NewEmailAddress = "New@new.com",
                 ConfirmEmailAddress = "New@new.com",
-                CurrentEmailAddress = User.Email
+                CurrentEmailAddress = CurrentUserEmail
             };
         }
-
-
-        //protected static CreateInvitationRequest BuildCreateInvitationRequest()
-        //{
-        //    var createInvitationRequest = new CreateInvitationRequest()
-        //    {
-        //        Email = "invited@email.com",
-        //        GivenName = "InvitedGivenName",
-        //        FamilyName = "InvitedFamilyName",
-        //        OrganisationName = "InvitedOrganisationName",
-        //        ApprenticeshipName = "InvitedApprenticeshipName",
-        //        SourceId = "InvitedSourceId",
-        //        UserRedirect = new Uri("https://localhost/userredirect"),
-        //        Callback = new Uri("https://localhost/callback"),
-        //        ClientId = ClientId
-        //    };
-        //    return createInvitationRequest;
-        //}
-
-        //protected static CreateInvitationRequest BuildEmptyCreateInvitationRequest()
-        //{
-        //    var createInvitationRequest = new CreateInvitationRequest();
-        //    return createInvitationRequest;
-        //}
 
         private StartChangeEmailHandler BuildStartChangeEmailHandler()
         {
