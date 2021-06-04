@@ -1,7 +1,3 @@
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SFA.DAS.LoginService.Application.Interfaces;
@@ -9,8 +5,12 @@ using SFA.DAS.LoginService.Application.Services;
 using SFA.DAS.LoginService.Application.Services.EmailServiceViewModels;
 using SFA.DAS.LoginService.Data;
 using SFA.DAS.LoginService.Data.Entities;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace SFA.DAS.LoginService.Application.StartChangeEmail
+namespace SFA.DAS.LoginService.Application.ChangeEmail.StartChangeEmail
 {
     public class StartChangeEmailHandler : IRequestHandler<StartChangeEmailRequest, StartChangeEmailResponse>
     {
@@ -29,7 +29,7 @@ namespace SFA.DAS.LoginService.Application.StartChangeEmail
         {
             var response = await ValidatedRequest(request);
 
-            if(response.HasErrors)
+            if (response.HasErrors)
             {
                 return response;
             }
@@ -44,16 +44,16 @@ namespace SFA.DAS.LoginService.Application.StartChangeEmail
 
             _loginContext.UserLogs.Add(new UserLog()
             {
-                Id = GuidGenerator.NewGuid(), 
-                Action = "Start Change Email", 
-                Email = request.CurrentEmailAddress, 
-                Result = "Change Users email started", 
+                Id = GuidGenerator.NewGuid(),
+                Action = "Start Change Email",
+                Email = request.CurrentEmailAddress,
+                Result = "Change Users email started",
                 DateTime = SystemTime.UtcNow(),
-                ExtraData = request.NewEmailAddress 
+                ExtraData = request.NewEmailAddress
             });
 
             await _loginContext.SaveChangesAsync();
-            
+
             return new StartChangeEmailResponse();
         }
 
@@ -82,7 +82,7 @@ namespace SFA.DAS.LoginService.Application.StartChangeEmail
                 FamilyName = user.FamilyName,
                 EmailAddress = request.NewEmailAddress,
                 Subject = "Confirm your new email address",
-                TemplateId = client.ServiceDetails.EmailTemplates.Single(t=>t.Name == "ChangeEmailAddress").TemplateId
+                TemplateId = client.ServiceDetails.EmailTemplates.Single(t => t.Name == "ChangeEmailAddress").TemplateId
             });
         }
 
@@ -142,14 +142,14 @@ namespace SFA.DAS.LoginService.Application.StartChangeEmail
             try
             {
                 var email = new System.Net.Mail.MailAddress(emailAsString);
-                
-                // check it contains a top level domain 
+
+                // check it contains a top level domain
                 var parts = email.Address.Split('@');
                 if (!parts[1].Contains(".") || parts[1].EndsWith("."))
                 {
                     return false;
                 }
-                            
+
                 return email.Address == emailAsString;
             }
             catch

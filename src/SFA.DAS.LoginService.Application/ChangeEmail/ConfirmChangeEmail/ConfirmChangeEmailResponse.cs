@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.LoginService.Application.StartChangeEmail
+﻿namespace SFA.DAS.LoginService.Application.ChangeEmail.ConfirmChangeEmail
 {
     public class ConfirmChangeEmailResponse
     {

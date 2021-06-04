@@ -9,7 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SFA.DAS.LoginService.Application.StartChangeEmail
+namespace SFA.DAS.LoginService.Application.ChangeEmail.ConfirmChangeEmail
 {
     public class ConfirmChangeEmailRequestHandler : IRequestHandler<ConfirmChangeEmailRequest, ConfirmChangeEmailResponse>
     {

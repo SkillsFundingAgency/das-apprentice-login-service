@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using SFA.DAS.LoginService.Application.StartChangeEmail;
+using SFA.DAS.LoginService.Application.ChangeEmail.ConfirmChangeEmail;
 using SFA.DAS.LoginService.Web.Controllers.ChangeEmail.ViewModels;
 using System;
 using System.Threading.Tasks;

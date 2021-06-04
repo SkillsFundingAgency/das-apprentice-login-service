@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.LoginService.Application.StartChangeEmail
+namespace SFA.DAS.LoginService.Application.ChangeEmail.ConfirmChangeEmail
 {
     public class ConfirmChangeEmailRequest : IRequest<ConfirmChangeEmailResponse>
     {

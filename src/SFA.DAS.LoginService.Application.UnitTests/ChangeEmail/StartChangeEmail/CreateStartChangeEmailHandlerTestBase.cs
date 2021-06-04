@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using NSubstitute;
 using NUnit.Framework;
 using SFA.DAS.LoginService.Application.Interfaces;
-using SFA.DAS.LoginService.Application.StartChangeEmail;
+using SFA.DAS.LoginService.Application.ChangeEmail.StartChangeEmail;
 using SFA.DAS.LoginService.Configuration;
 using SFA.DAS.LoginService.Data;
 using SFA.DAS.LoginService.Data.Entities;
