@@ -1,4 +1,4 @@
-namespace SFA.DAS.LoginService.Application.StartChangeEmail
+namespace SFA.DAS.LoginService.Application.ChangeEmail.StartChangeEmail
 {
     public class StartChangeEmailResponse
     {
@@ -7,6 +7,5 @@ namespace SFA.DAS.LoginService.Application.StartChangeEmail
 
         public bool HasErrors => !string.IsNullOrEmpty(NewEmailAddressError) ||
                                  !string.IsNullOrEmpty(ConfirmEmailAddressError);
-
     }
 }

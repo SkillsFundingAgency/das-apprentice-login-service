@@ -18,6 +18,8 @@ namespace SFA.DAS.LoginService.Samples.MvcInvitationClient
                 "https://das-at-aplogin-as.azurewebsites.net"
                 //*/
                 ;
+        
+        private const string ClientId = "36BCFAAD-1FF7-49CB-8EEF-19877B7AD0C9";
 
         internal async Task<CreateInvitationResponse> Invite(InvitationModel invitation)
         {
@@ -50,7 +52,7 @@ namespace SFA.DAS.LoginService.Samples.MvcInvitationClient
                 });
 
                 var response = await httpClient.PostAsync(
-                    $"{IdentityServiceHost}/Invitations/36BCFAAD-1FF7-49CB-8EEF-19877B7AD0C9",
+                    $"{IdentityServiceHost}/Invitations/{ClientId}",
                     new StringContent(inviteJson, Encoding.UTF8, "application/json")
                                                          );
 
@@ -63,5 +65,8 @@ namespace SFA.DAS.LoginService.Samples.MvcInvitationClient
                 return result;
             }
         }
+
+        internal Uri ChangeEmailUri =>
+            new Uri($"{IdentityServiceHost}/profile/{ClientId}/changeemail");
     }
 }

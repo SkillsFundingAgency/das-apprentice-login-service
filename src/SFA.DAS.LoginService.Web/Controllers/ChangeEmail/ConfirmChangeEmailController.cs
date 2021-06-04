@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using SFA.DAS.LoginService.Application.StartChangeEmail;
+using SFA.DAS.LoginService.Application.ChangeEmail.ConfirmChangeEmail;
 using SFA.DAS.LoginService.Web.Controllers.ChangeEmail.ViewModels;
 using System;
 using System.Threading.Tasks;
@@ -30,7 +30,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
         [HttpPost]
         public async Task<IActionResult> ConfirmChangeEmail(Guid clientId, [FromForm] ConfirmChangeEmailViewModel model)
         {
-            var currentEmail = model.TempCurrentEmail;
+            var currentEmail = User.Identity.Name;
 
             var response = await Mediator.Send(new ConfirmChangeEmailRequest
             {
