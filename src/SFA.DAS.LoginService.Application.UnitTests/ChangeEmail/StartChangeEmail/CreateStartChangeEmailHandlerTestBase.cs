@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoFixture;
 using Microsoft.EntityFrameworkCore;
 using NSubstitute;
@@ -26,6 +27,9 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.StartChangeEmai
         protected Guid ChangeEmailTemplateId;
         protected Fixture Fixture = new Fixture();
         protected LoginUser User;
+        protected string CurrentUserEmail = "current.user@test.com";
+        protected LoginUser AnotherUser;
+        protected string AnotherUserEmail = "another.user@test.com";
 
         [SetUp]
         public void SetUp()
@@ -35,7 +39,13 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.StartChangeEmai
             EmailService = Substitute.For<IEmailService>();
             LoginConfig = Substitute.For<ILoginConfig>();
             LoginConfig.BaseUrl.Returns("https://baseurl");
+
+            User = new LoginUser { GivenName = "Bob", FamilyName = "Hope", Email = CurrentUserEmail };
+            AnotherUser = new LoginUser { Email = AnotherUserEmail };
             UserService = Substitute.For<IWebUserService>();
+            UserService.FindByEmail(CurrentUserEmail).Returns(Task.FromResult(User));
+            UserService.FindByEmail(AnotherUserEmail).Returns(Task.FromResult(AnotherUser));
+
             UserAccountService = Substitute.For<IUserAccountService>();
             User = Fixture.Build<LoginUser>().With(u => u.Email, "A@A.com").Create();
 
