@@ -25,11 +25,10 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
 
         //[Authorize]
         [HttpPost("profile/{clientId}/changeemail")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangeEmail([FromRoute] Guid clientId, [FromForm] ChangeEmailViewModel model)
         {
-            //var user = User.Identity;
-            var email = "paul.graham@coprime.co.uk";  // user.Name;
+            var email = User.Identity.Name;
 
             var response = await Mediator.Send(new StartChangeEmailRequest
             {

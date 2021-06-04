@@ -30,7 +30,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
         [HttpPost]
         public async Task<IActionResult> ConfirmChangeEmail(Guid clientId, [FromForm] ConfirmChangeEmailViewModel model)
         {
-            var currentEmail = model.TempCurrentEmail;
+            var currentEmail = User.Identity.Name;
 
             var response = await Mediator.Send(new ConfirmChangeEmailRequest
             {
