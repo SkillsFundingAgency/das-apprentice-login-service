@@ -8,13 +8,17 @@ using System.Threading.Tasks;
 namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.ConfirmChangeEmail
 {
     [TestFixture]
-    public class When_ConfirmChangeEmail_called_for_existing_user_with_password_and_expired_token : ConfirmChangeEmailBase
+    public class When_ConfirmChangeEmail_called_for_existing_user_with_correct_password_and_expired_token : ConfirmChangeEmailBase
     {
         [SetUp]
         public void Setup()
         {
-            _userService
-                .ChangeEmail(default, default, default, default)
+            _userManager
+                .CheckPasswordAsync(default, default)
+                .ReturnsForAnyArgs(true);
+
+            _userManager
+                .ChangeEmailAsync(default, default, default)
                 .ReturnsForAnyArgs(IdentityResult.Failed(new IdentityErrorDescriber().InvalidToken()));
         }
 

@@ -30,8 +30,8 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.ConfirmChangeEm
         public async Task Then_does_not_attempt_to_change_email()
         {
             await _sut.Handle(_request, CancellationToken.None);
-            await _userService.DidNotReceiveWithAnyArgs()
-                .ChangeEmail(default, default, default, default);
+            await _userManager.DidNotReceiveWithAnyArgs()
+                .ChangeEmailAsync(default, default, default);
         }
     }
 }
