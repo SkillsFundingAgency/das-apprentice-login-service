@@ -4,7 +4,7 @@ using SFA.DAS.LoginService.Application.ChangeEmail.StartChangeEmail;
 using SFA.DAS.LoginService.Web.Controllers.ChangeEmail.ViewModels;
 using System;
 using System.Threading.Tasks;
-using System.Web;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
 {
@@ -15,7 +15,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
         {
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet("profile/{clientId}/changeemail")]
         public IActionResult ChangeEmail(Guid clientId)
         {
@@ -24,12 +24,12 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
             return View(model);
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPost("profile/{clientId}/changeemail")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangeEmail([FromRoute] Guid clientId, [FromForm] ChangeEmailViewModel model)
         {
-            var email = User.Identity.Name ?? "paul.graham@coprime.co.uk";
+            var email = User.Identity.Name;
 
             var response = await Mediator.Send(new StartChangeEmailRequest
             {
@@ -61,6 +61,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
             }
         }
 
+        [Authorize]
         [HttpGet("account/{clientId}/waittoconfirmnewemail")]
         public IActionResult WaitToConfirmNewEmail([FromRoute] Guid clientId, [FromQuery] string email)
         {
