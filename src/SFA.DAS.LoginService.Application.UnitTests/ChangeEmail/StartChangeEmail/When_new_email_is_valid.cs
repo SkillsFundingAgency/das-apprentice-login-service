@@ -48,12 +48,12 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.StartChangeEmai
         }
 
         [Test]
-        public async Task Then_email_is_to_new_email_address()
+        public async Task Then_email_is_sent_to_new_email_address()
         {
             var request = CreateStartChangeEmailRequest();
             await Sut.Handle(request, CancellationToken.None);
 
-            await EmailService.Received().SendChangeEmailCode(Arg.Is<ChangeUserEmailViewModel>(p => p.EmailAddress == User.Email));
+            await EmailService.Received().SendChangeEmailCode(Arg.Is<ChangeUserEmailViewModel>(p => p.EmailAddress == request.NewEmailAddress));
         }
     }
 }
