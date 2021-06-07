@@ -26,7 +26,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
 
         //[Authorize]
         [HttpPost("profile/{clientId}/changeemail")]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangeEmail([FromRoute] Guid clientId, [FromForm] ChangeEmailViewModel model)
         {
             var email = User.Identity.Name ?? "paul.graham@coprime.co.uk";
@@ -45,7 +45,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
                 return View("ChangeEmail", model);
             }
 
-            return RedirectToAction("WaitForConfirmNewEmail", new { ClientId = clientId, NewEmail= HttpUtility.UrlEncode(model.NewEmailAddress) });
+            return RedirectToAction("WaitToConfirmNewEmail", new { ClientId = clientId, Email = model.NewEmailAddress });
         }
 
         private void SetModelState(StartChangeEmailResponse response)
@@ -61,10 +61,17 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
             }
         }
 
-        [HttpGet("account/{clientId}/waitforconfirmnewemail?newemail={email}")]
-        public IActionResult WaitForConfirmNewEmail([FromRoute]Guid clientId, [FromQuery] string email)
+        [HttpGet("account/{clientId}/waittoconfirmnewemail")]
+        public IActionResult WaitToConfirmNewEmail([FromRoute] Guid clientId, [FromQuery] string email)
         {
-            return View();
+            var model = new ChangeEmailViewModel
+            {
+                Backlink = $"/profile/{clientId}/changeemail",
+                NewEmailAddress = email,
+                ConfirmEmailAddress = email
+            };
+
+            return View(model);
         }
     }
 }
