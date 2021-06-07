@@ -8,6 +8,8 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using NServiceBus;
+using SFA.DAS.Apprentice.LoginService.Messages;
 
 namespace SFA.DAS.LoginService.Application.ChangeEmail.ConfirmChangeEmail
 {
@@ -15,11 +17,13 @@ namespace SFA.DAS.LoginService.Application.ChangeEmail.ConfirmChangeEmail
     {
         private readonly IWebUserService _userService;
         private readonly LoginContext _loginContext;
+        private readonly IMessageSession _messageSession;
 
-        public ConfirmChangeEmailRequestHandler(IWebUserService userService, LoginContext loginContext)
+        public ConfirmChangeEmailRequestHandler(IWebUserService userService, LoginContext loginContext, IMessageSession messageSession)
         {
             _userService = userService;
             _loginContext = loginContext;
+            _messageSession = messageSession;
         }
 
         public async Task<ConfirmChangeEmailResponse> Handle(ConfirmChangeEmailRequest request, CancellationToken cancellationToken)
@@ -38,7 +42,15 @@ namespace SFA.DAS.LoginService.Application.ChangeEmail.ConfirmChangeEmail
                     response.PasswordError = "Incorrect password";
                 if (result.Errors.Any(x => x.Code == nameof(IdentityErrorDescriber.InvalidToken)))
                     response.TokenError = true;
+
+                return response;
             }
+            
+            await _messageSession.Publish(new EmailChangedEvent
+            {
+                ApprenticeId = user.ApprenticeId, NewEmailAddress = request.NewEmailAddress,
+                CurrentEmailAddress = request.CurrentEmailAddress
+            });
 
             _loginContext.UserLogs.Add(new UserLog()
             {

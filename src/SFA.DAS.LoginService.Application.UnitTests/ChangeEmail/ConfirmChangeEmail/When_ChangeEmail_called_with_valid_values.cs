@@ -4,6 +4,9 @@ using NSubstitute;
 using NUnit.Framework;
 using System.Threading;
 using System.Threading.Tasks;
+using NServiceBus;
+using SFA.DAS.Apprentice.LoginService.Messages;
+using SFA.DAS.LoginService.Application.Services.EmailServiceViewModels;
 
 namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.ConfirmChangeEmail
 {
@@ -56,6 +59,16 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.ConfirmChangeEm
                 PasswordError = (string)null,
                 TokenError = false,
             });
+        }
+
+        [Test]
+        public async Task Then_publishes_event_EmailChangedEvent()
+        {
+            await _sut.Handle(_request, CancellationToken.None);
+            await _messageSession.Received()
+                .Publish(Arg.Is<EmailChangedEvent>(m =>
+                    m.ApprenticeId == _user.ApprenticeId && m.NewEmailAddress == _request.NewEmailAddress &&
+                    m.CurrentEmailAddress == _request.CurrentEmailAddress), Arg.Any<PublishOptions>());
         }
     }
 }

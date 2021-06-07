@@ -62,7 +62,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
         }
 
         [Authorize]
-        [HttpGet("account/{clientId}/waittoconfirmnewemail")]
+        [HttpGet("profile/{clientId}/waittoconfirmnewemail")]
         public IActionResult WaitToConfirmNewEmail([FromRoute] Guid clientId, [FromQuery] string email)
         {
             var model = new ChangeEmailViewModel

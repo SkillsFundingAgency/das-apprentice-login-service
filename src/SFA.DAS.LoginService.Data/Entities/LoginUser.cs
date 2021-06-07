@@ -7,6 +7,6 @@ namespace SFA.DAS.LoginService.Data.Entities
     {
         public string GivenName { get; set; }
         public string FamilyName { get; set; }
-        public Guid RegistrationId { get; set; }
+        public Guid ApprenticeId { get; set; }
     }
 }

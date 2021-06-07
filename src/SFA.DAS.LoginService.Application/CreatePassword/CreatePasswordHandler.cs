@@ -35,7 +35,7 @@ namespace SFA.DAS.LoginService.Application.CreatePassword
                     Email = invitation.Email,
                     GivenName = invitation.GivenName,
                     FamilyName = invitation.FamilyName,
-                    RegistrationId = Guid.TryParse(invitation.SourceId, out var rid) ? rid : default,
+                    ApprenticeId = Guid.TryParse(invitation.SourceId, out var rid) ? rid : default,
                 }, request.Password);
 
             if (newUserResponse.Result != IdentityResult.Success)

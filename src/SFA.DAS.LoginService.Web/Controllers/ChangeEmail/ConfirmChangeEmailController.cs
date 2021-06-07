@@ -4,6 +4,7 @@ using SFA.DAS.LoginService.Application.ChangeEmail.ConfirmChangeEmail;
 using SFA.DAS.LoginService.Web.Controllers.ChangeEmail.ViewModels;
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
 {
@@ -14,9 +15,9 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
         {
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet]
-        public IActionResult ConfirmChangeEmail(Guid clientId, [FromQuery] string email, [FromQuery] string token)
+        public IActionResult ConfirmChangeEmail([FromRoute]Guid clientId, [FromQuery] string email, [FromQuery] string token)
         {
             return View(new ConfirmChangeEmailViewModel
             {
@@ -26,7 +27,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
             });
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> ConfirmChangeEmail(Guid clientId, [FromForm] ConfirmChangeEmailViewModel model)
         {

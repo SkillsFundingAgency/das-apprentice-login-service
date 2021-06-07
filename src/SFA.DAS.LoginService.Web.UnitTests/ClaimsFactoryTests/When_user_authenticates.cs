@@ -48,7 +48,7 @@ namespace SFA.DAS.LoginService.Web.UnitTests.ClaimsFactoryTests
             claims.Claims.Should().ContainEquivalentOf(new
             {
                 Type = "registration_id",
-                Value = user.RegistrationId.ToString(),
+                Value = user.ApprenticeId.ToString(),
             });
         }
     }

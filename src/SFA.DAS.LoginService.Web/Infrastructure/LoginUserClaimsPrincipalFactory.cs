@@ -19,7 +19,8 @@ namespace SFA.DAS.LoginService.Web.Infrastructure
             var identity = await base.GenerateClaimsAsync(user);
             identity.AddClaim(new Claim("family_name", user.FamilyName));
             identity.AddClaim(new Claim("given_name", user.GivenName));
-            identity.AddClaim(new Claim("registration_id", user.RegistrationId.ToString()));
+            identity.AddClaim(new Claim("registration_id", user.ApprenticeId.ToString()));
+            identity.AddClaim(new Claim("apprentice_id", user.ApprenticeId.ToString()));
             return identity;
         }
     }

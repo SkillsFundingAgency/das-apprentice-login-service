@@ -9,10 +9,12 @@
       <PackageReference Include="MediatR" Version="6.0.0" />
       <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="2.2.0" />
       <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+      <PackageReference Include="NServiceBus" Version="7.1.7" />
       <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\SFA.DAS.Apprentice.LoginService.Messages\SFA.DAS.Apprentice.LoginService.Messages.csproj" />
       <ProjectReference Include="..\SFA.DAS.LoginService.Configuration\SFA.DAS.LoginService.Configuration.csproj" />
       <ProjectReference Include="..\SFA.DAS.LoginService.Data\SFA.DAS.LoginService.Data.csproj" />
       <ProjectReference Include="..\SFA.DAS.LoginService.Types\SFA.DAS.LoginService.Types.csproj" />
