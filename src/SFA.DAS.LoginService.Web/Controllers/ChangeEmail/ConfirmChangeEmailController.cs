@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.LoginService.Application.ChangeEmail.ConfirmChangeEmail;
+using SFA.DAS.LoginService.Application.ChangeEmail.ChangeEmailSuccessful;
 using SFA.DAS.LoginService.Web.Controllers.ChangeEmail.ViewModels;
 using System;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
 {
-    [Route("profile/{clientId}/changeemail/confirm")]
+    //[Route("profile/{clientId}/changeemail/confirm")]
     public class ConfirmChangeEmailController : BaseController
     {
         public ConfirmChangeEmailController(IMediator mediator) : base(mediator)
@@ -47,7 +48,19 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
                 return View(model);
             }
 
-            return Ok();
+            //return Ok();
+            return RedirectToAction("ChangeEmailSuccessful", new { ClientId = clientId });
+        }
+
+        //[Authorize]
+        [HttpGet("profile/{clientId}/changeemail/changeemailsuccessful")]
+        public async Task<IActionResult> ChangeEmailSuccessful(Guid clientId)
+        {
+            var client = await Mediator.Send(new ChangeEmailSuccessfulRequest { ClientId = clientId });
+            var baseUrl = client.ServiceDetails.SupportUrl;
+            var model = new ChangeEmailSuccessfulViewModel { ReturnUrl = baseUrl + "apprenticeships" };
+
+            return View();
         }
 
         private void SetModelState(ConfirmChangeEmailResponse response, ConfirmChangeEmailViewModel model)
