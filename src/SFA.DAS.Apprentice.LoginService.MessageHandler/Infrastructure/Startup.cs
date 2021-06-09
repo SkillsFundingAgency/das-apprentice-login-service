@@ -35,7 +35,7 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler
                     connectionStringName: "NServiceBusConnectionString");
 
                 configuration.AdvancedConfiguration.Conventions()                    
-                    .DefiningMessagesAs(t => t.Namespace?.StartsWith("SFA.DAS.Apprentice.LoginService.Messages.Commands") == true);                    
+                    .DefiningMessagesAs(t => t.Namespace?.StartsWith("SFA.DAS.Apprentice.LoginService.Messages") == true);                    
 
                 configuration.AdvancedConfiguration.SendFailedMessagesTo($"{QueueNames.ApprenticeLoginService}-error");
                 configuration.LogDiagnostics();
