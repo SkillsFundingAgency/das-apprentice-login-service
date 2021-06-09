@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Logging;
 using NServiceBus;
 using SFA.DAS.Apprentice.LoginService.MessageHandler.InvitationService;
-using SFA.DAS.Apprentice.LoginService.Messages.Commands;
+using SFA.DAS.Apprentice.LoginService.Messages;
 using System;
 using System.Threading.Tasks;
 
@@ -10,9 +10,9 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler
     public class SendInvitationCommandHandler : IHandleMessages<SendInvitation>
     {
         private readonly IInvitationApi _api;
-        private readonly ILogger _log;
+        private readonly ILogger<SendInvitationCommandHandler> _log;
 
-        public SendInvitationCommandHandler(IInvitationApi api, ILogger log)
+        public SendInvitationCommandHandler(IInvitationApi api, ILogger<SendInvitationCommandHandler> log)
         {
             _api = api;
             _log = log;
@@ -38,6 +38,7 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler
 
             await context.Reply(new SendInvitationReply
             {
+                ClientId = message.ClientId,
                 Message = response.Message,
                 Invited = response.Invited,
                 InvitationId = response.InvitationId,

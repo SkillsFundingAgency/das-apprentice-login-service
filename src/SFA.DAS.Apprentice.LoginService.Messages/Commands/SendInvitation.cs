@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SFA.DAS.Apprentice.LoginService.Messages.Commands
+namespace SFA.DAS.Apprentice.LoginService.Messages
 {
     public class SendInvitation
     {
