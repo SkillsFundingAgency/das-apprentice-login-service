@@ -34,6 +34,9 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler
                     endpointName: QueueNames.ApprenticeLoginService,
                     connectionStringName: "NServiceBusConnectionString");
 
+                configuration.AdvancedConfiguration.Conventions()                    
+                    .DefiningMessagesAs(t => t.Namespace?.StartsWith("SFA.DAS.Apprentice.LoginService.Messages.Commands") == true);                    
+
                 configuration.AdvancedConfiguration.SendFailedMessagesTo($"{QueueNames.ApprenticeLoginService}-error");
                 configuration.LogDiagnostics();
 
@@ -53,7 +56,7 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler
             var configuration = sp.GetRequiredService<IConfiguration>();
             var login = sp.GetRequiredService<ILoginConfig>();
 
-            login.ApprenticeLoginApi ??= new ApprenticeLoginApiConfiguration { ApiBaseUrl = "https://bob.com/" };
+            login.ApprenticeLoginApi ??= new ApprenticeLoginApiConfiguration { ApiBaseUrl = "https://localhost:5001" };
 
             builder.Services.AddInvitationService(configuration, login.ApprenticeLoginApi);
         }
