@@ -1,7 +1,7 @@
 ﻿using AutoFixture;
 using AutoFixture.AutoNSubstitute;
 using AutoFixture.NUnit3;
-using SFA.DAS.Apprentice.LoginService.Messages.Commands;
+using SFA.DAS.Apprentice.LoginService.Messages;
 using System;
 
 namespace SFA.DAS.Apprentice.LoginService.MessageHandler.AcceptanceTests.Steps

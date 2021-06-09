@@ -3,7 +3,7 @@ using NServiceBus.Testing;
 using NSubstitute;
 using NUnit.Framework;
 using SFA.DAS.Apprentice.LoginService.MessageHandler.InvitationService;
-using SFA.DAS.Apprentice.LoginService.Messages.Commands;
+using SFA.DAS.Apprentice.LoginService.Messages;
 using System;
 using System.Threading.Tasks;
 
