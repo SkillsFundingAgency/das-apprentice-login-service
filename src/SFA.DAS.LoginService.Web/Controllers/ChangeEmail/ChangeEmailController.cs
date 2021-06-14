@@ -26,7 +26,6 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
 
         [Authorize]
         [HttpPost("profile/{clientId}/changeemail")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangeEmail([FromRoute] Guid clientId, [FromForm] ChangeEmailViewModel model)
         {
             var email = User.Identity.Name;
