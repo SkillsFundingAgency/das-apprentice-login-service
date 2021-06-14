@@ -40,17 +40,6 @@ namespace SFA.DAS.LoginService.Web.UnitTests.ClaimsFactoryTests
                 Value = user.FamilyName,
             });
         }
-
-        [Test, NSubstituteAutoData]
-        public async Task Adds_registration_id(LoginUserClaimsPrincipalFactory sut, LoginUser user)
-        {
-            var claims = await sut.CreateAsync(user);
-            claims.Claims.Should().ContainEquivalentOf(new
-            {
-                Type = "registration_id",
-                Value = user.ApprenticeId.ToString(),
-            });
-        }
     }
 
     internal class NSubstituteAutoDataAttribute : AutoDataAttribute
