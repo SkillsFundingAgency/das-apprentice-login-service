@@ -60,7 +60,6 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
             return View(new ChangeEmailSuccessfulViewModel() { ReturnUrl = client.ServiceDetails.SupportUrl, ServiceName = client.ServiceDetails.ServiceName });
         }
     
-
         private void SetModelState(ConfirmChangeEmailResponse response, ConfirmChangeEmailViewModel model)
         {
             model.TokenInvalid = response.TokenError;
