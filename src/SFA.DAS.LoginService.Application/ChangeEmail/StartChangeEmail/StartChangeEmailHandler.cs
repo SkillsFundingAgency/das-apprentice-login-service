@@ -28,6 +28,9 @@ namespace SFA.DAS.LoginService.Application.ChangeEmail.StartChangeEmail
 
         public async Task<StartChangeEmailResponse> Handle(StartChangeEmailRequest request, CancellationToken cancellationToken)
         {
+            request.NewEmailAddress = request.NewEmailAddress?.Trim();
+            request.ConfirmEmailAddress = request.ConfirmEmailAddress?.Trim();
+
             var response = await ValidatedRequest(request);
 
             if (response.HasErrors)
