@@ -5,5 +5,6 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail.ViewModels
         public string NewEmailAddress { get; set; }
         public string ConfirmEmailAddress { get; set; }
         public string Backlink { get; set; }
+        public bool Resend { get; set; } = false;
     }
 }

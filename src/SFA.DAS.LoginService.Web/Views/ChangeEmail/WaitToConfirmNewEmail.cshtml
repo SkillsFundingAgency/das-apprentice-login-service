@@ -3,7 +3,14 @@
 <main class="govuk-main-wrapper " id="main-content" role="main">
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
+            @if (Model.Resend)
+            {
+            <h1 class="govuk-heading-xl">We have sent you a new email</h1>
+            }
+            else
+            {
             <h1 class="govuk-heading-xl">We have sent you an email</h1>
+            }
         </div>
     </div>
 
@@ -18,6 +25,7 @@
                 @Html.AntiForgeryToken()
                 <input type="hidden" asp-for="NewEmailAddress" />
                 <input type="hidden" asp-for="ConfirmEmailAddress" />
+                <input type="hidden" asp-for="Resend" value="True" />
 
                 <div class="govuk-form-group">
                     <button class="govuk-button" type="submit">Request new email link</button>
