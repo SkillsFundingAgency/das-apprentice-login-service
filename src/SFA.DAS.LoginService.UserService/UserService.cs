@@ -67,6 +67,25 @@ namespace SFA.DAS.LoginService.Application.Services
             return await _userManager.GeneratePasswordResetTokenAsync(user);
         }
 
+        public async Task<string> GenerateChangeEmailToken(LoginUser user, string newEmail)
+        {
+            return await _userManager.GenerateChangeEmailTokenAsync(user, newEmail);
+        }
+
+        public async Task<IdentityResult> ChangeEmail(LoginUser user, string password, string newEmail, string token)
+        {
+            if (!await _userManager.CheckPasswordAsync(user, password))
+                return IdentityResult.Failed(new IdentityErrorDescriber().PasswordMismatch());
+
+            var r = await _userManager.ChangeEmailAsync(user, newEmail, token);
+
+            if (!r.Succeeded) return r;
+
+            r = await _userManager.SetUserNameAsync(user, newEmail);
+
+            return r;
+        }
+
         public async Task AddUserClaim(LoginUser user, string claimType, string value)
         {
             await _userManager.AddClaimAsync(user, new Claim(claimType, value));

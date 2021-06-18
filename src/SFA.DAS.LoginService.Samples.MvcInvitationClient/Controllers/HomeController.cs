@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.LoginService.Samples.MvcInvitationClient.Models;
 using System.Diagnostics;
@@ -41,6 +43,19 @@ namespace SFA.DAS.LoginService.Samples.MvcInvitationClient.Controllers
         {
             var claims = new SecureModel(User.Claims);
             return View(claims);
+        }
+
+        [Authorize]
+        [Route("/Account/ChangeEmail")]
+        public IActionResult ChangeEmail([FromServices] InvitationService inviter)
+        {
+            return Redirect(inviter.ChangeEmailUri.ToString());
+        }
+
+        [Route("/Account/Logout")]
+        public IActionResult Logout()
+        {
+            return SignOut("Cookies", "oidc");
         }
     }
 }

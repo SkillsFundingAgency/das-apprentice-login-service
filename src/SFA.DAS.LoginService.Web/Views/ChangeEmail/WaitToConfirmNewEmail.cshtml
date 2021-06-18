@@ -1,0 +1,40 @@
+﻿@model SFA.DAS.LoginService.Web.Controllers.ChangeEmail.ViewModels.ChangeEmailViewModel
+
+<main class="govuk-main-wrapper " id="main-content" role="main">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            @if (Model.Resend)
+            {
+            <h1 class="govuk-heading-xl">We have sent you a new email</h1>
+            }
+            else
+            {
+            <h1 class="govuk-heading-xl">We have sent you an email</h1>
+            }
+        </div>
+    </div>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <div class="govuk-body">
+                <p>We have sent a change email link to @Model.NewEmailAddress.</p>
+                <p>If you do not receive this email you can request a new one.</p>
+            </div>
+            <form method="Post" action="@Model.Backlink">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="NewEmailAddress" />
+                <input type="hidden" asp-for="ConfirmEmailAddress" />
+                <input type="hidden" asp-for="Resend" value="True" />
+
+                <div class="govuk-form-group">
+                    <button class="govuk-button" type="submit">Request new email link</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+@section Backlink {
+    <a href="@Model.Backlink" title="Change email address page" class="govuk-back-link">Back</a>
+}

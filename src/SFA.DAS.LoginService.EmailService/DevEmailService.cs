@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.LoginService.Application.Interfaces;
-using SFA.DAS.LoginService.Application.Services;
 using SFA.DAS.LoginService.Application.Services.EmailServiceViewModels;
 
 namespace SFA.DAS.LoginService.EmailService
@@ -38,6 +37,11 @@ namespace SFA.DAS.LoginService.EmailService
         public async Task SendUserExistsEmail(UserExistsEmailViewModel viewModel)
         {
             await Task.Run(() => _logger.LogInformation($"USER EXISTS Email sent to {viewModel.EmailAddress} with returnUrl {viewModel.LoginLink}"));
+        }
+
+        public Task SendChangeEmailCode(ChangeUserEmailViewModel viewModel)
+        {
+            return Task.Run(() => _logger.LogInformation($"CHANGE USER EMAIL sent to {viewModel.EmailAddress}"));
         }
     }
 }

@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using SFA.DAS.LoginService.Application.Services;
 using SFA.DAS.LoginService.Application.Services.EmailServiceViewModels;
 
 namespace SFA.DAS.LoginService.Application.Interfaces
@@ -11,5 +10,6 @@ namespace SFA.DAS.LoginService.Application.Interfaces
         Task SendResetNoAccountPassword(PasswordResetNoAccountEmailViewModel viewModel);
         Task SendPasswordReset(PasswordResetEmailViewModel viewModel);
         Task SendUserExistsEmail(UserExistsEmailViewModel viewModel);
+        Task SendChangeEmailCode(ChangeUserEmailViewModel viewModel);
     }
 }
