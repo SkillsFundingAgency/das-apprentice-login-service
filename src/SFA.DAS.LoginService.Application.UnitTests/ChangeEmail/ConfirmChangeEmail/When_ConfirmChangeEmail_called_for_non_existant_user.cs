@@ -2,7 +2,6 @@
 using NSubstitute;
 using NUnit.Framework;
 using SFA.DAS.LoginService.Data.Entities;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -19,11 +18,14 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.ConfirmChangeEm
         }
 
         [Test]
-        public void Then_returns_token_errors()
+        public async Task Then_returns_token_errors()
         {
-            _sut.Invoking(x => x.Handle(_request, CancellationToken.None))
-                .Should().Throw<ApplicationException>()
-                .WithMessage("Current User's email `unknown@example.com` does not exist");
+            var result = await _sut.Handle(_request, CancellationToken.None);
+            result.Should().BeEquivalentTo(new
+            {
+                PasswordError = (string)null,
+                TokenError = true,
+            });
         }
 
         [Test]

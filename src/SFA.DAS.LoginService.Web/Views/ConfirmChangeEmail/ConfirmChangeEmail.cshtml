@@ -11,50 +11,50 @@
         </div>
     </div>
 
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-            <div class="govuk-body">
-                <p>Your new email address is @Model.NewEmailAddress.</p>
-                <p>Enter your password to use this email address.</p>
+    @if (Model.TokenInvalid)
+    {
+        <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
+            <h2 class="govuk-error-summary__title" id="error-summary-title">
+                The verification code is invalid
+            </h2>
+            <div class="govuk-error-summary__body">
+                <p>The link has expired or is not valid for the new email address.</p>
+                <p>You can <a asp-controller="ChangeEmail" asp-action="ChangeEmail" asp-route-clientId="@Model.ClientId">request another verification email</a>.</p>
             </div>
+        </div>
+    }
+    else
+    {
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                <div class="govuk-body">
+                    <p>Your new email address is @Model.NewEmailAddress.</p>
+                    <p>Enter your password to use this email address.</p>
+                </div>
 
                 <form asp-action="Post">
                     @Html.AntiForgeryToken()
                     <input type="hidden" asp-for="NewEmailAddress" />
                     <input type="hidden" asp-for="Token" />
 
-                    @if (Model.TokenInvalid)
-                    {
-                        <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
-                            <h2 class="govuk-error-summary__title" id="error-summary-title">
-                                The verification code is invalid
-                            </h2>
-                            <div class="govuk-error-summary__body">
-                                <p>The link has expired or is not valid for the new email address.</p>
-                                <p>You can <a asp-controller="ChangeEmail" asp-action="ChangeEmail" asp-route-clientId="@Model.ClientId">request another verification email</a>.</p>
+                    <div class="govuk-form-group" sfa-validation-for="Password" sfa-validationerror-class="govuk-form-group--error">
+                        <label class="govuk-label govuk-label--m" asp-for="Password">
+                            Your password
+                        </label>
+                        <div class="show-password-container">
+                            <input class="govuk-input govuk-input--width-20 show-hide-password-input" asp-for="Password" type="password" autocomplete="current-password" data-show-hide="password" sfa-validation-for="Password" sfa-validationerror-class="govuk-input--error" />
+                            <div class="show-password-control-container">
+                                <input type="checkbox" class="show-hide-checkbox" name="show-hide" id="show-hide" />
+                                <label for="show-hide" class="govuk-label govuk-label--show-hide"><span class="govuk-label__show-hide-text">show</span><span class="govuk-visually-hidden"> password</span></label>
                             </div>
                         </div>
-                    }
-                    else
-                    {
-                        <div class="govuk-form-group" sfa-validation-for="Password" sfa-validationerror-class="govuk-form-group--error">
-                            <label class="govuk-label govuk-label--m" asp-for="Password">
-                                Your password
-                            </label>
-                            <div class="show-password-container">
-                                <input class="govuk-input govuk-input--width-20 show-hide-password-input" asp-for="Password" type="password" autocomplete="current-password" data-show-hide="password" sfa-validation-for="Password" sfa-validationerror-class="govuk-input--error" />
-                                <div class="show-password-control-container">
-                                    <input type="checkbox" class="show-hide-checkbox" name="show-hide" id="show-hide" />
-                                    <label for="show-hide" class="govuk-label govuk-label--show-hide"><span class="govuk-label__show-hide-text">show</span><span class="govuk-visually-hidden"> password</span></label>
-                                </div>
-                            </div>
-                        </div>
+                    </div>
 
-                        <div class="govuk-form-group">
-                            <button class="govuk-button" type="submit">Submit</button>
-                        </div>
-                    }
+                    <div class="govuk-form-group">
+                        <button class="govuk-button" type="submit">Submit</button>
+                    </div>
                 </form>
             </div>
         </div>
+    }
 </main>
