@@ -31,9 +31,13 @@ namespace SFA.DAS.LoginService.Application.ChangeEmail.ConfirmChangeEmail
             var response = ValidatedRequest(request);
             if (response.HasErrors) return response;
 
-            var user = await _userService.FindByEmail(request.CurrentEmailAddress)
-                ?? throw new ApplicationException(
-                    $"Current User's email `{request.CurrentEmailAddress}` does not exist");
+            var user = await _userService.FindByEmail(request.CurrentEmailAddress);
+
+            if (user == null)
+            {
+                response.TokenError = true;
+                return response;
+            }
 
             var result = await _userService.ChangeEmail(user, request.Password, request.NewEmailAddress, request.Token);
             if (!result.Succeeded)
@@ -63,7 +67,7 @@ namespace SFA.DAS.LoginService.Application.ChangeEmail.ConfirmChangeEmail
                 ExtraData = request.NewEmailAddress
             });
 
-            return response;
+            return new ConfirmChangeEmailResponse(); 
         }
 
         private ConfirmChangeEmailResponse ValidatedRequest(ConfirmChangeEmailRequest request)
