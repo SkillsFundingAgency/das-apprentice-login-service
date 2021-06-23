@@ -1,10 +1,10 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.LoginService.Application.ChangeEmail.StartChangeEmail;
 using SFA.DAS.LoginService.Web.Controllers.ChangeEmail.ViewModels;
 using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 
 namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
 {
@@ -44,7 +44,27 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
                 return View("ChangeEmail", model);
             }
 
-            return RedirectToAction("WaitToConfirmNewEmail", new { ClientId = clientId, Email = model.NewEmailAddress });
+            return RedirectToAction("WaitToConfirmNewEmail", new
+            {
+                ClientId = clientId,
+                Email = model.NewEmailAddress,
+                Resend = model.Resend,
+            });
+        }
+
+        [Authorize]
+        [HttpGet("profile/{clientId}/waittoconfirmnewemail")]
+        public IActionResult WaitToConfirmNewEmail([FromRoute] Guid clientId, [FromQuery] string email, [FromQuery] bool resend)
+        {
+            var model = new ChangeEmailViewModel
+            {
+                Backlink = $"/profile/{clientId}/changeemail",
+                NewEmailAddress = email,
+                ConfirmEmailAddress = email,
+                Resend = resend,
+            };
+
+            return View(model);
         }
 
         private void SetModelState(StartChangeEmailResponse response)
@@ -58,20 +78,6 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
             {
                 ViewData.ModelState.AddModelError("ConfirmEmailAddress", response.ConfirmEmailAddressError);
             }
-        }
-
-        [Authorize]
-        [HttpGet("profile/{clientId}/waittoconfirmnewemail")]
-        public IActionResult WaitToConfirmNewEmail([FromRoute] Guid clientId, [FromQuery] string email)
-        {
-            var model = new ChangeEmailViewModel
-            {
-                Backlink = $"/profile/{clientId}/changeemail",
-                NewEmailAddress = email,
-                ConfirmEmailAddress = email
-            };
-
-            return View(model);
         }
     }
 }

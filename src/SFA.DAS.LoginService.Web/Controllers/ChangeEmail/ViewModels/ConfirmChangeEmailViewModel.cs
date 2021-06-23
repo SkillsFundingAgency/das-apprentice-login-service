@@ -14,6 +14,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail.ViewModels
         public bool TokenInvalid { get; set; }
 
         [Required(ErrorMessage = "Enter your password")]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
     }
 }

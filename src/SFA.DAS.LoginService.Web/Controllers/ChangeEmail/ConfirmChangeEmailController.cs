@@ -1,14 +1,14 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.LoginService.Application.ChangeEmail.ConfirmChangeEmail;
+using SFA.DAS.LoginService.Types.GetClientById;
 using SFA.DAS.LoginService.Web.Controllers.ChangeEmail.ViewModels;
 using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 
 namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
 {
-    [Route("profile/{clientId}/changeemail/confirm")]
     public class ConfirmChangeEmailController : BaseController
     {
         public ConfirmChangeEmailController(IMediator mediator) : base(mediator)
@@ -16,8 +16,8 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
         }
 
         [Authorize]
-        [HttpGet]
-        public IActionResult ConfirmChangeEmail([FromRoute]Guid clientId, [FromQuery] string email, [FromQuery] string token)
+        [HttpGet("profile/{clientId}/changeemail/confirm")]
+        public IActionResult ConfirmChangeEmail(Guid clientId, [FromQuery] string email, [FromQuery] string token)
         {
             return View(new ConfirmChangeEmailViewModel
             {
@@ -28,7 +28,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
         }
 
         [Authorize]
-        [HttpPost]
+        [HttpPost("profile/{clientId}/changeemail/confirm")]
         public async Task<IActionResult> ConfirmChangeEmail(Guid clientId, [FromForm] ConfirmChangeEmailViewModel model)
         {
             var currentEmail = User.Identity.Name;
@@ -47,7 +47,18 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
                 return View(model);
             }
 
-            return Ok();
+            return RedirectToAction("ChangeEmailSuccessful", new { ClientId = clientId });
+        }
+
+        [Authorize]
+        [HttpGet("profile/{clientId}/changeemail/changeemailsuccessful")]
+        public async Task<IActionResult> ChangeEmailSuccessful(Guid clientId)
+        {
+            SetViewBagClientId(clientId);
+
+            var client = await Mediator.Send(new GetClientByIdRequest() { ClientId = clientId });
+
+            return View(new ChangeEmailSuccessfulViewModel() { ReturnUrl = client.ServiceDetails.SupportUrl, ServiceName = client.ServiceDetails.ServiceName });
         }
 
         private void SetModelState(ConfirmChangeEmailResponse response, ConfirmChangeEmailViewModel model)

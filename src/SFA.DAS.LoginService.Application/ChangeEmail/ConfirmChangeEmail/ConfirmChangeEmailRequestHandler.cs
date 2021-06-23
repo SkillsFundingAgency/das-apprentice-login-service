@@ -48,7 +48,8 @@ namespace SFA.DAS.LoginService.Application.ChangeEmail.ConfirmChangeEmail
             
             await _messageSession.Publish(new EmailChangedEvent
             {
-                ApprenticeId = user.ApprenticeId, NewEmailAddress = request.NewEmailAddress,
+                ApprenticeId = user.ApprenticeId, 
+                NewEmailAddress = request.NewEmailAddress,
                 CurrentEmailAddress = request.CurrentEmailAddress
             });
 
