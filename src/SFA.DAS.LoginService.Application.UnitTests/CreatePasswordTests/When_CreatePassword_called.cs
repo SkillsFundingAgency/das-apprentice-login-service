@@ -31,7 +31,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.CreatePasswordTests
                 && u.Email == "email@provider.com"
                 && u.GivenName == "GN1"
                 && u.FamilyName == "FN1"
-                && u.RegistrationId == SourceId), "Password");
+                && u.ApprenticeId == SourceId), "Password");
         }
 
         [Test]
