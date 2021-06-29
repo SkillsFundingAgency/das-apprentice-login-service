@@ -13,7 +13,9 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NServiceBus.AzureFunctions.InProcess.ServiceBus " Version="1.0.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="6.0.1" />
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.2" />
     <PackageReference Include="NLog" Version="4.7.7" />
     <PackageReference Include="NLog.Extensions.Logging" Version="1.7.0" />
     <PackageReference Include="RestEase" Version="1.5.2" />
@@ -27,7 +29,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Apprentice.LoginService.Messages\SFA.DAS.Apprentice.LoginService.Messages.csproj" />
+    <ProjectReference Include="..\SFA.DAS.LoginService.Application\SFA.DAS.LoginService.Application.csproj" />
     <ProjectReference Include="..\SFA.DAS.LoginService.Configuration\SFA.DAS.LoginService.Configuration.csproj" />
+    <ProjectReference Include="..\SFA.DAS.LoginService.EmailService\SFA.DAS.LoginService.EmailService.csproj" />
+    <ProjectReference Include="..\SFA.DAS.LoginService.UserService\SFA.DAS.LoginService.UserService.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">

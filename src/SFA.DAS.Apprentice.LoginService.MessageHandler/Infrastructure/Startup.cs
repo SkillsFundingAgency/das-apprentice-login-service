@@ -2,11 +2,11 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using NServiceBus;
 using SFA.DAS.Apprentice.LoginService.MessageHandler.Infrastructure;
 using SFA.DAS.Apprentice.LoginService.MessageHandler.Infrastructure.NServiceBus;
 using SFA.DAS.LoginService.Configuration;
+using SFA.DAS.LoginService.Data;
 
 [assembly: FunctionsStartup(typeof(SFA.DAS.Apprentice.LoginService.MessageHandler.Startup))]
 
@@ -22,6 +22,7 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler
             builder.ConfigureLogging();
 
             var logger = LoggerFactory.Create(b => b.ConfigureLogging()).CreateLogger<Startup>();
+
             AutoSubscribeToQueues.CreateQueuesWithReflection(
                 builder.GetContext().Configuration,
                 connectionStringName: "NServiceBusConnectionString",
@@ -34,8 +35,8 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler
                     endpointName: QueueNames.ApprenticeLoginService,
                     connectionStringName: "NServiceBusConnectionString");
 
-                configuration.AdvancedConfiguration.Conventions()                    
-                    .DefiningMessagesAs(t => t.Namespace?.StartsWith("SFA.DAS.Apprentice.LoginService.Messages") == true);                    
+                configuration.AdvancedConfiguration.Conventions()
+                    .DefiningMessagesAs(t => t.Namespace?.StartsWith("SFA.DAS.Apprentice.LoginService.Messages") == true);
 
                 configuration.AdvancedConfiguration.SendFailedMessagesTo($"{QueueNames.ApprenticeLoginService}-error");
                 configuration.LogDiagnostics();
@@ -44,21 +45,22 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler
 
                 return configuration;
             });
-            builder.Services
-                .AddOptions<LoginConfig>()
-                .Configure<IConfiguration>((settings, configuration) =>
-                    configuration.Bind("SFA.DAS.ApprenticeLoginService", settings));
 
-            builder.Services.AddSingleton<ILoginConfig>(s =>
-                s.GetRequiredService<IOptions<LoginConfig>>().Value);
+            builder.Services.AddSingleton(p =>
+                p.GetRequiredService<IConfiguration>().Get<LoginConfig>());
 
-            var sp = builder.Services.BuildServiceProvider();
-            var configuration = sp.GetRequiredService<IConfiguration>();
-            var login = sp.GetRequiredService<ILoginConfig>();
+            builder.Services.AddSingleton<ILoginConfig>(p =>
+                p.GetRequiredService<LoginConfig>());
 
-            login.ApprenticeLoginApi ??= new ApprenticeLoginApiConfiguration { ApiBaseUrl = "https://localhost:5001" };
+            builder.Services.WireUpDependencies(builder.GetContext());
 
-            builder.Services.AddInvitationService(configuration, login.ApprenticeLoginApi);
+            builder.Services.AddDbContext<LoginContext>((services, options) =>
+                services.GetRequiredService<IContextSecurityProvider>().Secure(options));
+
+            builder.Services.AddDbContext<LoginUserContext>((services, options) =>
+                services.GetRequiredService<IContextSecurityProvider>().Secure(options));
+
+            //builder.Services.AddIdentityServer(_loginConfig, _environment, _logger);
         }
     }
 }

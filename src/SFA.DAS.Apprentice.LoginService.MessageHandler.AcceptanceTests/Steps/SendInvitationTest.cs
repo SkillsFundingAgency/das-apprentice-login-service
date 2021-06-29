@@ -1,10 +1,11 @@
 ﻿using AutoFixture.NUnit3;
+using MediatR;
 using NServiceBus.Testing;
 using NSubstitute;
 using NUnit.Framework;
-using SFA.DAS.Apprentice.LoginService.MessageHandler.InvitationService;
 using SFA.DAS.Apprentice.LoginService.Messages;
-using System;
+using SFA.DAS.LoginService.Application.Invitations.CreateInvitation;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.Apprentice.LoginService.MessageHandler.AcceptanceTests.Steps
@@ -13,35 +14,35 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler.AcceptanceTests.Steps
     {
         [Test, DomainAutoData]
         public async Task Forward_SendInvitation_to_api(
-            [Frozen] IInvitationApi api,
+            [Frozen] IMediator api,
             SendInvitationCommandHandler sut,
             SendInvitation evt)
         {
             await sut.Handle(evt, new TestableMessageHandlerContext());
 
-            await api.Received().SendInvitation(
-                evt.ClientId,
-                Arg.Is<SendInvitationRequest>(r =>
+            await api.Received().Send(
+                Arg.Is<CreateInvitationRequest>(r =>
                 r.Email == evt.Email
                 && r.GivenName == evt.GivenName
                 && r.FamilyName == evt.FamilyName
                 && r.OrganisationName == evt.OrganisationName
                 && r.ApprenticeshipName == evt.ApprenticeshipName
                 && r.SourceId == evt.SourceId
-                && r.Callback.ToString() == evt.Callback
-                && r.UserRedirect.ToString() == evt.UserRedirect));
+                && r.Callback == evt.Callback
+                && r.UserRedirect == evt.UserRedirect),
+                Arg.Any<CancellationToken>());
         }
 
         [Test, DomainAutoData]
         public async Task Replies_to_sender(
-            [Frozen] IInvitationApi api,
+            [Frozen] IMediator api,
             SendInvitationCommandHandler sut,
             SendInvitation evt,
-            SendInvitationResponse response)
+            CreateInvitationResponse response)
         {
             var context = new TestableMessageHandlerContext();
             api
-                .SendInvitation(Arg.Any<Guid>(), Arg.Any<SendInvitationRequest>())
+                .Send(Arg.Any<CreateInvitationRequest>(), Arg.Any<CancellationToken>())
                 .Returns(response);
 
             await sut.Handle(evt, context);

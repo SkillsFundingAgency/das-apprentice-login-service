@@ -11,8 +11,8 @@ namespace SFA.DAS.Apprentice.LoginService.Messages
         public string FamilyName { get; set; }
         public string OrganisationName { get; set; }
         public string ApprenticeshipName { get; set; }
-        public string Callback { get; set; }
-        public string UserRedirect { get; set; }
+        public Uri Callback { get; set; }
+        public Uri UserRedirect { get; set; }
     }
 
     public class SendInvitationReply
