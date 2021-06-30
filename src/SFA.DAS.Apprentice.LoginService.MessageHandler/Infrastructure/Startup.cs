@@ -1,4 +1,4 @@
-﻿using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -51,6 +51,8 @@ namespace SFA.DAS.Apprentice.LoginService.MessageHandler
 
             builder.Services.AddSingleton<ILoginConfig>(p =>
                 p.GetRequiredService<LoginConfig>());
+
+            builder.Services.AddScoped<IMessageSession, FunctionEndpointSessionAdaptor>();
 
             builder.Services.WireUpDependencies(builder.GetContext());
 
