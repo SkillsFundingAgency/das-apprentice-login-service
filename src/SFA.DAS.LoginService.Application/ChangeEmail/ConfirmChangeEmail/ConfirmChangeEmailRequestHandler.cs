@@ -4,7 +4,6 @@ using SFA.DAS.LoginService.Application.Interfaces;
 using SFA.DAS.LoginService.Application.Services;
 using SFA.DAS.LoginService.Data;
 using SFA.DAS.LoginService.Data.Entities;
-using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
