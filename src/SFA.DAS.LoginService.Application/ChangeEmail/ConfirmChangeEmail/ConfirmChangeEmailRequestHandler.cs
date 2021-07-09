@@ -41,9 +41,12 @@ namespace SFA.DAS.LoginService.Application.ChangeEmail.ConfirmChangeEmail
                 return response;
             }
 
+            _logger.LogInformation($"About to change email for apprentice {user.ApprenticeId}");
+
             var result = await _userService.ChangeEmail(user, request.Password, request.NewEmailAddress, request.Token);
             if (!result.Succeeded)
             {
+                _logger.LogInformation($"ChangeEmail for apprentice {user.ApprenticeId}, returned some errors");
                 if (result.Errors.Any(x => x.Code == nameof(IdentityErrorDescriber.PasswordMismatch)))
                     response.PasswordError = "Incorrect password";
                 if (result.Errors.Any(x => x.Code == nameof(IdentityErrorDescriber.InvalidToken)))
