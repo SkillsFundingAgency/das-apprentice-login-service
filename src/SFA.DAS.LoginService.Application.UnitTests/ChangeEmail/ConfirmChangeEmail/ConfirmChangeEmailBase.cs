@@ -57,6 +57,8 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.ConfirmChangeEm
             _messageSession = Substitute.For<IMessageSession>();
             _fixture.Inject(_messageSession);
 
+            _fixture.Inject(Substitute.For<ILogger<ConfirmChangeEmailRequestHandler>>());
+
             _sut = _fixture.Create<ConfirmChangeEmailRequestHandler>();
 
             _fixture.Customize<ConfirmChangeEmailRequest>(c => c

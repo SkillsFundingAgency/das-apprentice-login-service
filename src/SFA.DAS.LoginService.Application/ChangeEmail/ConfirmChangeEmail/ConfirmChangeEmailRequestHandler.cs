@@ -7,6 +7,7 @@ using SFA.DAS.LoginService.Data.Entities;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using NServiceBus;
 using SFA.DAS.Apprentice.LoginService.Messages;
 
@@ -17,12 +18,14 @@ namespace SFA.DAS.LoginService.Application.ChangeEmail.ConfirmChangeEmail
         private readonly IWebUserService _userService;
         private readonly LoginContext _loginContext;
         private readonly IMessageSession _messageSession;
+        private readonly ILogger<ConfirmChangeEmailRequestHandler> _logger;
 
-        public ConfirmChangeEmailRequestHandler(IWebUserService userService, LoginContext loginContext, IMessageSession messageSession)
+        public ConfirmChangeEmailRequestHandler(IWebUserService userService, LoginContext loginContext, IMessageSession messageSession, ILogger<ConfirmChangeEmailRequestHandler> logger)
         {
             _userService = userService;
             _loginContext = loginContext;
             _messageSession = messageSession;
+            _logger = logger;
         }
 
         public async Task<ConfirmChangeEmailResponse> Handle(ConfirmChangeEmailRequest request, CancellationToken cancellationToken)
@@ -48,7 +51,8 @@ namespace SFA.DAS.LoginService.Application.ChangeEmail.ConfirmChangeEmail
 
                 return response;
             }
-            
+
+            _logger.LogInformation($"Event {nameof(EmailChangedEvent)} getting published for apprentice {user.ApprenticeId}");
             await _messageSession.Publish(new EmailChangedEvent
             {
                 ApprenticeId = user.ApprenticeId, 
@@ -56,6 +60,7 @@ namespace SFA.DAS.LoginService.Application.ChangeEmail.ConfirmChangeEmail
                 CurrentEmailAddress = request.CurrentEmailAddress
             });
 
+            _logger.LogInformation($"Logging 'Confirm Change Email' for apprentice {user.ApprenticeId}");
             _loginContext.UserLogs.Add(new UserLog()
             {
                 Id = GuidGenerator.NewGuid(),
@@ -65,6 +70,8 @@ namespace SFA.DAS.LoginService.Application.ChangeEmail.ConfirmChangeEmail
                 DateTime = SystemTime.UtcNow(),
                 ExtraData = request.NewEmailAddress
             });
+
+            await _loginContext.SaveChangesAsync(cancellationToken);
 
             return new ConfirmChangeEmailResponse(); 
         }
