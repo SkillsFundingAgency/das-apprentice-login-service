@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SFA.DAS.Apprentice.LoginService.Messages
+namespace SFA.DAS.Apprentice.LoginService.Messages.Events
 {
     public class EmailChangedEvent
     {

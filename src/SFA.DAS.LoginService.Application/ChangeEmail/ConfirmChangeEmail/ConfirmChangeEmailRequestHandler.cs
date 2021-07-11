@@ -1,5 +1,8 @@
-﻿using MediatR;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
+using NServiceBus;
+using SFA.DAS.Apprentice.LoginService.Messages.Events;
 using SFA.DAS.LoginService.Application.Interfaces;
 using SFA.DAS.LoginService.Application.Services;
 using SFA.DAS.LoginService.Data;
@@ -7,9 +10,6 @@ using SFA.DAS.LoginService.Data.Entities;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using NServiceBus;
-using SFA.DAS.Apprentice.LoginService.Messages;
 
 namespace SFA.DAS.LoginService.Application.ChangeEmail.ConfirmChangeEmail
 {
@@ -58,7 +58,7 @@ namespace SFA.DAS.LoginService.Application.ChangeEmail.ConfirmChangeEmail
             _logger.LogInformation($"Event {nameof(EmailChangedEvent)} getting published for apprentice {user.ApprenticeId}");
             await _messageSession.Publish(new EmailChangedEvent
             {
-                ApprenticeId = user.ApprenticeId, 
+                ApprenticeId = user.ApprenticeId,
                 NewEmailAddress = request.NewEmailAddress,
                 CurrentEmailAddress = request.CurrentEmailAddress
             });
@@ -76,7 +76,7 @@ namespace SFA.DAS.LoginService.Application.ChangeEmail.ConfirmChangeEmail
 
             await _loginContext.SaveChangesAsync(cancellationToken);
 
-            return new ConfirmChangeEmailResponse(); 
+            return new ConfirmChangeEmailResponse();
         }
 
         private ConfirmChangeEmailResponse ValidatedRequest(ConfirmChangeEmailRequest request)

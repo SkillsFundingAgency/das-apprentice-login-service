@@ -1,12 +1,11 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
+using NServiceBus;
 using NSubstitute;
 using NUnit.Framework;
+using SFA.DAS.Apprentice.LoginService.Messages.Events;
 using System.Threading;
 using System.Threading.Tasks;
-using NServiceBus;
-using SFA.DAS.Apprentice.LoginService.Messages;
-using SFA.DAS.LoginService.Application.Services.EmailServiceViewModels;
 
 namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.ConfirmChangeEmail
 {
