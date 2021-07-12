@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace SFA.DAS.Apprentice.LoginService.Messages.Events
+namespace SFA.DAS.Apprentice.LoginService.Messages.Commands
 {
-    public class EmailChangedEvent
+    public class UpdateEmailAddressCommand
     {
         public Guid ApprenticeId { get; set; }
         public string CurrentEmailAddress { get; set; }

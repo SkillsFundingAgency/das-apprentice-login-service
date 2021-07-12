@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using NServiceBus;
 using NSubstitute;
 using NUnit.Framework;
-using SFA.DAS.Apprentice.LoginService.Messages.Events;
+using SFA.DAS.Apprentice.LoginService.Messages.Commands;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -65,9 +65,9 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.ConfirmChangeEm
         {
             await _sut.Handle(_request, CancellationToken.None);
             await _messageSession.Received()
-                .Publish(Arg.Is<EmailChangedEvent>(m =>
+                .Send(Arg.Is<UpdateEmailAddressCommand>(m =>
                     m.ApprenticeId == _user.ApprenticeId && m.NewEmailAddress == _request.NewEmailAddress &&
-                    m.CurrentEmailAddress == _request.CurrentEmailAddress), Arg.Any<PublishOptions>());
+                    m.CurrentEmailAddress == _request.CurrentEmailAddress), Arg.Any<SendOptions>());
         }
     }
 }

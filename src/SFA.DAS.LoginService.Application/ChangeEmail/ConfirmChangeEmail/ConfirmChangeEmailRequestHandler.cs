@@ -2,7 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using NServiceBus;
-using SFA.DAS.Apprentice.LoginService.Messages.Events;
+using SFA.DAS.Apprentice.LoginService.Messages.Commands;
 using SFA.DAS.LoginService.Application.Interfaces;
 using SFA.DAS.LoginService.Application.Services;
 using SFA.DAS.LoginService.Data;
@@ -55,8 +55,8 @@ namespace SFA.DAS.LoginService.Application.ChangeEmail.ConfirmChangeEmail
                 return response;
             }
 
-            _logger.LogInformation($"Event {nameof(EmailChangedEvent)} getting published for apprentice {user.ApprenticeId}");
-            await _messageSession.Publish(new EmailChangedEvent
+            _logger.LogInformation($"Event {nameof(UpdateEmailAddressCommand)} getting published for apprentice {user.ApprenticeId}");
+            await _messageSession.Send(new UpdateEmailAddressCommand
             {
                 ApprenticeId = user.ApprenticeId,
                 NewEmailAddress = request.NewEmailAddress,
