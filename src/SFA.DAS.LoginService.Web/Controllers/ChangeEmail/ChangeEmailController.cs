@@ -52,21 +52,8 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
             });
         }
 
-        private void SetModelState(StartChangeEmailResponse response)
-        {
-            if (response.NewEmailAddressError != null)
-            {
-                ViewData.ModelState.AddModelError("NewEmailAddress", response.NewEmailAddressError);
-            }
-
-            if (response.ConfirmEmailAddressError != null)
-            {
-                ViewData.ModelState.AddModelError("ConfirmEmailAddress", response.ConfirmEmailAddressError);
-            }
-        }
-
         [Authorize]
-        [HttpGet("account/{clientId}/waittoconfirmnewemail")]
+        [HttpGet("profile/{clientId}/waittoconfirmnewemail")]
         public IActionResult WaitToConfirmNewEmail([FromRoute] Guid clientId, [FromQuery] string email, [FromQuery] bool resend)
         {
             var model = new ChangeEmailViewModel
@@ -78,6 +65,19 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
             };
 
             return View(model);
+        }
+
+        private void SetModelState(StartChangeEmailResponse response)
+        {
+            if (response.NewEmailAddressError != null)
+            {
+                ViewData.ModelState.AddModelError("NewEmailAddress", response.NewEmailAddressError);
+            }
+
+            if (response.ConfirmEmailAddressError != null)
+            {
+                ViewData.ModelState.AddModelError("ConfirmEmailAddress", response.ConfirmEmailAddressError);
+            }
         }
     }
 }

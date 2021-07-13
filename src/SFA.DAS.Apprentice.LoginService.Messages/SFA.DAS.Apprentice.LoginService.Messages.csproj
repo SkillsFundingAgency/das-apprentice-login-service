@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -9,7 +9,7 @@
     <PackageProjectUrl>https://github.com/SkillsFundingAgency/das-apprentice-login-service</PackageProjectUrl>
     <PackageId>SFA.DAS.Apprentice.LoginService.Messages</PackageId>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageOutputPath>..\NugetPackages</PackageOutputPath>
+    <PackageOutputPath>$(SolutionDir)..\..\NugetPackages</PackageOutputPath>
     <PackageVersion>0.0.0.1</PackageVersion>
 
   </PropertyGroup>

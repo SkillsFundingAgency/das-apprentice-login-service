@@ -1,77 +1,50 @@
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
+using MediatR;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using SFA.DAS.Apprentice.LoginService.MessageHandler.Infrastructure.NServiceBus;
-using SFA.DAS.Apprentice.LoginService.MessageHandler.InvitationService;
+using NServiceBus;
 using SFA.DAS.Apprentice.LoginService.Messages;
-using SFA.DAS.NServiceBus.AzureFunction.Attributes;
+using SFA.DAS.LoginService.Application.Invitations.CreateInvitation;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.Apprentice.LoginService.MessageHandler
 {
-    public class SendInvitationCommandHandler
+    public class SendInvitationCommandHandler : IHandleMessages<SendInvitation>
     {
-        private readonly IInvitationApi _api;
+        private readonly IMediator _mediator;
+        private readonly ILogger<SendInvitationCommandHandler> _log;
 
-        public SendInvitationCommandHandler(IInvitationApi api)
+        public SendInvitationCommandHandler(IMediator mediator, ILogger<SendInvitationCommandHandler> log)
         {
-            _api = api;
+            _mediator = mediator;
+            _log = log;
         }
 
-        [FunctionName("HandleSendInvitationCommand")]
-        public async Task RunCommand(
-            [NServiceBusTrigger(Endpoint = QueueNames.SendInvitationCommand)] SendInvitationCommand sendInvitationCommand,
-            ILogger log)
+        public async Task Handle(SendInvitation message, IMessageHandlerContext context)
         {
-            try
+            var response = await _mediator.Send(new CreateInvitationRequest
             {
-                var response = await _api.SendInvitation(sendInvitationCommand.ClientId, new SendInvitationRequest
-                {
-                    Email = sendInvitationCommand.Email,
-                    GivenName = sendInvitationCommand.GivenName,
-                    FamilyName = sendInvitationCommand.FamilyName,
-                    SourceId = sendInvitationCommand.SourceId,
-                    Callback = new Uri(sendInvitationCommand.Callback),
-                    UserRedirect = new Uri(sendInvitationCommand.UserRedirect),
-                    OrganisationName = sendInvitationCommand.OrganisationName,
-                    ApprenticeshipName = sendInvitationCommand.ApprenticeshipName,
-                    Inviter = null
-                });
+                ClientId = message.ClientId,
+                Email = message.Email,
+                GivenName = message.GivenName,
+                FamilyName = message.FamilyName,
+                SourceId = message.SourceId,
+                Callback = message.Callback,
+                UserRedirect = message.UserRedirect,
+                OrganisationName = message.OrganisationName,
+                ApprenticeshipName = message.ApprenticeshipName,
+            });
 
-                log.LogInformation(
-                    $"Completed {typeof(SendInvitationCommand)} InvitationId : {response?.InvitationId} Invited : {response?.Invited}, Message : { response?.Message}");
-            }
-            catch (Exception e)
+            _log.LogInformation(
+                $"Completed {typeof(SendInvitation)} InvitationId : {response?.InvitationId} Invited : {response?.Invited}, Message : { response?.Message}");
+
+            await context.Reply(new SendInvitationReply
             {
-                log.LogError($"Errored when processing {typeof(SendInvitationCommand)}", e);
-                throw;
-            }
+                ClientId = message.ClientId,
+                Message = response.Message,
+                Invited = response.Invited,
+                InvitationId = response.InvitationId,
+                ExistingUserId = response.ExistingUserId,
+                LoginLink = response.LoginLink,
+            });
         }
-
-#if DEBUG
-        [FunctionName("HandleSendInvitationCommandTrigger")]
-        public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "POST", Route = "test-send-invitation-command")] HttpRequestMessage req,
-            ILogger log)
-        {
-            log.LogInformation("Calling test-send-invitation-command");
-
-            try
-            {
-                var command = JsonConvert.DeserializeObject<SendInvitationCommand>(await req.Content.ReadAsStringAsync());
-                await RunCommand(command, log);
-                return new AcceptedResult();
-            }
-            catch (Exception e)
-            {
-                log.LogError(e, "Error Calling test-send-invitation-command");
-                return new BadRequestResult();
-            }
-        }
-#endif
     }
 }

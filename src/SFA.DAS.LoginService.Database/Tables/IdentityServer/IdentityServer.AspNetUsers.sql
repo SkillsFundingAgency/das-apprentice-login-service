@@ -16,7 +16,7 @@
 	[UserName] [nvarchar](256) NULL,
 	[GivenName] [nvarchar](256) NULL,
 	[FamilyName] [nvarchar](256) NULL,
-	[RegistrationId] UNIQUEIDENTIFIER NULL, 
+	[ApprenticeId] UNIQUEIDENTIFIER NULL, 
     CONSTRAINT [PK_AspNetUsers] PRIMARY KEY CLUSTERED 
 	(
 		[Id] ASC

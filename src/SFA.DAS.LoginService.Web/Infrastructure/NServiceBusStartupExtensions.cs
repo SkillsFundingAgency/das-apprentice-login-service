@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NServiceBus;
+using SFA.DAS.Apprentice.LoginService.Messages.Commands;
 using SFA.DAS.LoginService.Configuration;
 using SFA.DAS.Notifications.Messages.Commands;
 using SFA.DAS.NServiceBus.Configuration;
@@ -16,6 +17,7 @@ namespace SFA.DAS.LoginService.Web.Infrastructure
     {
         private const string EndpointName = "SFA.Apprentice.Login";
         private const string NotificationsEndpointName = "SFA.DAS.Notifications.MessageHandlers";
+        private const string ApprenticeCommitmentsEndpointName = "SFA.DAS.ApprenticeCommitments.Apprenticeship";
 
         public static IServiceCollection AddNServiceBus(this IServiceCollection services)
         {
@@ -58,6 +60,7 @@ namespace SFA.DAS.LoginService.Web.Infrastructure
         public static void AddRouting(this RoutingSettings routingSettings)
         {
             routingSettings.RouteToEndpoint(typeof(SendEmailCommand), NotificationsEndpointName);
+            routingSettings.RouteToEndpoint(typeof(UpdateEmailAddressCommand), ApprenticeCommitmentsEndpointName);
         }
 
         public static EndpointConfiguration UseLicense(this EndpointConfiguration config, string licenseText)

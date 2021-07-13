@@ -50,7 +50,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
             return RedirectToAction("ChangeEmailSuccessful", new { ClientId = clientId });
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet("profile/{clientId}/changeemail/changeemailsuccessful")]
         public async Task<IActionResult> ChangeEmailSuccessful(Guid clientId)
         {

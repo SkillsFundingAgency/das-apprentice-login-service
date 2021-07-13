@@ -1,7 +1,9 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
+using NServiceBus;
 using NSubstitute;
 using NUnit.Framework;
+using SFA.DAS.Apprentice.LoginService.Messages.Commands;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -56,6 +58,16 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.ConfirmChangeEm
                 PasswordError = (string)null,
                 TokenError = false,
             });
+        }
+
+        [Test]
+        public async Task Then_publishes_event_EmailChangedEvent()
+        {
+            await _sut.Handle(_request, CancellationToken.None);
+            await _messageSession.Received()
+                .Send(Arg.Is<UpdateEmailAddressCommand>(m =>
+                    m.ApprenticeId == _user.ApprenticeId && m.NewEmailAddress == _request.NewEmailAddress &&
+                    m.CurrentEmailAddress == _request.CurrentEmailAddress), Arg.Any<SendOptions>());
         }
     }
 }

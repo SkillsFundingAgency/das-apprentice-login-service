@@ -14,6 +14,7 @@ using SFA.DAS.LoginService.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Net.Mail;
+using NServiceBus;
 
 namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.ConfirmChangeEmail
 {
@@ -25,6 +26,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.ConfirmChangeEm
         protected LoginUser _user;
         protected ConfirmChangeEmailRequest _request;
         protected UserManager<LoginUser> _userManager;
+        protected IMessageSession _messageSession;
 
         [SetUp]
         public void SetUp()
@@ -51,6 +53,11 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.ConfirmChangeEm
             _fixture.Inject(_userManager);
             _fixture.Inject(new LoginContext(dbContextOptions));
             _fixture.Register<IWebUserService>(() => _fixture.Create<UserService>());
+            
+            _messageSession = Substitute.For<IMessageSession>();
+            _fixture.Inject(_messageSession);
+
+            _fixture.Inject(Substitute.For<ILogger<ConfirmChangeEmailRequestHandler>>());
 
             _sut = _fixture.Create<ConfirmChangeEmailRequestHandler>();
 

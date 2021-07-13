@@ -284,3 +284,4 @@ src/Tools/PhantomJS/tools/phantomjs/ChangeLog
 
 # exclude temp directory
 temp/
+src/SFA.DAS.Apprentice.LoginService.MessageHandler/local.settings.json

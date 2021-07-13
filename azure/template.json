@@ -26,6 +26,12 @@
         "sharedEnvResourceGroup": {
             "type": "string"
         },
+        "nServiceBusConnectionString": {
+            "type": "securestring"
+        },
+        "nServiceBusLicense": {
+            "type": "securestring"
+        },
         "configurationStorageConnectionString": {
             "type": "securestring"
         },
@@ -462,6 +468,14 @@
                                 {
                                     "name": "FUNCTIONS_WORKER_RUNTIME",
                                     "value": "dotnet"
+                                },
+                                {
+                                    "name": "NServiceBusConnectionString",
+                                    "value": "[parameters('nServiceBusConnectionString')]"
+                                },
+                                {
+                                    "name": "NServiceBusLicense",
+                                    "value": "[parameters('nServiceBusLicense')]"
                                 }
                             ]
                         }
