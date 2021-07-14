@@ -122,5 +122,11 @@ namespace SFA.DAS.LoginService.Web.Controllers.InvitationsWeb
 
             return View("Reinvited", new ReinvitedViewModel() { Email = invitation.Email });
         }
+
+        [HttpGet("/Invitations/Privacy")]
+        public IActionResult Privacy() => View("Privacy");
+
+        [HttpGet("/Invitations/Terms")]
+        public IActionResult Terms() => View("Terms");
     }
 }
