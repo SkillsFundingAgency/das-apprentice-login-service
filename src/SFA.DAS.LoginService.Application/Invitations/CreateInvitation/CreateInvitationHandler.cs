@@ -117,7 +117,7 @@ namespace SFA.DAS.LoginService.Application.Invitations.CreateInvitation
                     FamilyName = newInvitation.FamilyName,
                     OrganisationName = request.OrganisationName,
                     ApprenticeshipName = request.ApprenticeshipName,
-                    LoginLink = linkUrl,
+                    LoginLink = client.ServiceDetails.PostPasswordResetReturnUrl,
                     CreateAccountLink = linkUrl,
                     ServiceName = client.ServiceDetails.ServiceName,
                     ServiceTeam = client.ServiceDetails.ServiceTeam,
