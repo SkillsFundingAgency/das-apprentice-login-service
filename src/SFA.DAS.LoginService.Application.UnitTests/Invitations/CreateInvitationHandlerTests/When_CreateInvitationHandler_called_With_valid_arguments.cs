@@ -74,8 +74,8 @@ namespace SFA.DAS.LoginService.Application.UnitTests.Invitations.CreateInvitatio
                 vm.ApprenticeshipName == "InvitedApprenticeshipName" &&
                 vm.ServiceName == "Acme Service" &&
                 vm.ServiceTeam == "Acme Service Team" &&
-                vm.LoginLink == "https://goodurl/Invitations/CreatePassword/" + insertedInvitation.Id &&
-                vm.CreateAccountLink == "https://goodurl/Invitations/CreatePassword/" + insertedInvitation.Id &&
+                vm.LoginLink == "https://serviceurl" &&
+                vm.CreateAccountLink == "https://localhost/userredirect?invitation=" + insertedInvitation.Id &&
                 vm.EmailAddress == createInvitationRequest.Email &&
                 vm.TemplateId == InvitationTemplateId));
         }

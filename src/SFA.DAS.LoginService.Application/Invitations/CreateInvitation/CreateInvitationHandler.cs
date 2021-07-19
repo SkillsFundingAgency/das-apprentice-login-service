@@ -92,8 +92,7 @@ namespace SFA.DAS.LoginService.Application.Invitations.CreateInvitation
             
             _loginContext.Invitations.Add(newInvitation);
 
-            var linkUri = new Uri(_loginConfig.BaseUrl);
-            var linkUrl = new Uri(linkUri, "Invitations/CreatePassword/" + newInvitation.Id).ToString();
+            var linkUrl = new Uri(newInvitation.UserRedirectUri, "?invitation=" + newInvitation.Id).ToString();
             
             if (request.IsInvitationToOrganisation)
             {
@@ -117,7 +116,7 @@ namespace SFA.DAS.LoginService.Application.Invitations.CreateInvitation
                     FamilyName = newInvitation.FamilyName,
                     OrganisationName = request.OrganisationName,
                     ApprenticeshipName = request.ApprenticeshipName,
-                    LoginLink = linkUrl,
+                    LoginLink = client.ServiceDetails.PostPasswordResetReturnUrl,
                     CreateAccountLink = linkUrl,
                     ServiceName = client.ServiceDetails.ServiceName,
                     ServiceTeam = client.ServiceDetails.ServiceTeam,
