@@ -35,6 +35,8 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
         public async Task<IActionResult> ChangeEmail([FromRoute] Guid clientId, [FromForm] ChangeEmailViewModel model)
         {
             var email = User.Identity.Name;
+            var client = await Mediator.Send(new GetClientByIdRequest { ClientId = clientId });
+            model.Backlink = client.ServiceDetails.SupportUrl;
 
             var response = await Mediator.Send(new StartChangeEmailRequest
             {

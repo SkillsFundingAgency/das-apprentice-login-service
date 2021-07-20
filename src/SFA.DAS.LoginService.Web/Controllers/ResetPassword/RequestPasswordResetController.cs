@@ -33,6 +33,9 @@ namespace SFA.DAS.LoginService.Web.Controllers.ResetPassword
         [HttpPost("/ForgottenPassword/{clientId}")]
         public async Task<IActionResult> Post(Guid clientId, RequestPasswordResetViewModel requestPasswordResetViewModel)
         {
+            var client = await Mediator.Send(new GetClientByIdRequest { ClientId = clientId });
+            requestPasswordResetViewModel.Backlink = client.ServiceDetails.SupportUrl;
+
             SetViewBagClientId(clientId);
 
             if (!ModelState.IsValid)
