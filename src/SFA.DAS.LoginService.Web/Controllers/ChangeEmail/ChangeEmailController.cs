@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.LoginService.Application.ChangeEmail.StartChangeEmail;
+using SFA.DAS.LoginService.Types.GetClientById;
 using SFA.DAS.LoginService.Web.Controllers.ChangeEmail.ViewModels;
 using System;
 using System.Threading.Tasks;
@@ -17,9 +18,14 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
 
         [Authorize]
         [HttpGet("profile/{clientId}/changeemail")]
-        public IActionResult ChangeEmail(Guid clientId)
+        public async Task<IActionResult> ChangeEmail(Guid clientId)
         {
-            var model = new ChangeEmailViewModel();
+            var client = await Mediator.Send(new GetClientByIdRequest { ClientId = clientId });
+
+            var model = new ChangeEmailViewModel
+            {
+                Backlink = client.ServiceDetails.SupportUrl,
+            };
 
             return View(model);
         }
