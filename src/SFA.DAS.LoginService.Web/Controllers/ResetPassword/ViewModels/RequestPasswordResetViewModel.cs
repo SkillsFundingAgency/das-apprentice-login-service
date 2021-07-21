@@ -9,5 +9,6 @@ namespace SFA.DAS.LoginService.Web.Controllers.ResetPassword.ViewModels
         [Required(ErrorMessage = "Enter an email address")]
         [EmailAddress(ErrorMessage = "Enter a valid email address")]
         public string Email { get; set; }
+        public string Backlink { get; set; }
     }
 }
