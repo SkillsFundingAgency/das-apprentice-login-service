@@ -86,14 +86,14 @@ namespace SFA.DAS.LoginService.Application.Invitations.CreateInvitation
                 SourceId = request.SourceId,
                 ValidUntil = SystemTime.UtcNow().AddDays(_loginConfig.DaysInvitationIsValidFor).AddHours(1),
                 CallbackUri = request.Callback,
-                UserRedirectUri = request.UserRedirect,
+                UserRedirectUri = new Uri(client.ServiceDetails.PostPasswordResetReturnUrl),
                 ClientId = request.ClientId
             };
             
             _loginContext.Invitations.Add(newInvitation);
 
-            var linkUrl = new Uri(newInvitation.UserRedirectUri, "?invitation=" + newInvitation.Id).ToString();
-            
+            var linkUrl = new Uri(request.UserRedirect, "?invitation=" + newInvitation.Id).ToString();
+
             if (request.IsInvitationToOrganisation)
             {
                 await _emailService.SendInvitationEmail(new InvitationEmailViewModel()
