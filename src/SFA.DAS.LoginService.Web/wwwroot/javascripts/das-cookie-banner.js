@@ -72,7 +72,7 @@ function CookieBanner(module) {
         seenCookieName: "DASSeenCookieMessage",
         cookiePolicy: {
             AnalyticsConsent: false,
-            MarketingConsent: false,
+            //MarketingConsent: false,
         },
     };
 }
@@ -154,7 +154,7 @@ function CookieSettings(module, options) {
         seenCookieName: "DASSeenCookieMessage",
         cookiePolicy: {
             AnalyticsConsent: false,
-            MarketingConsent: false,
+            //MarketingConsent: false,
         },
         isModal: options === "modal",
     };
