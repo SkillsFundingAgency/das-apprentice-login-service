@@ -35,7 +35,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.Invitations.CreateInvitatio
             insertedInvitation.FamilyName.Should().Be(createInvitationRequest.FamilyName);
             insertedInvitation.SourceId.Should().Be(createInvitationRequest.SourceId);
             insertedInvitation.CallbackUri.Should().Be(createInvitationRequest.Callback.ToString());
-            insertedInvitation.UserRedirectUri.Should().Be(createInvitationRequest.UserRedirect.ToString());
+            insertedInvitation.UserRedirectUri.Should().Be(LoginContext.Clients.FirstOrDefault().ServiceDetails.PostPasswordResetReturnUrl);
             insertedInvitation.ClientId.Should().Be(createInvitationRequest.ClientId.ToString());
         }
 
