@@ -14,5 +14,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.InvitationsWeb.ViewModels
         public string Password { get; set; }
         [Required(ErrorMessage = "Confirm your password")]
         public string ConfirmPassword { get; set; }
+        public string NewEmailAddress { get; set; }
+        public string ConfirmEmailAddress { get; set; }
     }
 }
