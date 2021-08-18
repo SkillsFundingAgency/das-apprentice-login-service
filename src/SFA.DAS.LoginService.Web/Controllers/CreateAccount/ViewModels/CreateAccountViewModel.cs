@@ -1,20 +1,21 @@
-﻿using IdentityServer4.Models;
-using SFA.DAS.LoginService.Web.Controllers.ResetPassword.ViewModels;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace SFA.DAS.LoginService.Web.Controllers.InvitationsWeb.ViewModels
+namespace SFA.DAS.LoginService.Web.Controllers.CreateAccount.ViewModels
 {
     public class CreateAccountViewModel
     {
+        public Guid ClientId { get; set; }
+        public string Backlink { get; set; }
+
         [Required(ErrorMessage = "Enter a password")]
         public string Password { get; set; }
         [Required(ErrorMessage = "Confirm your password")]
         public string ConfirmPassword { get; set; }
-        public string NewEmailAddress { get; set; }
+
+        [Required(ErrorMessage = "Enter an email address")]
+        [EmailAddress(ErrorMessage = "Enter a valid email address")]
+        public string EmailAddress { get; set; }
         public string ConfirmEmailAddress { get; set; }
     }
 }
