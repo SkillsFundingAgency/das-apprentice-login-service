@@ -15,7 +15,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.CreateAccount.ViewModels
 
         [Required(ErrorMessage = "Enter an email address")]
         [EmailAddress(ErrorMessage = "Enter a valid email address")]
-        public string EmailAddress { get; set; }
-        public string ConfirmEmailAddress { get; set; }
+        public string Email { get; set; }
+        public string ConfirmEmail { get; set; }
     }
 }

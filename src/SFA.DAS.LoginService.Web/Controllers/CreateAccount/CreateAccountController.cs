@@ -1,10 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using SFA.DAS.LoginService.Application.CreateAccount;
 using SFA.DAS.LoginService.Types.GetClientById;
 using SFA.DAS.LoginService.Web.Controllers.CreateAccount.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.LoginService.Web.Controllers.CreateAccount
@@ -15,8 +14,6 @@ namespace SFA.DAS.LoginService.Web.Controllers.CreateAccount
             : base(mediator)
         {
         }
-
-        //[HttpGet("/CreateAccount/{clientId}/{requestId}")]
 
         [HttpGet("/CreateAccount/{clientId}")]
         public async Task<IActionResult> Index(Guid clientId)
@@ -31,25 +28,64 @@ namespace SFA.DAS.LoginService.Web.Controllers.CreateAccount
             };
 
             return View("CreateAccount", vm);
-
-
-            //return View("CreateAccount");
         }
 
-        //[HttpPost("/ForgottenPassword/{clientId}")]
-        //public async Task<IActionResult> Post(Guid clientId, RequestPasswordResetViewModel requestPasswordResetViewModel)
-        //{
-        //    var client = await Mediator.Send(new GetClientByIdRequest { ClientId = clientId });
-        //    requestPasswordResetViewModel.Backlink = client.ServiceDetails.SupportUrl;
+        [HttpPost("/CreateAccount/{clientId}")]
+        public async Task<ActionResult> Post(Guid clientId, CreateAccountViewModel vm)
+        {
+            var client = await Mediator.Send(new GetClientByIdRequest { ClientId = clientId }); 
+            
+            if (!ModelState.IsValid)
+            {
+                return View("CreateAccount", vm);
+            }
 
-        //    SetViewBagClientId(clientId);
+            if (vm.Password == vm.ConfirmPassword)
+            {
+                var response = await Mediator.Send(new CreateAccountRequest { Email = vm.Email, Password = vm.Password });
+                if (response.PasswordValid)
+                {
+                    return Redirect(client.ServiceDetails.SupportUrl);
+                }
 
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View("RequestPasswordReset", requestPasswordResetViewModel);
-        //    }
+                ModelState.AddModelError("Password", "Password does not meet minimum complexity requirements");
 
-        //    await Mediator.Send(new RequestPasswordResetRequest { ClientId = clientId, Email = requestPasswordResetViewModel.Email });
-        //    return RedirectToAction("CodeSent", new { clientId, email = requestPasswordResetViewModel.Email });
+                return View("CreateAccount",
+                    new CreateAccountViewModel()
+                    {
+                        Password = vm.Password,
+                        ConfirmPassword = vm.ConfirmPassword,
+                        Email = vm.Email,
+                        ConfirmEmail = vm.ConfirmEmail
+                    });
+
+                if (response.HasErrors)
+                {
+                    SetModelState(response);
+                    return View("CreateAccount", vm);
+                }
+            }
+
+            ModelState.AddModelError("Password", "Passwords should match");
+
+            return View("CreateAccount", new CreateAccountViewModel()
+            {
+                Password = vm.Password,
+                ConfirmPassword = vm.ConfirmPassword
+            });
+        }
+
+        private void SetModelState(CreateAccountResponse response)
+        {
+            if (response.EmailAddressError != null)
+            {
+                ViewData.ModelState.AddModelError("EmailAddress", response.EmailAddressError);
+            }
+
+            if (response.ConfirmEmailAddressError != null)
+            {
+                ViewData.ModelState.AddModelError("ConfirmEmailAddress", response.ConfirmEmailAddressError);
+            }
+        }
     }
 }
