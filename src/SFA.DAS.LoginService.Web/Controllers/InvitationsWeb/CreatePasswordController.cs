@@ -28,20 +28,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.InvitationsWeb
                 return BadRequest("Invitation does not exist");
             }
 
-            SetViewBagClientId(invitation.ClientId);
-
-            if (invitation.IsUserCreated || invitation.ValidUntil < SystemTime.UtcNow())
-            {
-                return View("InvitationExpired", new InvitationExpiredViewModel(){InvitationId = id});
-            }
-
-            return View("CreatePassword", new CreatePasswordViewModel()
-            {
-                InvitationId = id,
-                Username = invitation.Email,
-                Password = "",
-                ConfirmPassword = ""
-            });
+            return RedirectToAction("Index", $"CreateAccount", new { clientId = invitation.ClientId });
         }
 
         [HttpPost("/Invitations/CreatePassword/{id}")]

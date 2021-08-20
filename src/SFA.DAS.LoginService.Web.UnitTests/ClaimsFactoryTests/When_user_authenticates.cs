@@ -19,27 +19,27 @@ namespace SFA.DAS.LoginService.Web.UnitTests.ClaimsFactoryTests
             claims.Should().NotBeNull();
         }
 
-        [Test, NSubstituteAutoData]
-        public async Task Adds_given_name(LoginUserClaimsPrincipalFactory sut, LoginUser user)
-        {
-            var claims = await sut.CreateAsync(user);
-            claims.Claims.Should().ContainEquivalentOf(new
-            {
-                Type = "given_name",
-                Value = user.GivenName,
-            });
-        }
+        //[Test, NSubstituteAutoData]
+        //public async Task Adds_given_name(LoginUserClaimsPrincipalFactory sut, LoginUser user)
+        //{
+        //    var claims = await sut.CreateAsync(user);
+        //    claims.Claims.Should().ContainEquivalentOf(new
+        //    {
+        //        Type = "given_name",
+        //        Value = user.GivenName,
+        //    });
+        //}
 
-        [Test, NSubstituteAutoData]
-        public async Task Adds_family_name(LoginUserClaimsPrincipalFactory sut, LoginUser user)
-        {
-            var claims = await sut.CreateAsync(user);
-            claims.Claims.Should().ContainEquivalentOf(new
-            {
-                Type = "family_name",
-                Value = user.FamilyName,
-            });
-        }
+        //[Test, NSubstituteAutoData]
+        //public async Task Adds_family_name(LoginUserClaimsPrincipalFactory sut, LoginUser user)
+        //{
+        //    var claims = await sut.CreateAsync(user);
+        //    claims.Claims.Should().ContainEquivalentOf(new
+        //    {
+        //        Type = "family_name",
+        //        Value = user.FamilyName,
+        //    });
+        //}
     }
 
     internal class NSubstituteAutoDataAttribute : AutoDataAttribute
