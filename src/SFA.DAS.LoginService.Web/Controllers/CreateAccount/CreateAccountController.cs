@@ -16,7 +16,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.CreateAccount
         }
 
         [HttpGet("/CreateAccount/{clientId}")]
-        public async Task<IActionResult> Index(Guid clientId)
+        public async Task<IActionResult> Get(Guid clientId, string returnUrl)
         {
             var client = await Mediator.Send(new GetClientByIdRequest { ClientId = clientId });
             SetViewBagClientId(clientId);
@@ -25,6 +25,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.CreateAccount
             {
                 ClientId = clientId,
                 Backlink = client.ServiceDetails.SupportUrl,
+                ReturnUrl = returnUrl,
             };
 
             return View("CreateAccount", vm);
@@ -33,8 +34,8 @@ namespace SFA.DAS.LoginService.Web.Controllers.CreateAccount
         [HttpPost("/CreateAccount/{clientId}")]
         public async Task<ActionResult> Post(Guid clientId, CreateAccountViewModel vm)
         {
-            var client = await Mediator.Send(new GetClientByIdRequest { ClientId = clientId }); 
-            
+            var client = await Mediator.Send(new GetClientByIdRequest { ClientId = clientId });
+
             if (!ModelState.IsValid)
             {
                 return View("CreateAccount", vm);
@@ -45,7 +46,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.CreateAccount
                 var response = await Mediator.Send(new CreateAccountRequest { Email = vm.Email, Password = vm.Password });
                 if (response.PasswordValid)
                 {
-                    return Redirect(client.ServiceDetails.SupportUrl);
+                    return Redirect(vm.ReturnUrl);
                 }
 
                 ModelState.AddModelError("Password", "Password does not meet minimum complexity requirements");

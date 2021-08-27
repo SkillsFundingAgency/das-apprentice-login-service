@@ -6,6 +6,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.CreateAccount.ViewModels
     public class CreateAccountViewModel
     {
         public Guid ClientId { get; set; }
+        public string ReturnUrl { get; set; }
         public string Backlink { get; set; }
 
         [Required(ErrorMessage = "Enter a password")]
