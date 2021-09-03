@@ -35,6 +35,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.CreateAccount
         public async Task<ActionResult> Post(Guid clientId, CreateAccountViewModel vm)
         {
             var client = await Mediator.Send(new GetClientByIdRequest { ClientId = clientId });
+            vm.Backlink = client.ServiceDetails.SupportUrl;
 
             if (!ModelState.IsValid)
             {
