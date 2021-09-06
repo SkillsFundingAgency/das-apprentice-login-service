@@ -51,7 +51,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.CreateAccount
                 }
 
                 if(response.DuplicateEmail)
-                    ModelState.AddModelError("Email", "That email address is already used.");
+                    ModelState.AddModelError("Email", "This email address already has an apprentice account");
                 else
                     ModelState.AddModelError("", "Sorry, we couldn't create an account.");
 
