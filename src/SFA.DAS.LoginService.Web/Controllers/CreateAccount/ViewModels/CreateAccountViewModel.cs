@@ -14,6 +14,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.CreateAccount.ViewModels
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Please re-enter the email address")]
+        [EmailAddress(ErrorMessage = "Please re-enter a valid email address")]
         [Compare(nameof(Email), ErrorMessage = "Please enter the same email address")]
         public string ConfirmEmail { get; set; }
 
