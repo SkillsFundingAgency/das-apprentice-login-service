@@ -55,14 +55,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.CreateAccount
                 else
                     ModelState.AddModelError("", "Sorry, we couldn't create an account.");
 
-                return View("CreateAccount",
-                    new CreateAccountViewModel()
-                    {
-                        Password = vm.Password,
-                        ConfirmPassword = vm.ConfirmPassword,
-                        Email = vm.Email,
-                        ConfirmEmail = vm.ConfirmEmail
-                    });
+                return View("CreateAccount", vm);
             }
 
             ModelState.AddModelError("Password", "Passwords should match");
