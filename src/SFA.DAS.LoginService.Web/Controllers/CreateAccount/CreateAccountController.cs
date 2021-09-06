@@ -50,7 +50,10 @@ namespace SFA.DAS.LoginService.Web.Controllers.CreateAccount
                     return Redirect(vm.ReturnUrl);
                 }
 
-                ModelState.AddModelError("Password", "Password does not meet minimum complexity requirements");
+                if(response.DuplicateEmail)
+                    ModelState.AddModelError("Email", "That email address is already used.");
+                else
+                    ModelState.AddModelError("", "Sorry, we couldn't create an account.");
 
                 return View("CreateAccount",
                     new CreateAccountViewModel()
@@ -60,12 +63,6 @@ namespace SFA.DAS.LoginService.Web.Controllers.CreateAccount
                         Email = vm.Email,
                         ConfirmEmail = vm.ConfirmEmail
                     });
-
-                if (response.HasErrors)
-                {
-                    SetModelState(response);
-                    return View("CreateAccount", vm);
-                }
             }
 
             ModelState.AddModelError("Password", "Passwords should match");

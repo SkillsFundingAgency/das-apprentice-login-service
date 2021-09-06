@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -24,7 +25,7 @@ namespace SFA.DAS.LoginService.Application.CreateAccount
         public async Task<CreateAccountResponse> Handle(CreateAccountRequest request, CancellationToken cancellationToken)
         {
             var newUserResponse = await _userService.CreateUser(
-                new LoginUser()
+                new LoginUser
                 {
                     UserName = request.Email,
                     Email = request.Email,
@@ -33,10 +34,12 @@ namespace SFA.DAS.LoginService.Application.CreateAccount
 
             if (newUserResponse.Result != IdentityResult.Success)
             {
-                return new CreateAccountResponse() { PasswordValid = false };
+                return newUserResponse.Result.Errors.Any(x => x.Code == "DuplicateUserName")
+                    ? new CreateAccountResponse { DuplicateEmail = true }
+                    : new CreateAccountResponse { PasswordValid = false };
             }
 
-            _loginContext.UserLogs.Add(new UserLog()
+            _loginContext.UserLogs.Add(new UserLog
             {
                 Id = GuidGenerator.NewGuid(), 
                 Action = "Create password", 
@@ -49,7 +52,7 @@ namespace SFA.DAS.LoginService.Application.CreateAccount
 
             var signInResult = await _userService.SignInUser(request.Email, request.Password, false);
 
-            return new CreateAccountResponse(){PasswordValid = true};
+            return new CreateAccountResponse { PasswordValid = true };
         }
     }
 }
