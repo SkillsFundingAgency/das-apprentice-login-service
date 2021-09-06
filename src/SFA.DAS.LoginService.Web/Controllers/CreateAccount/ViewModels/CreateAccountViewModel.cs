@@ -9,19 +9,19 @@ namespace SFA.DAS.LoginService.Web.Controllers.CreateAccount.ViewModels
         public string ReturnUrl { get; set; }
         public string Backlink { get; set; }
 
-        [Required(ErrorMessage = "Enter an email address")]
-        [EmailAddress(ErrorMessage = "Enter a valid email address")]
+        [Required(ErrorMessage = "Please enter an email address")]
+        [EmailAddress(ErrorMessage = "Please enter a valid email address")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Re-enter the email address")]
-        [Compare(nameof(Email), ErrorMessage = "Enter the same email address")]
+        [Required(ErrorMessage = "Please re-enter the email address")]
+        [Compare(nameof(Email), ErrorMessage = "Please enter the same email address")]
         public string ConfirmEmail { get; set; }
 
-        [Required(ErrorMessage = "Enter a password")]
+        [Required(ErrorMessage = "Please enter a password")]
         public string Password { get; set; }
         
-        [Required(ErrorMessage = "Re-enter the password")]
-        [Compare(nameof(Password), ErrorMessage = "Enter the same password")]
+        [Required(ErrorMessage = "Plesae re-enter the password")]
+        [Compare(nameof(Password), ErrorMessage = "Please enter the same password")]
         public string ConfirmPassword { get; set; }
     }
 }
