@@ -1,6 +1,6 @@
 ﻿@model SFA.DAS.LoginService.Web.Controllers.CreateAccount.ViewModels.CreateAccountViewModel
 @{
-    ViewData["Title"] = "Login details";
+    ViewData["Title"] = "Create login details";
 }
 
 <main class="govuk-main-wrapper " id="main-content" role="main">
@@ -10,7 +10,7 @@
 
             <partial name="/Views/Partials/_validationErrorSummary.cshtml" />
 
-            <h1 class="govuk-heading-xl">Login details</h1>
+            <h1 class="govuk-heading-xl">Create login details</h1>
 
             <form asp-action="Post">
                 @Html.AntiForgeryToken()
