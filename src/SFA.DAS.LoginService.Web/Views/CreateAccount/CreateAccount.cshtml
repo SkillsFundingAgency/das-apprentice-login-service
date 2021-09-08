@@ -1,0 +1,78 @@
+﻿@model SFA.DAS.LoginService.Web.Controllers.CreateAccount.ViewModels.CreateAccountViewModel
+@{
+    ViewData["Title"] = "Create login details";
+}
+
+<main class="govuk-main-wrapper " id="main-content" role="main">
+    <a href="@Model.Backlink" title="Apprenticeship overview page" class="govuk-back-link">Return to home</a>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <partial name="/Views/Partials/_validationErrorSummary.cshtml" />
+
+            <h1 class="govuk-heading-xl">Create login details</h1>
+
+            <form asp-action="Post">
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" asp-for="ReturnUrl" />
+                
+                <div class="govuk-form-group" sfa-validation-for="Email" sfa-validationerror-class="govuk-form-group--error">
+                    <label class="govuk-label govuk-label--m" asp-for="Email">
+                        Personal email address
+                    </label>
+                    <p class="govuk-body">These are used in case you change employer</p>
+                    <span id="email-error" asp-validation-for="Email" class="govuk-error-message"></span>
+                    <input class="govuk-input" asp-for="Email" type="text" aria-describedby="email-address-hint" sfa-validation-for="Email" sfa-validationerror-class="govuk-input--error">
+                </div>
+
+                <div class="govuk-form-group" sfa-validation-for="ConfirmEmail" sfa-validationerror-class="govuk-form-group--error">
+                    <label class="govuk-label govuk-label--m" asp-for="ConfirmEmail">
+                        Re-type email address
+                    </label>
+                    <span id="email-error" asp-validation-for="ConfirmEmail" class="govuk-error-message"></span>
+                    <input class="govuk-input" asp-for="ConfirmEmail" type="text" aria-describedby="email-address-hint" sfa-validation-for="ConfirmEmail" sfa-validationerror-class="govuk-input--error">
+                </div>
+
+                <div class="govuk-form-group" sfa-validation-for="Password" sfa-validationerror-class="govuk-form-group--error">
+                    <label class="govuk-label govuk-label--m" asp-for="Password">
+                        Create your password
+                    </label>
+                    <div id="Password-hint" class="govuk-hint" >
+                        <p class="govuk-body govuk-body--hint govuk-!-margin-bottom-2">Your password must:</p>
+                        <ul class="govuk-list govuk-list--bullet govuk-list--hint govuk-list--ticks">
+                            <li data-condition="minChars">be at least 8 characters</li>
+                            <li data-condition="anyLetter">contain at least one letter (a-z)</li>
+                            <li data-condition="anyNumber">contain at least one number (0-9)</li>
+                            <li data-condition="mustMatch">match with the confirmed password</li>
+                        </ul>
+                    </div>
+
+                    <div class="show-password-container">
+                        <span id="email-error" asp-validation-for="Password" class="govuk-error-message"></span>
+                        <input class="govuk-input govuk-input--width-20 show-hide-password-input" name="Password" id="Password" type="password" autocomplete="new-password" data-show-hide="password" data-password-conditions="password" />
+                        <div class="show-password-control-container">
+                            <input type="checkbox" class="show-hide-checkbox" name="show-hide" id="show-hide" />
+                            <label for="show-hide" class="govuk-label govuk-label--show-hide"><span class="govuk-label__show-hide-text">show</span><span class="govuk-visually-hidden"> password</span></label>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="govuk-form-group" sfa-validation-for="ConfirmPassword" sfa-validationerror-class="govuk-form-group--error">
+                    <label class="govuk-label govuk-label--m">
+                        Confirm your password
+                    </label>
+                    <span id="email-error" asp-validation-for="ConfirmPassword" class="govuk-error-message"></span>
+
+                    <input class="govuk-input govuk-input--width-20" name="ConfirmPassword" id="ConfirmPassword" type="password" autocomplete="new-password" data-show-hide="confirm-password" data-password-conditions="confirm-password" />
+                </div>
+
+                <button type="submit" class="govuk-button">
+                    Save and continue
+                </button>
+            </form>
+
+        </div>
+    </div>
+</main>
