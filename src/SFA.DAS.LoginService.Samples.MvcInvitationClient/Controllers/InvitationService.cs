@@ -11,7 +11,7 @@ namespace SFA.DAS.LoginService.Samples.MvcInvitationClient
 {
     public class InvitationService
     {
-        private const string IdentityServiceHost =
+        public const string IdentityServiceHost =
                 //*
                 "https://localhost:5001"
                 /*/

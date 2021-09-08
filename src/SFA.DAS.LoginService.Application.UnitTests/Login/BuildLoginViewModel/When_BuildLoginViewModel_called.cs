@@ -32,7 +32,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.Login.BuildLoginViewModel
             result.ReturnUrl.Should().Be("https://returnurl");
             result.ClientId.Should().Be(ClientId);
             result.CreateAccount.LocalSignUp.Should().BeFalse();
-            result.CreateAccount.ShowCreateAccountLink.Should().BeFalse();
+            result.CreateAccount.ShowCreateAccountLink.Should().BeTrue();
         }
     }
 }

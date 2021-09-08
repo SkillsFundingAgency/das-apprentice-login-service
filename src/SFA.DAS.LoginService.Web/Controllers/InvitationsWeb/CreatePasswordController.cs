@@ -1,14 +1,13 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.LoginService.Application.CreatePassword;
 using SFA.DAS.LoginService.Application.GetInvitationById;
 using SFA.DAS.LoginService.Application.Reinvite;
-using SFA.DAS.LoginService.Application.Services;
 using SFA.DAS.LoginService.Types.GetClientById;
 using SFA.DAS.LoginService.Web.Controllers.InvitationsWeb.ViewModels;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.LoginService.Web.Controllers.InvitationsWeb
 {
@@ -23,25 +22,14 @@ namespace SFA.DAS.LoginService.Web.Controllers.InvitationsWeb
         public async Task<ActionResult> Get(Guid id)
         {
             var invitation = await Mediator.Send(new GetInvitationByIdRequest(id));
-            if (invitation == null)
-            {
-                return BadRequest("Invitation does not exist");
-            }
+            if (invitation == null) return BadRequest("Invitation does not exist");
 
-            SetViewBagClientId(invitation.ClientId);
+            var client = await Mediator.Send(new GetClientByIdRequest { ClientId = invitation.ClientId });
+            if (client == null) return BadRequest("Client does not exist");
 
-            if (invitation.IsUserCreated || invitation.ValidUntil < SystemTime.UtcNow())
-            {
-                return View("InvitationExpired", new InvitationExpiredViewModel(){InvitationId = id});
-            }
-
-            return View("CreatePassword", new CreatePasswordViewModel()
-            {
-                InvitationId = id,
-                Username = invitation.Email,
-                Password = "",
-                ConfirmPassword = ""
-            });
+            var baseUri = new Uri(client.ServiceDetails.SupportUrl);
+            var registerUri = new Uri(baseUri, $"register/{invitation.SourceId}");
+            return Redirect(registerUri.ToString());
         }
 
         [HttpPost("/Invitations/CreatePassword/{id}")]
@@ -51,7 +39,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.InvitationsWeb
             {
                 return View("CreatePassword", vm);
             }
-            
+
             var invitation = await Mediator.Send(new GetInvitationByIdRequest(vm.InvitationId));
             if (invitation == null)
             {
@@ -59,13 +47,13 @@ namespace SFA.DAS.LoginService.Web.Controllers.InvitationsWeb
             }
 
             SetViewBagClientId(invitation.ClientId);
-            
+
             if (vm.Password == vm.ConfirmPassword)
             {
-                var response = await Mediator.Send(new CreatePasswordRequest {InvitationId = vm.InvitationId, Password = vm.Password});
+                var response = await Mediator.Send(new CreatePasswordRequest { InvitationId = vm.InvitationId, Password = vm.Password });
                 if (response.PasswordValid)
                 {
-                    return RedirectToAction("Get", "SignUpComplete", new {id = vm.InvitationId});
+                    return RedirectToAction("Get", "SignUpComplete", new { id = vm.InvitationId });
                 }
 
                 ModelState.AddModelError("Password", "Password does not meet minimum complexity requirements");
@@ -73,22 +61,22 @@ namespace SFA.DAS.LoginService.Web.Controllers.InvitationsWeb
                 return View("CreatePassword",
                     new CreatePasswordViewModel()
                     {
-                        InvitationId = vm.InvitationId, 
-                        Password = vm.Password, 
+                        InvitationId = vm.InvitationId,
+                        Password = vm.Password,
                         ConfirmPassword = vm.ConfirmPassword
                     });
             }
-            
+
             ModelState.AddModelError("Password", "Passwords should match");
-            
+
             return View("CreatePassword", new CreatePasswordViewModel()
             {
-                InvitationId = vm.InvitationId, 
-                Password = vm.Password, 
+                InvitationId = vm.InvitationId,
+                Password = vm.Password,
                 ConfirmPassword = vm.ConfirmPassword
             });
         }
-        
+
         [HttpPost("/Invitations/Reinvite/{invitationId}")]
         public async Task<IActionResult> Reinvite(Guid invitationId)
         {

@@ -19,7 +19,7 @@ namespace SFA.DAS.LoginService.Web.Views.TagHelpers
             output.TagName = null;
             foreach (var modelState in ViewContext.ModelState)
             {
-                foreach (var error in modelState.Value.Errors.Where(e => !string.IsNullOrWhiteSpace(e.ErrorMessage)))
+                foreach (var error in modelState.Value.Errors.Where(e => !string.IsNullOrWhiteSpace(e.ErrorMessage)).Take(1))
                 {
                     var liTagBuilder = new TagBuilder("li");
                     var aTagBuilder = new TagBuilder("a");
