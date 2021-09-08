@@ -86,7 +86,7 @@ namespace SFA.DAS.LoginService.Application.Invitations.CreateInvitation
                 SourceId = request.SourceId,
                 ValidUntil = SystemTime.UtcNow().AddDays(_loginConfig.DaysInvitationIsValidFor).AddHours(1),
                 CallbackUri = request.Callback,
-                UserRedirectUri = new Uri(client.ServiceDetails.PostPasswordResetReturnUrl),
+                UserRedirectUri = new Uri(new Uri(client.ServiceDetails.PostPasswordResetReturnUrl), $"?RegistrationCode={request.SourceId}"),
                 ClientId = request.ClientId
             };
             
