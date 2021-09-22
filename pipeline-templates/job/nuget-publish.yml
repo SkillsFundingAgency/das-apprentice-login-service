@@ -1,7 +1,7 @@
 jobs:
 - deployment: NugetPush
   pool:
-    name: DAS - Continuous Deployment
+    name: DAS - Continuous Deployment Agents
   workspace:
     clean: all 
   environment: Nuget
