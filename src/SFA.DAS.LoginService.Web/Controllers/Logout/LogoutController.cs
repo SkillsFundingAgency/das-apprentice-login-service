@@ -25,7 +25,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.Logout
             var vm = await Mediator.Send(new LogoutRequest {LogoutId = logoutId});
             var result = View("Loggedout", vm);
 
-            if (HttpContext.Request.Cookies.Count > 0)
+            if (HttpContext != null && HttpContext.Request.Cookies.Count > 0)
             {
                 var cookies = HttpContext.Request.Cookies.Where(x => x.Key.Contains("Apprenticeships") || x.Key.Contains("AspNetCore")).ToList();
 

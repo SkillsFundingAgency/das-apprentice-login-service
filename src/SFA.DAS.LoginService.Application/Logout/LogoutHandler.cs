@@ -12,6 +12,7 @@ using SFA.DAS.LoginService.Application.Interfaces;
 using SFA.DAS.LoginService.Application.Services;
 using SFA.DAS.LoginService.Data;
 using SFA.DAS.LoginService.Data.Entities;
+using System.Linq;
 
 namespace SFA.DAS.LoginService.Application.BuildLogoutViewModel
 {
@@ -53,7 +54,19 @@ namespace SFA.DAS.LoginService.Application.BuildLogoutViewModel
             
                 await _eventService.RaiseAsync(new UserLogoutSuccessEvent(principal.GetSubjectId(), principal.GetDisplayName()));
             }
-            
+
+            if (_httpContextAccessor.HttpContext.Request.Cookies.Count > 0)
+            {
+                var cookies = _httpContextAccessor.HttpContext.Request.Cookies.Where(x => x.Key.Contains("Apprenticeships") || x.Key.Contains("AspNetCore")).ToList();
+
+                //cookies.ForEach(x => Response.Cookies.Delete(x.Key));
+                cookies.ForEach(x =>
+                {                    
+                    var options = new CookieOptions { Expires = System.DateTime.Now.AddDays(-1) };
+                    _httpContextAccessor.HttpContext.Response.Cookies.Append(x.Key, x.Value, options);
+                });
+            }
+
             return response;
         }
     }
