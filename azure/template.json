@@ -221,6 +221,10 @@
                                 {
                                     "name": "WEBSITE_LOAD_CERTIFICATES",
                                     "value": "[reference('app-service-certificate').outputs.certificateThumbprint.value]"
+                                },
+                                {
+                                    "name": "WEBSITE_RUN_FROM_PACKAGE",
+                                    "value": "1"
                                 }
                             ]
                         }
