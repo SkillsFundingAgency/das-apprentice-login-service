@@ -476,6 +476,10 @@
                                 {
                                     "name": "NServiceBusLicense",
                                     "value": "[parameters('nServiceBusLicense')]"
+                                },
+                                {
+                                    "name": "WEBSITE_RUN_FROM_PACKAGE",
+                                    "value": "1"
                                 }
                             ]
                         }
