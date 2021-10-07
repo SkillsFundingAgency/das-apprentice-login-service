@@ -62,6 +62,25 @@
               )
             : window.location.hostname;
     };
+
+    window.GOVUK.getEnv = function () {
+        var domain = window.location.hostname;
+        if (domain.indexOf("at-") >= 0) {
+            return "AT"
+        }
+        if (domain.indexOf("test-") >= 0) {
+            return "TEST"
+        }
+        if (domain.indexOf("test2-") >= 0) {
+            return "TEST2"
+        }
+        if (domain.indexOf("pp-") >= 0) {
+            return "PP"
+        }
+        return "";
+    };
+    
+
 })(window);
 
 // _cookieBanner.js
@@ -72,9 +91,8 @@ function CookieBanner(module) {
         seenCookieName: "DASSeenCookieMessage",
         env: window.GOVUK.getEnv(),
         cookiePolicy: {
-            AnalyticsConsent: false,
-            //MarketingConsent: false,
-        },
+            AnalyticsConsent: false
+        }
     };
 }
 
