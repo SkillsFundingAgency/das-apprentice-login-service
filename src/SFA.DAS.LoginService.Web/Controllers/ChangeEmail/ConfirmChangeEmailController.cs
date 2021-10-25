@@ -31,6 +31,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
         [HttpPost("profile/{clientId}/changeemail/confirm")]
         public async Task<IActionResult> ConfirmChangeEmail(Guid clientId, [FromForm] ConfirmChangeEmailViewModel model)
         {
+            model.ClientId = clientId;
             var currentEmail = User.Identity.Name;
 
             var response = await Mediator.Send(new ConfirmChangeEmailRequest
