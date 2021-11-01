@@ -388,18 +388,10 @@
 }
 
 .js-enabled .show-password-control-container {
-  display: inline-block;
-  text-align: center;
-  width: 46px;
-  margin-left: -52px;
-
-  /* 
-    position: absolute;
-    top: -1px;
-    right: 2px;
-    text-align: center;
-    width: 46px;
-    */
+  display: block;
+  position: absolute;
+  right: 10px;
+  top: -2px;
 }
 
 .show-hide-checkbox {
