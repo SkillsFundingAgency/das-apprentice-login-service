@@ -16,7 +16,7 @@
             if (event.target.id !== "show-hide" && event.target.id !== "show-hide-label") return false;
 
             if (event instanceof KeyboardEvent){
-                if (event.code !== 'Space' && event.code !== 'Enter') return false
+                if (event.key !== ' ' && event.key !== 'Enter') return false
             }
 
             var confirmPasswordInput = document.querySelector(
