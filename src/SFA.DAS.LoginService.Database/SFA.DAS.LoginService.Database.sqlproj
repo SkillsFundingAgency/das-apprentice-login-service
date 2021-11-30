@@ -61,6 +61,7 @@
     <Folder Include="Tables\" />
     <Folder Include="Tables\IdentityServer" />
     <Folder Include="Tables\LoginService\" />
+    <Folder Include="Manual" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Schemas\IdentityServer.sql" />
@@ -103,5 +104,8 @@
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.LoginService.Database.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Manual\InitialSetupScript.sql" />
   </ItemGroup>
 </Project>
