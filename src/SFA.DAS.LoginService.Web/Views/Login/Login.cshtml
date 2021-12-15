@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Sign in to " + @Model.ServiceName;
+    ViewBag.ValidationOrder = "Userame,Password";
 }
 
 <main class="govuk-main-wrapper " id="main-content" role="main">
