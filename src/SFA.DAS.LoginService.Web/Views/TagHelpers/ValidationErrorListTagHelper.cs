@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
@@ -16,8 +17,9 @@ namespace SFA.DAS.LoginService.Web.Views.TagHelpers
         
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
+            var validationOrder = ViewContext.ViewBag.ValidationOrder != null ? ViewContext.ViewBag.ValidationOrder.Split(',') : new string[] { };
             output.TagName = null;
-            foreach (var modelState in ViewContext.ModelState)
+            foreach (var modelState in ViewContext.ModelState.OrderBy(x => Array.IndexOf(validationOrder, x.Key)))
             {
                 foreach (var error in modelState.Value.Errors.Where(e => !string.IsNullOrWhiteSpace(e.ErrorMessage)).Take(1))
                 {
