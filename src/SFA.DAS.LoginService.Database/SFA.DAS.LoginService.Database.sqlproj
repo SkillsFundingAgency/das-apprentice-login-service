@@ -98,6 +98,7 @@
     <Build Include="Tables\LoginService\LoginService.Invitations.sql" />
     <Build Include="Tables\LoginService\LoginService.ResetPasswordRequests.sql" />
     <Build Include="Tables\LoginService\LoginService.UserLogs.sql" />
+    <None Include="Manual\DeleteApiScript.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
