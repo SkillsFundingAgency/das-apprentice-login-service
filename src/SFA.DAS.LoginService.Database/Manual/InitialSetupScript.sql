@@ -7,7 +7,8 @@
 
 
 declare @apprenticePortalHostname as nvarchar(100) = 'localhost:7070' -- WITHOUT trailing slash (or scheme) 
-declare @apprenticeWebHost as nvarchar(100); set @apprenticeWebHost = 'https://localhost:7080'
+declare @apprenticeAccountWebHost as nvarchar(100); 
+set @apprenticeAccountWebHost = 'https://localhost:7080'
 
 declare @apprenticePortalWebHost as nvarchar(100); set @apprenticePortalWebHost = 'https://' + @apprenticePortalHostname
 declare @confirmWebHost as nvarchar(100); set @confirmWebHost = 'https://confirm.' + @apprenticePortalHostname
@@ -35,6 +36,7 @@ insert [IdentityServer].[IdentityClaims] ([Id], [Type], [IdentityResourceId])
 select * from (values 
 	(1, N'sub', 1),	
 	(2, N'updated_at', 2),	
+	(2, N'updated_at', 2),	
 	(8, N'email', 3),	
 	(10, N'preferred_username', 2),	
 	(13, N'given_name', 2),	
@@ -50,41 +52,12 @@ set identity_insert [IdentityServer].[IdentityClaims] off
 
 
 
----- [IdentityServer].[ApiResources]
-
-set identity_insert [IdentityServer].[ApiResources] on
-
-insert [IdentityServer].[ApiResources] ([Id], [Enabled], [Name], [DisplayName], [Description], [Created], [Updated], [LastAccessed], [NonEditable])
-select * from (values 
-	(1, 1, N'api1', N'My API 1', NULL, CAST(N'2019-03-18T11:32:45.9490670' AS DateTime2), NULL, NULL, 0))
-as insrt ([Id], [Enabled], [Name], [DisplayName], [Description], [Created], [Updated], [LastAccessed], [NonEditable])
-where not exists (select 1 from [IdentityServer].[ApiResources] where Id = insrt.Id)
-
-set identity_insert [IdentityServer].[ApiResources] off
-  
-
- 
----- [IdentityServer].[ApiScopes]
-
-set identity_insert [IdentityServer].[ApiScopes] on
-
-insert [IdentityServer].[ApiScopes] ([Id], [Name], [DisplayName], [Description], [Required], [Emphasize], [ShowInDiscoveryDocument], [ApiResourceId])
-select * from (values 
-	(1, N'api1', N'My API 1', NULL, 0, 0, 1, 1))
-as insrt ([Id], [Name], [DisplayName], [Description], [Required], [Emphasize], [ShowInDiscoveryDocument], [ApiResourceId])
-where not exists (select 1 from [IdentityServer].[ApiScopes] where Id = insrt.Id)
-
-set identity_insert [IdentityServer].[ApiScopes] off
-
-
-
 ---- [IdentityServer].[Clients]
 
 set identity_insert [IdentityServer].[Clients] on
 
 insert [IdentityServer].[Clients] ([Id], [Enabled], [ClientId], [ProtocolType], [RequireClientSecret], [ClientName], [Description], [ClientUri], [LogoUri], [RequireConsent], [AllowRememberConsent], [AlwaysIncludeUserClaimsInIdToken], [RequirePkce], [AllowPlainTextPkce], [AllowAccessTokensViaBrowser], [FrontChannelLogoutUri], [FrontChannelLogoutSessionRequired], [BackChannelLogoutUri], [BackChannelLogoutSessionRequired], [AllowOfflineAccess], [IdentityTokenLifetime], [AccessTokenLifetime], [AuthorizationCodeLifetime], [ConsentLifetime], [AbsoluteRefreshTokenLifetime], [SlidingRefreshTokenLifetime], [RefreshTokenUsage], [UpdateAccessTokenClaimsOnRefresh], [RefreshTokenExpiration], [AccessTokenType], [EnableLocalLogin], [IncludeJwtId], [AlwaysSendClientClaims], [ClientClaimsPrefix], [PairWiseSubjectSalt], [Created], [Updated], [LastAccessed], [UserSsoLifetime], [UserCodeType], [DeviceCodeLifetime], [NonEditable])
 select * from (values 
-	(1, 1, N'client', N'oidc', 1, N'Client Credentials Client', NULL, NULL, NULL, 0, 1, 0, 0, 0, 0, NULL, 1, NULL, 1, 0, 300, 3600, 300, NULL, 2592000, 1296000, 1, 0, 1, 0, 1, 0, 0, N'client_', NULL, CAST(N'2019-03-18T11:32:44.0555601' AS DateTime2), NULL, NULL, NULL, NULL, 300, 0),
 	(2, 1, N'apprentice', N'oidc', 1, N'Apprentice Client', NULL, NULL, NULL, 0, 1, 0, 0, 0, 0, NULL, 1, NULL, 1, 0, 300, 3600, 300, NULL, 2592000, 1296000, 1, 0, 1, 0, 1, 0, 0, N'apprentice_', NULL, CAST(N'2019-03-18T11:32:44.0555601' AS DateTime2), NULL, NULL, NULL, NULL, 300, 0))
 as insrt ([Id], [Enabled], [ClientId], [ProtocolType], [RequireClientSecret], [ClientName], [Description], [ClientUri], [LogoUri], [RequireConsent], [AllowRememberConsent], [AlwaysIncludeUserClaimsInIdToken], [RequirePkce], [AllowPlainTextPkce], [AllowAccessTokensViaBrowser], [FrontChannelLogoutUri], [FrontChannelLogoutSessionRequired], [BackChannelLogoutUri], [BackChannelLogoutSessionRequired], [AllowOfflineAccess], [IdentityTokenLifetime], [AccessTokenLifetime], [AuthorizationCodeLifetime], [ConsentLifetime], [AbsoluteRefreshTokenLifetime], [SlidingRefreshTokenLifetime], [RefreshTokenUsage], [UpdateAccessTokenClaimsOnRefresh], [RefreshTokenExpiration], [AccessTokenType], [EnableLocalLogin], [IncludeJwtId], [AlwaysSendClientClaims], [ClientClaimsPrefix], [PairWiseSubjectSalt], [Created], [Updated], [LastAccessed], [UserSsoLifetime], [UserCodeType], [DeviceCodeLifetime], [NonEditable])
 where not exists (select 1 from [IdentityServer].[Clients] where Id = insrt.Id)
@@ -105,21 +78,6 @@ where not exists (select 1 from [IdentityServer].[ClientGrantTypes] where Id = i
 
 set identity_insert [IdentityServer].[ClientGrantTypes] off
 
-
-
----- [IdentityServer].[ClientScopes]
-
-set identity_insert [IdentityServer].[ClientScopes] on
-
-insert [IdentityServer].[ClientScopes] ([Id], [Scope], [ClientId])
-select * from (values 
-	(1, N'api1', 1))
-as insrt ([Id], [Scope], [ClientId])
-where not exists (select 1 from [IdentityServer].[ClientScopes] where Id = insrt.Id)
-
-set identity_insert [IdentityServer].[ClientScopes] off
-  
-
  
 ---- [IdentityServer].[ClientRedirectUris]
 
@@ -129,42 +87,25 @@ insert [IdentityServer].[ClientRedirectUris] ([Id], [RedirectUri], [ClientId])
 select * from (values 
 	(1, @apprenticePortalWebHost + N'/signin-oidc', 2),
 	(2, @confirmWebHost + N'/signin-oidc', 2), 
-	(3, @apprenticeWebHost + N'/signin-oidc', 2))
+	(3, @apprenticeAccountWebHost + N'/signin-oidc', 2))
 as insrt ([Id], [RedirectUri], [ClientId])
 where not exists (select 1 from [IdentityServer].[ClientRedirectUris] where Id = insrt.Id)
 
 set identity_insert [IdentityServer].[ClientRedirectUris] off
 
 
----- [IdentityServer].[ClientSecrets]
-
-set identity_insert [IdentityServer].[ClientSecrets] on
-
-insert [IdentityServer].[ClientSecrets] ([Id], [Description], [Value], [Expiration], [Type], [Created], [ClientId])
-select * from (values 
-	(1, NULL, N'fU7fRb+g6YdlniuSqviOLWNkda1M/MuPtH6zNI9inF8=', NULL, N'SharedSecret', CAST(N'2019-03-18T11:32:44.0560440' AS DateTime2), 1))
-as insrt ([Id], [Description], [Value], [Expiration], [Type], [Created], [ClientId])
-where not exists (select 1 from [IdentityServer].[ClientSecrets] where Id = insrt.Id)
-
-set identity_insert [IdentityServer].[ClientSecrets] off
-
-
-
-
 ---- [IdentityServer].[ClientPostLogoutRedirectUris]
-
 set identity_insert [IdentityServer].[ClientPostLogoutRedirectUris] on
 
 insert [IdentityServer].[ClientPostLogoutRedirectUris] ([Id], [PostLogoutRedirectUri], [ClientId])
 select * from (values 
 	(1, @apprenticePortalWebHost + N'/signout-callback-oidc', 2),
 	(2, @confirmWebHost + N'/signout-callback-oidc', 2),
-	(3, @apprenticeWebHost + N'/signout-callback-oidc', 2))
+	(3, @apprenticeAccountWebHost + N'/signout-callback-oidc', 2))
 as insrt ([Id], [PostLogoutRedirectUri], [ClientId])
 where not exists (select 1 from [IdentityServer].[ClientPostLogoutRedirectUris] where Id = insrt.Id)
 
 set identity_insert [IdentityServer].[ClientPostLogoutRedirectUris] off
-
 
 
 ---- [IdentityServer].[ClientGrantTypes]
@@ -180,7 +121,6 @@ where not exists (select 1 from [IdentityServer].[ClientGrantTypes] where Id = i
 set identity_insert [IdentityServer].[ClientGrantTypes] off
 
 
-
 ---- [IdentityServer].[ClientScopes]
 
 set identity_insert [IdentityServer].[ClientScopes] on
@@ -193,7 +133,6 @@ as insrt ([Id], [Scope], [ClientId])
 where not exists (select 1 from [IdentityServer].[ClientScopes] where Id = insrt.Id)
 
 set identity_insert [IdentityServer].[ClientScopes] off
-
 
 
 ---- [LoginService].[Clients]
