@@ -61,6 +61,7 @@
     <Folder Include="Tables\" />
     <Folder Include="Tables\IdentityServer" />
     <Folder Include="Tables\LoginService\" />
+    <Folder Include="Manual" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Schemas\IdentityServer.sql" />
@@ -97,11 +98,15 @@
     <Build Include="Tables\LoginService\LoginService.Invitations.sql" />
     <Build Include="Tables\LoginService\LoginService.ResetPasswordRequests.sql" />
     <Build Include="Tables\LoginService\LoginService.UserLogs.sql" />
+    <None Include="Manual\DeleteApiScript.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.LoginService.Database.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Manual\InitialSetupScript.sql" />
   </ItemGroup>
 </Project>
