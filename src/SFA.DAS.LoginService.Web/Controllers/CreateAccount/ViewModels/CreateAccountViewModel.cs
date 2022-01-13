@@ -1,4 +1,5 @@
-﻿using System;
+using SFA.DAS.EmailValidationService;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace SFA.DAS.LoginService.Web.Controllers.CreateAccount.ViewModels
@@ -10,11 +11,11 @@ namespace SFA.DAS.LoginService.Web.Controllers.CreateAccount.ViewModels
         public string Backlink { get; set; }
 
         [Required(ErrorMessage = "Enter an email address")]
-        [EmailAddress(ErrorMessage = "Enter a valid email address")]
+        [EsfaEmailAddress(ErrorMessage = "Enter a valid email address")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Re-enter the email address")]
-        [EmailAddress(ErrorMessage = "Re-enter a valid email address")]
+        [EsfaEmailAddress(ErrorMessage = "Re-enter a valid email address")]
         [Compare(nameof(Email), ErrorMessage = "Enter the same email address")]
         public string ConfirmEmail { get; set; }
 
