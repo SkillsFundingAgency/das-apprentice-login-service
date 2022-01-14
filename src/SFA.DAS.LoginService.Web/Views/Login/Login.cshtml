@@ -65,24 +65,23 @@
                     <button type="submit" class="govuk-button">
                         Sign in
                     </button>
-
-                    <div class="das-inline-button-link">
-                        <span class="govuk-body">
-                            or
-                            <a asp-controller="CreateAccount" asp-action="Get" asp-route-clientId="@Model.ClientId" asp-route-returnUrl="@Model.ReturnUrl" class="govuk-link">create an account</a>
-                        </span>
-                    </div>
                 </div>
 
                 <div class="govuk-form-group">
-                    <h2 class="govuk-heading-m">Problems signing in</h2>
                     <p class="govuk-body">
-                        <a class="govuk-link" asp-action="Get" asp-controller="RequestPasswordReset" asp-route-clientId="@Model.ClientId">I have forgotten my password</a>
+                        You can
+                        <a class="govuk-link" asp-action="Get" asp-controller="RequestPasswordReset" asp-route-clientId="@Model.ClientId">change your password</a>
+                        if you've forgotten it.
+                    </p>
+                </div>
+
+                <div class="govuk-form-group">
+                    <p class="govuk-body">
+                    <a asp-controller="CreateAccount" asp-action="Get" asp-route-clientId="@Model.ClientId" asp-route-returnUrl="@Model.ReturnUrl" class="govuk-link">Create an account</a>
+                    if you do not have one.
                     </p>
                 </div>
             </form>
-
-            <!-- <p class="govuk-body"><a class="govuk-link" href="@Model.ServiceSupportUrl">Having problems with sign in?</a></p> -->
         </div>
     </div>
 </main>
