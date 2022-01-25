@@ -60,29 +60,19 @@
                         <li>read the service <a class="govuk-link" asp-controller="Home" asp-action="Privacy" target="_blank" rel="noopener noreferrer" >privacy statement</a></li>
                     </ul>
                 </div>
-
-                <div class="govuk-form-group">
-                    <button type="submit" class="govuk-button">
-                        Sign in
-                    </button>
-
-                    <div class="das-inline-button-link">
-                        <span class="govuk-body">
-                            or
-                            <a asp-controller="CreateAccount" asp-action="Get" asp-route-clientId="@Model.ClientId" asp-route-returnUrl="@Model.ReturnUrl" class="govuk-link">create an account</a>
-                        </span>
-                    </div>
-                </div>
-
-                <div class="govuk-form-group">
-                    <h2 class="govuk-heading-m">Problems signing in</h2>
-                    <p class="govuk-body">
-                        <a class="govuk-link" asp-action="Get" asp-controller="RequestPasswordReset" asp-route-clientId="@Model.ClientId">I have forgotten my password</a>
-                    </p>
-                </div>
+                <button type="submit" class="govuk-button">
+                    Sign in
+                </button>
+                <p class="govuk-body">
+                    You can
+                    <a class="govuk-link" asp-action="Get" asp-controller="RequestPasswordReset" asp-route-clientId="@Model.ClientId">change your password</a>
+                    if you've forgotten it.
+                </p>
+                <p class="govuk-body">
+                    <a asp-controller="CreateAccount" asp-action="Get" asp-route-clientId="@Model.ClientId" asp-route-returnUrl="@Model.ReturnUrl" class="govuk-link">Create an account</a>
+                    if you do not have one.
+                </p>
             </form>
-
-            <!-- <p class="govuk-body"><a class="govuk-link" href="@Model.ServiceSupportUrl">Having problems with sign in?</a></p> -->
         </div>
     </div>
 </main>
