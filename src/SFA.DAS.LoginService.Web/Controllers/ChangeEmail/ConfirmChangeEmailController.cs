@@ -15,7 +15,6 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
         {
         }
 
-        [Authorize]
         [HttpGet("profile/{clientId}/changeemail/confirm")]
         public IActionResult ConfirmChangeEmail(Guid clientId, [FromQuery] string email, [FromQuery] string token)
         {
@@ -27,7 +26,6 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
             });
         }
 
-        [Authorize]
         [HttpPost("profile/{clientId}/changeemail/confirm")]
         public async Task<IActionResult> ConfirmChangeEmail(Guid clientId, [FromForm] ConfirmChangeEmailViewModel model)
         {

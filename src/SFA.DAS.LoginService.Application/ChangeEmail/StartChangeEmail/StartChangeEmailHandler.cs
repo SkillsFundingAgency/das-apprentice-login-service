@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SFA.DAS.LoginService.Application.Interfaces;
 using SFA.DAS.LoginService.Application.Services;
 using SFA.DAS.LoginService.Application.Services.EmailServiceViewModels;
+using SFA.DAS.LoginService.Configuration;
 using SFA.DAS.LoginService.Data;
 using SFA.DAS.LoginService.Data.Entities;
 using System;
@@ -17,13 +18,15 @@ namespace SFA.DAS.LoginService.Application.ChangeEmail.StartChangeEmail
     {
         private readonly IWebUserService _userService;
         private readonly LoginContext _loginContext;
+        private readonly ILoginConfig _loginConfig;
         private readonly IEmailService _emailService;
 
-        public StartChangeEmailHandler(IWebUserService userService, LoginContext loginContext, IEmailService emailService)
+        public StartChangeEmailHandler(IWebUserService userService, LoginContext loginContext, IEmailService emailService, ILoginConfig loginConfig)
         {
             _userService = userService;
             _loginContext = loginContext;
             _emailService = emailService;
+            _loginConfig = loginConfig;
         }
 
         public async Task<StartChangeEmailResponse> Handle(StartChangeEmailRequest request, CancellationToken cancellationToken)
@@ -86,7 +89,7 @@ namespace SFA.DAS.LoginService.Application.ChangeEmail.StartChangeEmail
 
             await _emailService.SendChangeEmailCode(new ChangeUserEmailViewModel
             {
-                ConfirmEmailLink = await BuildLink(client.ServiceDetails.SupportUrl),
+                ConfirmEmailLink = await BuildLink(_loginConfig.BaseUrl),
                 GivenName = user.GivenName,
                 FamilyName = user.FamilyName,
                 EmailAddress = request.NewEmailAddress,
