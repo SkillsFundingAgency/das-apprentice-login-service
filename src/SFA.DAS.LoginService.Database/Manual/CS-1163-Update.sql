@@ -1,13 +1,13 @@
 ﻿
   /*  CS-1163
   
-  Update the SupportUrl eg. in AT
-  "SupportUrl": "https://confirm.at-aas.apprenticeships.education.gov.uk/"  to
-  "SupportUrl": "https://at-aas.apprenticeships.education.gov.uk/home"
+  Update the PostPasswordResetReturnUrl eg. in AT
+  "PostPasswordResetReturnUrl": "https://confirm.test-aas.apprenticeships.education.gov.uk/apprenticeships"  to
+  "PostPasswordResetReturnUrl": "https://test-aas.apprenticeships.education.gov.uk/Home"
   
   Prod:
-  "SupportUrl": "https://confirm.my.apprenticeships.education.gov.uk/"  to  
-  "SupportUrl": "https://my.apprenticeships.education.gov.uk/Home"
+  "PostPasswordResetReturnUrl": "https://confirm.my.apprenticeships.education.gov.uk/apprenticeships"  to  
+  "PostPasswordResetReturnUrl": "https://my.apprenticeships.education.gov.uk/Home"
 
   */
 
@@ -25,20 +25,21 @@
 	throw 60000, 'Database should be one of das-at-alogin-db, das-test-alogin-db, das-test2-alogin-db, das-pp-alogin-db, das-prd-alogin-db', 1;
 
   
-  declare @existingLink nvarchar(100), @newLink nvarchar(100);
+  declare @existingLink nvarchar(120), @newLink nvarchar(120);
   
   if DB_NAME() = 'das-prd-alogin-db'
     begin
-		select @existingLink = '"SupportUrl": "https://confirm.my.apprenticeships.education.gov.uk/",',
-		       @newLink = '"SupportUrl": "https://my.apprenticeships.education.gov.uk/Home",';
+		select @existingLink = '"PostPasswordResetReturnUrl": "https://confirm.my.apprenticeships.education.gov.uk/apprenticeships",',
+		       @newLink = '"PostPasswordResetReturnUrl": "https://my.apprenticeships.education.gov.uk/Home",';
     end
   else
     begin
-		select @existingLink = '"SupportUrl": "https://confirm.' + @environment + '-aas.apprenticeships.education.gov.uk/",',
-		       @newLink = '"SupportUrl": "https://' + @environment + '-aas.apprenticeships.education.gov.uk/Home",';
+		select @existingLink = '"PostPasswordResetReturnUrl": "https://confirm.' + @environment + '-aas.apprenticeships.education.gov.uk/apprenticeships",',
+		       @newLink = '"PostPasswordResetReturnUrl": "https://' + @environment + '-aas.apprenticeships.education.gov.uk/Home",';
 	end
 
   
+  --select @existingLink, @newLink;
   --select replace([ServiceDetails], @existingLink, @newLink)
   --  from [LoginService].[Clients]
   -- where [IdentityServerClientId] = 'apprentice'
