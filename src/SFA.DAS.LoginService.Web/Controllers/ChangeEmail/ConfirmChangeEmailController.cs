@@ -59,7 +59,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
 
             var client = await Mediator.Send(new GetClientByIdRequest() { ClientId = clientId });
 
-            return View(new ChangeEmailSuccessfulViewModel() { ReturnUrl = client.ServiceDetails.SupportUrl, ServiceName = client.ServiceDetails.ServiceName });
+            return View(new ChangeEmailSuccessfulViewModel() { ReturnUrl = client.ServiceDetails.PostPasswordResetReturnUrl, ServiceName = client.ServiceDetails.ServiceName });
         }
 
         private void SetModelState(ConfirmChangeEmailResponse response, ConfirmChangeEmailViewModel model)

@@ -24,7 +24,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.ResetPassword
             var vm = new RequestPasswordResetViewModel
             {
                 ClientId = clientId,
-                Backlink = client.ServiceDetails.SupportUrl,
+                Backlink = client.ServiceDetails.PostPasswordResetReturnUrl,
             };
 
             return View("RequestPasswordReset", vm);
@@ -34,7 +34,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.ResetPassword
         public async Task<IActionResult> Post(Guid clientId, RequestPasswordResetViewModel requestPasswordResetViewModel)
         {
             var client = await Mediator.Send(new GetClientByIdRequest { ClientId = clientId });
-            requestPasswordResetViewModel.Backlink = client.ServiceDetails.SupportUrl;
+            requestPasswordResetViewModel.Backlink = client.ServiceDetails.PostPasswordResetReturnUrl;
 
             SetViewBagClientId(clientId);
 
