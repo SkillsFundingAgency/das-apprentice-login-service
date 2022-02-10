@@ -32,7 +32,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.StartChangeEmai
         {
             var request = CreateStartChangeEmailRequest();
             var expectedLink =
-                $"https://serviceurl/profile/{ClientId}/changeemail/confirm?email={HttpUtility.UrlEncode(request.NewEmailAddress)}&token={HttpUtility.UrlEncode(Token)}";
+                $"https://baseurl/profile/{ClientId}/changeemail/confirm?email={HttpUtility.UrlEncode(request.NewEmailAddress)}&token={HttpUtility.UrlEncode(Token)}";
             await Sut.Handle(request, CancellationToken.None);
 
             await EmailService.Received().SendChangeEmailCode(Arg.Is<ChangeUserEmailViewModel>(p => p.ConfirmEmailLink == expectedLink));

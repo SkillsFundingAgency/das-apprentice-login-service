@@ -97,7 +97,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.StartChangeEmai
 
         private StartChangeEmailHandler BuildStartChangeEmailHandler()
         {
-            return new StartChangeEmailHandler(UserService, LoginContext, EmailService);
+            return new StartChangeEmailHandler(UserService, LoginContext, EmailService, LoginConfig);
         }
     }
 }
