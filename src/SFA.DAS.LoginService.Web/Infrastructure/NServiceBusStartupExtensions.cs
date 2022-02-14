@@ -17,7 +17,7 @@ namespace SFA.DAS.LoginService.Web.Infrastructure
     {
         private const string EndpointName = "SFA.Apprentice.Login";
         private const string NotificationsEndpointName = "SFA.DAS.Notifications.MessageHandlers";
-        private const string ApprenticeAccountsEndpointName = "SFA-DAS-ApprenticeAccounts";
+        private const string ApprenticeAccountsEndpointName = "SFA.DAS.ApprenticeAccounts";
 
         public static IServiceCollection AddNServiceBus(this IServiceCollection services)
         {
