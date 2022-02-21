@@ -7,6 +7,8 @@ jobs:
   - group: Build Management Resources
   - name: buildConfiguration
     value: release
+  - name: SONAR_SCANNER_OPTS
+    value: -Xmx256m
   workspace:
     clean: all
   steps:
@@ -15,8 +17,6 @@ jobs:
   - template: azure-pipelines-templates/build/step/app-build.yml@das-platform-building-blocks
     parameters:
       SonarCloudProjectKey: SkillsFundingAgency_das-apprentice-login-service
-      SonarCloudExtraProperties: |
-        SONAR_SCANNER_OPTS=-Xmx512m
 
   - template: azure-pipelines-templates/build/step/dependency-check.yml@das-platform-building-blocks
 
