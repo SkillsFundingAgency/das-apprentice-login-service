@@ -16,7 +16,7 @@ jobs:
     parameters:
       SonarCloudProjectKey: SkillsFundingAgency_das-apprentice-login-service
       SonarCloudExtraProperties: |
-        SONAR_SCANNER_OPTS=-Xmx256m
+        SONAR_SCANNER_OPTS=-Xmx512m
 
   - template: azure-pipelines-templates/build/step/dependency-check.yml@das-platform-building-blocks
 
