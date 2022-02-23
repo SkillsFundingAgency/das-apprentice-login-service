@@ -24,7 +24,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
 
             var model = new ChangeEmailViewModel
             {
-                Backlink = client.ServiceDetails.SupportUrl,
+                Backlink = client.ServiceDetails.PostPasswordResetReturnUrl,
             };
 
             return View(model);
@@ -36,7 +36,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
         {
             var email = User.Identity.Name;
             var client = await Mediator.Send(new GetClientByIdRequest { ClientId = clientId });
-            model.Backlink = client.ServiceDetails.SupportUrl;
+            model.Backlink = client.ServiceDetails.PostPasswordResetReturnUrl;
 
             var response = await Mediator.Send(new StartChangeEmailRequest
             {

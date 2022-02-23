@@ -17,7 +17,7 @@ namespace SFA.DAS.LoginService.Web.Infrastructure
     {
         private const string EndpointName = "SFA.Apprentice.Login";
         private const string NotificationsEndpointName = "SFA.DAS.Notifications.MessageHandlers";
-        private const string ApprenticeCommitmentsEndpointName = "SFA.DAS.ApprenticeCommitments.Apprenticeship";
+        private const string ApprenticeAccountsEndpointName = "SFA.DAS.ApprenticeAccounts";
 
         public static IServiceCollection AddNServiceBus(this IServiceCollection services)
         {
@@ -60,7 +60,7 @@ namespace SFA.DAS.LoginService.Web.Infrastructure
         public static void AddRouting(this RoutingSettings routingSettings)
         {
             routingSettings.RouteToEndpoint(typeof(SendEmailCommand), NotificationsEndpointName);
-            routingSettings.RouteToEndpoint(typeof(UpdateEmailAddressCommand), ApprenticeCommitmentsEndpointName);
+            routingSettings.RouteToEndpoint(typeof(UpdateEmailAddressCommand), ApprenticeAccountsEndpointName);
         }
 
         public static EndpointConfiguration UseLicense(this EndpointConfiguration config, string licenseText)
