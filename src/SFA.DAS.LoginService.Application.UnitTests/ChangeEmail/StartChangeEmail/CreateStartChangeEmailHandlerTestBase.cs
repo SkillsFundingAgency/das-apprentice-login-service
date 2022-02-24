@@ -93,10 +93,9 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.StartChangeEmai
             return new StartChangeEmailRequest
             {
                 ClientId = ClientId,
-                SubjectId = CurrentUserId,
+                UserId = CurrentUserId,
                 NewEmailAddress = "New@new.com",
                 ConfirmEmailAddress = "New@new.com",
-                CurrentEmailAddress = CurrentUserEmail
             };
         }
 

@@ -73,7 +73,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.StartChangeEmai
         public async Task Because_new_email_matches_current_email()
         {
             var request = CreateStartChangeEmailRequest();
-            request.CurrentEmailAddress = request.NewEmailAddress;
+            User.Email = request.NewEmailAddress;
             var response = await Sut.Handle(request, CancellationToken.None);
             response.NewEmailAddressError.Should().NotBeEmpty();
             response.NewEmailAddressError.Should().Be("This email is the same as your current email address");
@@ -83,7 +83,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.StartChangeEmai
         public async Task Because_new_email_matches_another_existing_email()
         {
             var request = CreateStartChangeEmailRequest();
-            request.CurrentEmailAddress = CurrentUserEmail;
+            User.Email = CurrentUserEmail;
             request.NewEmailAddress = AnotherUserEmail;
             request.ConfirmEmailAddress = AnotherUserEmail;
 

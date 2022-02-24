@@ -49,13 +49,6 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
             {
                 SetModelState(response, model);
                 return View(model);
-}
-
-            var authenticated = await HttpContext.AuthenticateAsync();
-
-            if (authenticated.Succeeded)
-            {
-                await HttpContext.SignInAsync(authenticated.Principal, authenticated.Properties);
             }
 
             return RedirectToAction("ChangeEmailSuccessful", new { ClientId = clientId });

@@ -42,7 +42,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
             var response = await Mediator.Send(new StartChangeEmailRequest
             {
                 ClientId = clientId,
-                SubjectId = User.Claims.Subject(),
+                UserId = User.Claims.Subject(),
                 NewEmailAddress = model.NewEmailAddress,
                 ConfirmEmailAddress = model.ConfirmEmailAddress
             });
