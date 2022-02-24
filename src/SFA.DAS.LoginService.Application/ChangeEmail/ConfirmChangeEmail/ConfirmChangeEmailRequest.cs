@@ -4,6 +4,7 @@ namespace SFA.DAS.LoginService.Application.ChangeEmail.ConfirmChangeEmail
 {
     public class ConfirmChangeEmailRequest : IRequest<ConfirmChangeEmailResponse>
     {
+        public string SubjectId { get; set; }
         public string CurrentEmailAddress { get; set; }
         public string NewEmailAddress { get; set; }
         public string Token { get; set; }

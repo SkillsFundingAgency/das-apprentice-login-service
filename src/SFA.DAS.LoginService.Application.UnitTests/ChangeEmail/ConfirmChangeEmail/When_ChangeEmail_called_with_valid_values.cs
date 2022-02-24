@@ -30,7 +30,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.ConfirmChangeEm
         {
             await _sut.Handle(_request, CancellationToken.None);
             await _userManager.Received()
-                .FindByEmailAsync(_request.CurrentEmailAddress);
+                .FindByIdAsync(_request.SubjectId);
         }
 
         [Test]

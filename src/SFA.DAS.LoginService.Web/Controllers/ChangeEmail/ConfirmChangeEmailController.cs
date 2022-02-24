@@ -1,10 +1,14 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Polly;
 using SFA.DAS.LoginService.Application.ChangeEmail.ConfirmChangeEmail;
 using SFA.DAS.LoginService.Types.GetClientById;
 using SFA.DAS.LoginService.Web.Controllers.ChangeEmail.ViewModels;
+using SFA.DAS.LoginService.Web.Infrastructure;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
@@ -34,6 +38,7 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
 
             var response = await Mediator.Send(new ConfirmChangeEmailRequest
             {
+                SubjectId = User.Claims.Subject(),
                 CurrentEmailAddress = currentEmail,
                 NewEmailAddress = model.NewEmailAddress,
                 Token = model.Token.Replace(" ", "+"),
@@ -44,6 +49,13 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
             {
                 SetModelState(response, model);
                 return View(model);
+}
+
+            var authenticated = await HttpContext.AuthenticateAsync();
+
+            if (authenticated.Succeeded)
+            {
+                await HttpContext.SignInAsync(authenticated.Principal, authenticated.Properties);
             }
 
             return RedirectToAction("ChangeEmailSuccessful", new { ClientId = clientId });

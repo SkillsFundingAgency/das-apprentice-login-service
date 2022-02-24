@@ -13,7 +13,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.ConfirmChangeEm
         [SetUp]
         public void Setup()
         {
-            _request.CurrentEmailAddress = "unknown@example.com";
+            _request.SubjectId = "unknown@example.com";
             _userManager.FindByEmailAsync(Arg.Any<string>()).Returns((LoginUser)null);
         }
 

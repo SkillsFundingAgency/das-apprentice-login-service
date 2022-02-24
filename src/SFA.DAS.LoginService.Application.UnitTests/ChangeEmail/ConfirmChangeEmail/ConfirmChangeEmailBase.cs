@@ -71,6 +71,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.ConfirmChangeEm
                 .Create();
 
             _userManager.FindByEmailAsync(_request.CurrentEmailAddress).Returns(_user);
+            _userManager.FindByIdAsync(_request.SubjectId).Returns(_user);
             _userManager.ChangeEmailAsync(default, default, default).ReturnsForAnyArgs(IdentityResult.Success);
         }
     }

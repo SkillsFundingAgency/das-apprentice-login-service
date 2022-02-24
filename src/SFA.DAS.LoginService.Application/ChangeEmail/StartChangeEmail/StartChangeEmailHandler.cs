@@ -41,12 +41,13 @@ namespace SFA.DAS.LoginService.Application.ChangeEmail.StartChangeEmail
                 return response;
             }
 
-            var user = await _userService.FindByEmail(request.CurrentEmailAddress);
+            var user = await _userService.FindById(request.SubjectId);
             if (user is null)
             {
-                throw new ApplicationException($"Current Users email {request.CurrentEmailAddress} does not exist");
+                throw new ApplicationException($"User {request.SubjectId} does not exist");
             }
 
+            request.CurrentEmailAddress = user.Email;
             await SendChangeEmailLink(request, user, cancellationToken);
 
             _loginContext.UserLogs.Add(new UserLog()

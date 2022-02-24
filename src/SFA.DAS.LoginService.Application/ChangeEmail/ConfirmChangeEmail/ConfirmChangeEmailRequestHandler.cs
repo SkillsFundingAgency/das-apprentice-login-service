@@ -33,7 +33,7 @@ namespace SFA.DAS.LoginService.Application.ChangeEmail.ConfirmChangeEmail
             var response = ValidatedRequest(request);
             if (response.HasErrors) return response;
 
-            var user = await _userService.FindByEmail(request.CurrentEmailAddress);
+            var user = await _userService.FindById(request.SubjectId);
 
             if (user == null)
             {

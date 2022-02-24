@@ -52,6 +52,11 @@ namespace SFA.DAS.LoginService.Application.Services
             return await _userManager.FindByEmailAsync(email);
         }
 
+        public async Task<LoginUser> FindById(string subjectId)
+        {
+            return await _userManager.FindByIdAsync(subjectId);
+        }
+
         public async Task<UserResponse> ResetPassword(string email, string password, string identityToken)
         {
             var user = await FindByEmail(email);
