@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using SFA.DAS.LoginService.Data.Entities;
@@ -10,6 +11,7 @@ namespace SFA.DAS.LoginService.Application.Interfaces
         Task<UserResponse> CreateUser(LoginUser newUser, string password);
         Task<SignInResult> SignInUser(string username, string password, bool rememberLogin);
         Task<LoginUser> FindByUsername(string username);
+        Task<LoginUser> FindById(string id);
         Task SignOutUser();
         Task<LoginUser> FindByEmail(string email);
         Task<UserResponse> ResetPassword(string email, string password, string identityToken);

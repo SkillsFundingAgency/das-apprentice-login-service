@@ -15,7 +15,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.StartChangeEmai
         public async Task And_user_is_not_found_Then_throw_exception()
         {
             var request = CreateStartChangeEmailRequest();
-            request.CurrentEmailAddress = "UnknownUser@test.com";
+            request.UserId = Guid.NewGuid().ToString();
             try
             {
                 await Sut.Handle(request, CancellationToken.None);
@@ -23,7 +23,7 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.StartChangeEmai
             }
             catch (ApplicationException e)
             {
-                e.Message.Should().Contain($"{request.CurrentEmailAddress} does not exist");
+                e.Message.Should().Contain($"{request.UserId} does not exist");
             }
         }
 

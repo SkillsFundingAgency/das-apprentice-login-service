@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.LoginService.Application.ChangeEmail.StartChangeEmail;
 using SFA.DAS.LoginService.Types.GetClientById;
 using SFA.DAS.LoginService.Web.Controllers.ChangeEmail.ViewModels;
+using SFA.DAS.LoginService.Web.Infrastructure;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
@@ -34,14 +36,13 @@ namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
         [HttpPost("profile/{clientId}/changeemail")]
         public async Task<IActionResult> ChangeEmail([FromRoute] Guid clientId, [FromForm] ChangeEmailViewModel model)
         {
-            var email = User.Identity.Name;
             var client = await Mediator.Send(new GetClientByIdRequest { ClientId = clientId });
             model.Backlink = client.ServiceDetails.PostPasswordResetReturnUrl;
 
             var response = await Mediator.Send(new StartChangeEmailRequest
             {
                 ClientId = clientId,
-                CurrentEmailAddress = email,
+                UserId = User.Claims.Subject(),
                 NewEmailAddress = model.NewEmailAddress,
                 ConfirmEmailAddress = model.ConfirmEmailAddress
             });

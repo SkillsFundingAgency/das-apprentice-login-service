@@ -41,10 +41,17 @@ namespace SFA.DAS.LoginService.Application.ChangeEmail.StartChangeEmail
                 return response;
             }
 
-            var user = await _userService.FindByEmail(request.CurrentEmailAddress);
+            var user = await _userService.FindById(request.UserId);
             if (user is null)
             {
-                throw new ApplicationException($"Current Users email {request.CurrentEmailAddress} does not exist");
+                throw new ApplicationException($"User {request.UserId} does not exist");
+            }
+
+            if (request.NewEmailAddress.Equals(user.Email,
+                StringComparison.InvariantCultureIgnoreCase))
+            {
+                response.NewEmailAddressError = "This email is the same as your current email address";
+                return response;
             }
 
             await SendChangeEmailLink(request, user, cancellationToken);
@@ -53,7 +60,7 @@ namespace SFA.DAS.LoginService.Application.ChangeEmail.StartChangeEmail
             {
                 Id = GuidGenerator.NewGuid(),
                 Action = "Start Change Email",
-                Email = request.CurrentEmailAddress,
+                Email = user.Email,
                 Result = "Change Users email started",
                 DateTime = SystemTime.UtcNow(),
                 ExtraData = request.NewEmailAddress
@@ -129,13 +136,6 @@ namespace SFA.DAS.LoginService.Application.ChangeEmail.StartChangeEmail
                 StringComparison.InvariantCultureIgnoreCase))
             {
                 response.ConfirmEmailAddressError = "Email addresses must match";
-                return response;
-            }
-
-            if (request.NewEmailAddress.Equals(request.CurrentEmailAddress,
-                StringComparison.InvariantCultureIgnoreCase))
-            {
-                response.NewEmailAddressError = "This email is the same as your current email address";
                 return response;
             }
 

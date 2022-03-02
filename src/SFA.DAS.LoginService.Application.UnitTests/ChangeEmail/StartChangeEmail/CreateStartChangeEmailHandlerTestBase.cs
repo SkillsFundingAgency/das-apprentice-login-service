@@ -27,7 +27,9 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.StartChangeEmai
         protected Guid ChangeEmailTemplateId;
         protected Fixture Fixture = new Fixture();
         protected LoginUser User;
+        protected string CurrentUserId = "my_user_id";
         protected string CurrentUserEmail = "current.user@test.com";
+        protected string AnotherUserId = "their_user_id";
         protected LoginUser AnotherUser;
         protected string AnotherUserEmail = "another.user@test.com";
         protected string Token = "Token";
@@ -45,7 +47,9 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.StartChangeEmai
             AnotherUser = new LoginUser { Email = AnotherUserEmail };
             UserService = Substitute.For<IWebUserService>();
             UserService.FindByEmail(CurrentUserEmail).Returns(Task.FromResult(User));
+            UserService.FindById(AnotherUserId).Returns(Task.FromResult(AnotherUser));
             UserService.FindByEmail(AnotherUserEmail).Returns(Task.FromResult(AnotherUser));
+            UserService.FindById(CurrentUserId).Returns(Task.FromResult(User));
             UserService.GenerateChangeEmailToken(User, "New@new.com").Returns(Token);
 
             UserAccountService = Substitute.For<IUserAccountService>();
@@ -89,9 +93,9 @@ namespace SFA.DAS.LoginService.Application.UnitTests.ChangeEmail.StartChangeEmai
             return new StartChangeEmailRequest
             {
                 ClientId = ClientId,
+                UserId = CurrentUserId,
                 NewEmailAddress = "New@new.com",
                 ConfirmEmailAddress = "New@new.com",
-                CurrentEmailAddress = CurrentUserEmail
             };
         }
 
