@@ -31,29 +31,29 @@
   
   if DB_NAME() = 'das-prd-alogin-db'
     begin
-		select @newSignInLink = 'https://feedback.my.apprenticeships.education.gov.uk/signin-oidc';
-    select @newSignOutLink = 'https://feedback.my.apprenticeships.education.gov.uk/signout-callback-oidc';
+      select @newSignInLink = 'https://feedback.my.apprenticeships.education.gov.uk/signin-oidc';
+      select @newSignOutLink = 'https://feedback.my.apprenticeships.education.gov.uk/signout-callback-oidc';
     end
   else
     begin
-		select @newSignInLink = 'https://feedback.' + @environment + '-aas.apprenticeships.education.gov.uk/signin-oidc';
-    select @newSignOutLink = 'https://feedback.' + @environment + '-aas.apprenticeships.education.gov.uk/signout-callback-oidc';
-	end
+      select @newSignInLink = 'https://feedback.' + @environment + '-aas.apprenticeships.education.gov.uk/signin-oidc';
+      select @newSignOutLink = 'https://feedback.' + @environment + '-aas.apprenticeships.education.gov.uk/signout-callback-oidc';
+    end
 
-  SELECT @clientId = Id FROM [IdentityServer].[Clients] WHERE ClientId = 'apprentice'
+  select @clientId = Id from [IdentityServer].[Clients] where ClientId = 'apprentice'
 
-  IF NOT EXISTS (
-    SELECT 1 FROM [IdentityServer].[ClientRedirectUris] WHERE RedirectUri = @newSignInLink
+  if not exists (
+    select 1 from [IdentityServer].[ClientRedirectUris] where RedirectUri = @newSignInLink
   )
-  BEGIN  
-    INSERT INTO [IdentityServer].[ClientRedirectUris] (RedirectUri, ClientId) VALUES(@newSignInLink, @clientId)
-  END
+  begin  
+    insert into [IdentityServer].[ClientRedirectUris] (RedirectUri, ClientId) values(@newSignInLink, @clientId)
+  end
 
-  IF NOT EXISTS(
-    SELECT 1 FROM [IdentityServer].[ClientPostLogoutRedirectUris] WHERE PostLogoutRedirectUri = @newSignoutLink
+  if not exists(
+    select 1 from [IdentityServer].[ClientPostLogoutRedirectUris] where PostLogoutRedirectUri = @newSignoutLink
   )
-  BEGIN
-    INSERT INTO [IdentityServer].[ClientPostLogoutRedirectUris] (PostLogoutRedirectUri, ClientId) VALUES(@newSignOutLink, @clientId)
-  END
+  begin
+    insert into [IdentityServer].[ClientPostLogoutRedirectUris] (PostLogoutRedirectUri, ClientId) values (@newSignOutLink, @clientId)
+  end
   
 
