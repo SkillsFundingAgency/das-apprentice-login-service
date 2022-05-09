@@ -41,8 +41,19 @@
 	end
 
   SELECT @clientId = Id FROM [IdentityServer].[Clients] WHERE ClientId = 'apprentice'
-    
-  INSERT INTO [IdentityServer].[ClientRedirectUris] (RedirectUri, ClientId) VALUES(@newSignInLink, @clientId)
-  INSERT INTO [IdentityServer].[ClientPostLogoutRedirectUris] (PostLogoutRedirectUri, ClientId) VALUES(@newSignOutLink, @clientId)
+
+  IF NOT EXISTS (
+    SELECT 1 FROM [IdentityServer].[ClientRedirectUris] WHERE RedirectUri = @newSignInLink
+  )
+  BEGIN  
+    INSERT INTO [IdentityServer].[ClientRedirectUris] (RedirectUri, ClientId) VALUES(@newSignInLink, @clientId)
+  END
+
+  IF NOT EXISTS(
+    SELECT 1 FROM [IdentityServer].[ClientPostLogoutRedirectUris] WHERE PostLogoutRedirectUri = @newSignoutLink
+  )
+  BEGIN
+    INSERT INTO [IdentityServer].[ClientPostLogoutRedirectUris] (PostLogoutRedirectUri, ClientId) VALUES(@newSignOutLink, @clientId)
+  END
   
 
