@@ -105,7 +105,7 @@ select * from (values
 	(1, @apprenticePortalWebHost + N'/signout-callback-oidc', 2),
 	(2, @confirmWebHost + N'/signout-callback-oidc', 2),
 	(3, @apprenticeAccountWebHost + N'/signout-callback-oidc', 2),
-	(3, @apprenticeFeedbackWebHost + N'/signout-callback-oidc', 2))
+	(4, @apprenticeFeedbackWebHost + N'/signout-callback-oidc', 2))
 as insrt ([Id], [PostLogoutRedirectUri], [ClientId])
 where not exists (select 1 from [IdentityServer].[ClientPostLogoutRedirectUris] where Id = insrt.Id)
 
