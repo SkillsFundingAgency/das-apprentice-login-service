@@ -9,6 +9,8 @@
 declare @apprenticePortalHostname as nvarchar(100) = 'localhost:7070' -- WITHOUT trailing slash (or scheme) 
 declare @apprenticeAccountWebHost as nvarchar(100); 
 set @apprenticeAccountWebHost = 'https://localhost:7080'
+declare @apprenticeFeedbackWebHost as nvarchar(100); 
+set @apprenticeFeedbackWebHost = 'https://localhost:7090'
 
 declare @apprenticePortalWebHost as nvarchar(100); set @apprenticePortalWebHost = 'https://' + @apprenticePortalHostname
 declare @confirmWebHost as nvarchar(100); set @confirmWebHost = 'https://confirm.' + @apprenticePortalHostname
@@ -87,7 +89,8 @@ insert [IdentityServer].[ClientRedirectUris] ([Id], [RedirectUri], [ClientId])
 select * from (values 
 	(1, @apprenticePortalWebHost + N'/signin-oidc', 2),
 	(2, @confirmWebHost + N'/signin-oidc', 2), 
-	(3, @apprenticeAccountWebHost + N'/signin-oidc', 2))
+	(3, @apprenticeAccountWebHost + N'/signin-oidc', 2),
+	(4, @apprenticeFeedbackWebHost + N'/signin-oidc', 2))
 as insrt ([Id], [RedirectUri], [ClientId])
 where not exists (select 1 from [IdentityServer].[ClientRedirectUris] where Id = insrt.Id)
 
@@ -101,7 +104,8 @@ insert [IdentityServer].[ClientPostLogoutRedirectUris] ([Id], [PostLogoutRedirec
 select * from (values 
 	(1, @apprenticePortalWebHost + N'/signout-callback-oidc', 2),
 	(2, @confirmWebHost + N'/signout-callback-oidc', 2),
-	(3, @apprenticeAccountWebHost + N'/signout-callback-oidc', 2))
+	(3, @apprenticeAccountWebHost + N'/signout-callback-oidc', 2),
+	(4, @apprenticeFeedbackWebHost + N'/signout-callback-oidc', 2))
 as insrt ([Id], [PostLogoutRedirectUri], [ClientId])
 where not exists (select 1 from [IdentityServer].[ClientPostLogoutRedirectUris] where Id = insrt.Id)
 
