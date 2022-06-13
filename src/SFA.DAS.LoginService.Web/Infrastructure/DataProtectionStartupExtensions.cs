@@ -20,7 +20,7 @@ namespace SFA.DAS.LoginService.Web.Infrastructure
                     configuration["EnvironmentName"],
                     configuration["ConfigurationStorageConnectionString"],
                     "1.0",
-                    "SFA.DAS.LoginService", environment).Result;
+                    "SFA.DAS.ApprenticeLoginService", environment).Result;
 
                 if (loginConfig != null)
                 {
