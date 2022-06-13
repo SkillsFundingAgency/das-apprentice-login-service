@@ -11,5 +11,7 @@ namespace SFA.DAS.LoginService.Configuration
         public NotificationsApiConfiguration NotificationsApiClientConfiguration { get; set; }
         public NServiceBusConfiguration NServiceBusConfiguration { get; set; }
         public ApprenticeLoginApiConfiguration ApprenticeLoginApi { get; set; }
+        public string RedisConnectionString { get; set; }
+        public string DataProtectionKeysDatabase { get; set; }
     }
 }

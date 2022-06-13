@@ -75,6 +75,8 @@ namespace SFA.DAS.LoginService.Web
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
+            services.AddDataProtection(Configuration, _environment, _serviceProvider);
+
             var a = Configuration.GetSection("ConnectionStrings");
             var nsbConfig = _loginConfig.NServiceBusConfiguration;
             _logger.LogInformation("NServiceBusConfigration: {@config}", nsbConfig?.SharedServiceBusEndpointUrl);

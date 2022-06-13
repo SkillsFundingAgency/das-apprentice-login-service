@@ -11,5 +11,7 @@ namespace SFA.DAS.LoginService.Configuration
         int DaysInvitationIsValidFor { get; set; }
         NServiceBusConfiguration NServiceBusConfiguration { get; set; }
         ApprenticeLoginApiConfiguration ApprenticeLoginApi { get; set; }
+        string RedisConnectionString { get; set; }
+        string DataProtectionKeysDatabase { get; set; }
     }
 }
