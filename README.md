@@ -14,6 +14,10 @@ See [Support Site](https://skillsfundingagency.atlassian.net/wiki/spaces/NDL/pag
 
 ### Developer Setup
 
+runs on: https://localhost:5001
+
+The SFA.DAS.LoginService.Web project should run in kestrel to ensure that the 5001 port is used
+
 #### Requirements
 
 - Install [.NET Core 2.2 SDK](https://www.microsoft.com/net/download)
@@ -24,10 +28,16 @@ See [Support Site](https://skillsfundingagency.atlassian.net/wiki/spaces/NDL/pag
 - Install [Azure Storage Emulator](https://go.microsoft.com/fwlink/?linkid=717179&clcid=0x409) (Make sure you are on atleast v5.3)
 - Install [Azure Storage Explorer](http://storageexplorer.com/) 
 
+### How It Works
+
+This repo deals with the service authentication. 
+
 #### Setup
 
 - Clone this repository
 - Open Visual Studio as an administrator
+
+also see onboarding guide [here](https://skillsfundingagency.atlassian.net/wiki/spaces/NDL/pages/3518529551/Apprentice+Portal+-+on+boarding+guide)
 
 ##### Publish Database
 
@@ -44,6 +54,40 @@ See [Support Site](https://skillsfundingagency.atlassian.net/wiki/spaces/NDL/pag
 - Create a Configuration table in your (Development) local Azure Storage account.
 - Add a row to the Configuration table with fields: PartitionKey: LOCAL, RowKey: SFA.DAS.LoginService_1.0, Data: {{The contents of the local config json file}}.
 - Update Configuration SFA.DAS.LoginService_1.0, Data { "SqlConnectionstring":"Server={{local instance name}};Initial Catalog={{database name}};Trusted_Connection=True;" }
+
+sample appsettings.development.json file:
+```json
+{
+  "BaseUrl": "https://localhost:5001/",
+  "SqlConnectionString": "Server=.;Database=SFA.DAS.ApprenticeLoginService.Database;Trusted_Connection=True;",
+  "PasswordResetExpiryInHours": 1,
+  "CertificateThumbprint": "7ffcb87cc97c8ff8eaac9494a36c680e7c9560cb",
+  "NServiceBusConfiguration": {
+    "SharedServiceBusEndpointUrl": "Endpoint=sb://das-at-shared-ns.servicebus.windows.net/",
+    "NServiceBusLicense": "LicenseHere"
+  },
+  "MaxFailedAccessAttempts": 10,
+  "DaysInvitationIsValidFor": 7,
+
+  "Logging": {
+    "LogLevel": {
+      "Default": "Debug",
+      "System": "Information",
+      "Microsoft": "Information"
+    }
+  },
+  "AllowedHosts": "*",
+  "ConfigurationStorageConnectionString": "UseDevelopmentStorage=true;",
+  "ConnectionStrings": {
+    "Redis": "localhost:6379"
+  },
+  "EnvironmentName": "LOCAL",
+  "ApprenticeLoginApi": {
+    "ApiBaseUrl": "https://localhost:5001/",
+    "IdentifierUri": "https://citizenazuresfabisgov.onmicrosoft.com/das-at-alogin-as-ar"
+  }
+}
+```
 
 ##### Complete Data Setup
 
