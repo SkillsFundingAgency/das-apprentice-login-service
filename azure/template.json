@@ -106,6 +106,10 @@
         "appServicePlanSize": {
             "type": "string",
             "defaultValue": "1"
+        },
+        "utcValue": {
+            "type": "string",
+            "defaultValue": "[utcNow('yyMMddHHmmss')]"
         }
     },
     "variables": {
@@ -129,7 +133,7 @@
         },
         {
             "apiVersion": "2020-06-01",
-            "name": "app-service-certificate",
+            "name": "[concat('app-service-certificate-', parameters('utcValue'))]",
             "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
@@ -153,7 +157,7 @@
         },
         {
             "apiVersion": "2020-06-01",
-            "name": "app-service-application-insights",
+            "name": "[concat('app-service-application-insights-', parameters('utcValue'))]",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[variables('resourceGroupName')]",
             "properties": {
@@ -177,7 +181,7 @@
         },
         {
             "apiVersion": "2020-06-01",
-            "name": "app-service",
+            "name": "[concat('app-service-', parameters('utcValue'))]",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[variables('resourceGroupName')]",
             "properties": {
@@ -212,7 +216,7 @@
                                 },
                                 {
                                     "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                                    "value": "[reference('app-service-application-insights').outputs.InstrumentationKey.value]"
+                                    "value": "[reference(concat('app-service-application-insights-', parameters('utcValue'))).outputs.InstrumentationKey.value]"
                                 },
                                 {
                                     "name": "ASPNETCORE_ENVIRONMENT",
@@ -220,7 +224,7 @@
                                 },
                                 {
                                     "name": "WEBSITE_LOAD_CERTIFICATES",
-                                    "value": "[reference('app-service-certificate').outputs.certificateThumbprint.value]"
+                                    "value": "[reference(concat('app-service-certificate-', parameters('utcValue'))).outputs.certificateThumbprint.value]"
                                 }
                             ]
                         }
@@ -240,7 +244,7 @@
                         "value": "[parameters('customHostname')]"
                     },
                     "certificateThumbprint": {
-                        "value": "[reference('app-service-certificate').outputs.certificateThumbprint.value]"
+                        "value": "[reference(concat('app-service-certificate-', parameters('utcValue'))).outputs.certificateThumbprint.value]"
                     },
                     "ipSecurityRestrictions": {
                         "value": "[parameters('frontEndAccessRestrictions')]"
@@ -253,7 +257,7 @@
         },
         {
             "apiVersion": "2020-06-01",
-            "name": "[concat('app-service-role-assignments-', copyIndex())]",
+            "name": "[concat('app-service-role-assignments-', copyIndex(), '-', parameters('utcValue'))]",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
             "properties": {
@@ -264,7 +268,7 @@
                 },
                 "parameters": {
                     "principalId": {
-                        "value": "[createArray(reference('app-service').outputs.managedServiceIdentityId.value, reference('app-service').outputs.stagingManagedServiceIdentityId.value)[copyIndex()]]"
+                        "value": "[createArray(reference(concat('app-service-', parameters('utcValue'))).outputs.managedServiceIdentityId.value, reference(concat('app-service-', parameters('utcValue'))).outputs.stagingManagedServiceIdentityId.value)[copyIndex()]]"
                     },
                     "assignmentType": {
                         "value": "ServiceBusSender"
@@ -281,7 +285,7 @@
         },
         {
             "apiVersion": "2020-06-01",
-            "name": "sql-database",
+            "name": "[concat('sql-database-', parameters('utcValue'))]",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
             "properties": {
@@ -320,7 +324,7 @@
         },
         {
             "apiVersion": "2020-06-01",
-            "name": "function-app-subnet",
+            "name": "[concat('function-app-subnet-', parameters('utcValue'))]",
             "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
@@ -353,7 +357,7 @@
         },
         {
             "apiVersion": "2020-06-01",
-            "name": "app-service-plan",
+            "name": "[concat('app-service-plan-', parameters('utcValue'))]",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[variables('resourceGroupName')]",
             "properties": {
@@ -380,7 +384,7 @@
         },
         {
             "apiVersion": "2020-06-01",
-            "name": "function-app-application-insights",
+            "name": "[concat('function-app-application-insights-', parameters('utcValue'))]",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[variables('resourceGroupName')]",
             "properties": {
@@ -404,7 +408,7 @@
         },
         {
             "apiVersion": "2020-06-01",
-            "name": "function-app",
+            "name": "[concat('function-app-', parameters('utcValue'))]",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[variables('resourceGroupName')]",
             "properties": {
@@ -424,7 +428,7 @@
                         "value": "[variables('resourceGroupName')]"
                     },
                     "subnetResourceId": {
-                        "value": "[reference('function-app-subnet').outputs.SubnetResourceId.value]"
+                        "value": "[reference(concat('function-app-subnet-', parameters('utcValue'))).outputs.SubnetResourceId.value]"
                     },
                     "functionAppAppSettings": {
                         "value": {
@@ -447,7 +451,7 @@
                                 },
                                 {
                                     "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                                    "value": "[reference('function-app-application-insights').outputs.InstrumentationKey.value]"
+                                    "value": "[reference(concat('function-app-application-insights-', parameters('utcValue'))).outputs.InstrumentationKey.value]"
                                 },
                                 {
                                     "name": "AzureWebJobsStorage",
@@ -491,12 +495,12 @@
             },
             "dependsOn": [
                 "[variables('resourceGroupName')]",
-                "app-service-plan"
+                "[concat('app-service-plan-', parameters('utcValue'))]"
             ]
         },
         {
             "apiVersion": "2020-06-01",
-            "name": "function-app-role-assignment",
+            "name": "[concat('function-app-role-assignment-', parameters('utcValue'))]",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
             "properties": {
@@ -507,7 +511,7 @@
                 },
                 "parameters": {
                     "principalId": {
-                        "value": "[reference('function-app').outputs.managedServiceIdentityId.value]"
+                        "value": "[reference(concat('function-app-', parameters('utcValue'))).outputs.managedServiceIdentityId.value]"
                     },
                     "assignmentType": {
                         "value": "ServiceBusOwner"
@@ -530,7 +534,7 @@
         },
         "CertificateThumbprint": {
             "type": "string",
-            "value": "[reference('app-service-certificate').outputs.certificateThumbprint.value]"
+            "value": "[reference(concat('app-service-certificate-', parameters('utcValue'))).outputs.certificateThumbprint.value]"
         },
         "FunctionAppName": {
             "type": "string",
