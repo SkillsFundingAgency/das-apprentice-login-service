@@ -18,7 +18,7 @@
     "SFA.DAS.LoginService.Web": {
       "commandName": "Project",
       "launchBrowser": false,
-      "applicationUrl": "https://localhost:5001;http://localhost:5000",
+      "applicationUrl": "https://localhost:53401;http://localhost:53400",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
