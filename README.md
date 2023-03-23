@@ -14,9 +14,9 @@ See [Support Site](https://skillsfundingagency.atlassian.net/wiki/spaces/NDL/pag
 
 ### Developer Setup
 
-runs on: https://localhost:5001
+runs on: https://localhost:53401
 
-The SFA.DAS.LoginService.Web project should run in kestrel to ensure that the 5001 port is used
+The SFA.DAS.LoginService.Web project should run in kestrel to ensure that the 53401 port is used
 
 #### Requirements
 
@@ -58,7 +58,7 @@ also see onboarding guide [here](https://skillsfundingagency.atlassian.net/wiki/
 sample appsettings.development.json file:
 ```json
 {
-  "BaseUrl": "https://localhost:5001/",
+  "BaseUrl": "https://localhost:53401/",
   "SqlConnectionString": "Server=.;Database=SFA.DAS.ApprenticeLoginService.Database;Trusted_Connection=True;",
   "PasswordResetExpiryInHours": 1,
   "CertificateThumbprint": "7ffcb87cc97c8ff8eaac9494a36c680e7c9560cb",
@@ -83,7 +83,7 @@ sample appsettings.development.json file:
   },
   "EnvironmentName": "LOCAL",
   "ApprenticeLoginApi": {
-    "ApiBaseUrl": "https://localhost:5001/",
+    "ApiBaseUrl": "https://localhost:53401/",
     "IdentifierUri": "https://citizenazuresfabisgov.onmicrosoft.com/das-at-alogin-as-ar"
   }
 }
@@ -99,7 +99,7 @@ For an example follow the [Setup Guide]() to populate a local database; scripts 
 - run `dotnet restore`
 - run `dotnet run`
 
-The Login service is now running waiting to recevie OpenId requests to authenticate a client application on port 5001 by default.
+The Login service is now running waiting to receive OpenId requests to authenticate a client application on port 53401 by default.
 
 Please not that if this is run from VS using IIS Express (not recomended) the port number is different and would need to be configured in a client app as the valid ranges of SSL ports in IIS Express are 44300 to 44399.
 
@@ -115,10 +115,10 @@ The following example client configuration is taken from the Apprentice service 
 
 ```json
 {
-  "MetadataAddress": "https://localhost:5001/.well-known/openid-configuration",
+  "MetadataAddress": "https://localhost:53401/.well-known/openid-configuration",
   "ClientId": "assessor",
   "ApiClientSecret": "",
-  "ApiUri": "https://localhost:5001/Invitations/08372E20-BECD-415C-9925-4D33DDF67FAF",   <- This GUID needs to be the Id of the record in LoginService.Clients table
+  "ApiUri": "https://localhost:53401/Invitations/08372E20-BECD-415C-9925-4D33DDF67FAF",   <- This GUID needs to be the Id of the record in LoginService.Clients table
   "RedirectUri": "https://localhost:5015/Account/SignIn",
   "CallbackUri": "https://localhost:5015/Account/Callback",
   "SignOutRedirectUri": "https://localhost:5015/Account/SignedOut"
