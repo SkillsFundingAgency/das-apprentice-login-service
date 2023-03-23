@@ -38,7 +38,7 @@ namespace SFA.DAS.LoginService.Samples.MvcInvitationClient
                 {
                     options.SignInScheme = "Cookies";
 
-                    options.Authority = "https://localhost:5001";
+                    options.Authority = "https://localhost:5071";
                     options.RequireHttpsMetadata = false;
 
                     options.ClientId = "apprentice";

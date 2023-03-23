@@ -41,7 +41,7 @@ namespace SFA.DAS.LoginService.EmailService
 
         public Task SendChangeEmailCode(ChangeUserEmailViewModel viewModel)
         {
-            return Task.Run(() => _logger.LogInformation($"CHANGE USER EMAIL sent to {viewModel.EmailAddress}"));
+            return Task.Run(() => _logger.LogInformation($"CHANGE USER EMAIL sent to {viewModel.EmailAddress} TOKEN {viewModel.ConfirmEmailLink}"));
         }
     }
 }

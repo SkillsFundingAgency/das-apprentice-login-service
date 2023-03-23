@@ -13,7 +13,7 @@ namespace SFA.DAS.LoginService.Samples.MvcInvitationClient
     {
         public const string IdentityServiceHost =
                 //*
-                "https://localhost:5001"
+                "https://localhost:5071"
                 /*/
                 "https://das-at-aplogin-as.azurewebsites.net"
                 //*/
