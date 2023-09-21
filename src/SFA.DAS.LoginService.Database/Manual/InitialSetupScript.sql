@@ -1,20 +1,15 @@
 ﻿/*
-	This script will create initial setup data for a new apprentice login service database and was copied from confluence
+	This script will create initial setup data for a new apprentice login service database running on localhost
 	https://skillsfundingagency.atlassian.net/wiki/spaces/NDL/pages/2595815438/Using+das-login-service+for+authentication+provider
 
-	First two values need to be set up manually amd then the script ran. Only work at the moment on a new database
+	This only works currently on a new database
 */
 
 
-declare @apprenticePortalHostname as nvarchar(100) = 'localhost:7070' -- WITHOUT trailing slash (or scheme) 
-declare @apprenticeAccountWebHost as nvarchar(100); 
-set @apprenticeAccountWebHost = 'https://localhost:7080'
-declare @apprenticeFeedbackWebHost as nvarchar(100); 
-set @apprenticeFeedbackWebHost = 'https://localhost:7090'
-
-declare @apprenticePortalWebHost as nvarchar(100); set @apprenticePortalWebHost = 'https://' + @apprenticePortalHostname
-declare @confirmWebHost as nvarchar(100); set @confirmWebHost = 'https://confirm.' + @apprenticePortalHostname
-
+declare @apprenticePortalWebHost as nvarchar(100) = 'https://localhost:5001';
+declare @apprenticeCommitmentsWebHost as nvarchar(100) = 'https://localhost:7070';
+declare @apprenticeAccountsWebHost as nvarchar(100) = 'https://localhost:7080';
+declare @apprenticeFeedbackWebHost as nvarchar(100) = 'https://localhost:7090';
 
 ---- [IdentityServer].[IdentityResources]
 
@@ -38,7 +33,6 @@ insert [IdentityServer].[IdentityClaims] ([Id], [Type], [IdentityResourceId])
 select * from (values 
 	(1, N'sub', 1),	
 	(2, N'updated_at', 2),	
-	(2, N'updated_at', 2),	
 	(8, N'email', 3),	
 	(10, N'preferred_username', 2),	
 	(13, N'given_name', 2),	
@@ -52,8 +46,6 @@ where not exists (select 1 from [IdentityServer].[IdentityClaims] where Id = ins
 
 set identity_insert [IdentityServer].[IdentityClaims] off
 
-
-
 ---- [IdentityServer].[Clients]
 
 set identity_insert [IdentityServer].[Clients] on
@@ -65,31 +57,17 @@ as insrt ([Id], [Enabled], [ClientId], [ProtocolType], [RequireClientSecret], [C
 where not exists (select 1 from [IdentityServer].[Clients] where Id = insrt.Id)
 
 set identity_insert [IdentityServer].[Clients] off
-  
- 
- 
----- [IdentityServer].[ClientGrantTypes]
 
-set identity_insert [IdentityServer].[ClientGrantTypes] on
 
-insert [IdentityServer].[ClientGrantTypes] ([Id], [GrantType], [ClientId])
-select * from (values 
-	(1, N'client_credentials', 1))
-as insrt ([Id], [GrantType], [ClientId])
-where not exists (select 1 from [IdentityServer].[ClientGrantTypes] where Id = insrt.Id)
-
-set identity_insert [IdentityServer].[ClientGrantTypes] off
-
- 
 ---- [IdentityServer].[ClientRedirectUris]
 
 set identity_insert [IdentityServer].[ClientRedirectUris] on
 
 insert [IdentityServer].[ClientRedirectUris] ([Id], [RedirectUri], [ClientId])
 select * from (values 
-	(1, @apprenticePortalWebHost + N'/signin-oidc', 2),
-	(2, @confirmWebHost + N'/signin-oidc', 2), 
-	(3, @apprenticeAccountWebHost + N'/signin-oidc', 2),
+	(1, @apprenticePortalWebHost + N'/signin-oidc', 2), 
+    (2, @apprenticeCommitmentsWebHost + N'/signin-oidc', 2), 
+	(3, @apprenticeAccountsWebHost + N'/signin-oidc', 2),
 	(4, @apprenticeFeedbackWebHost + N'/signin-oidc', 2))
 as insrt ([Id], [RedirectUri], [ClientId])
 where not exists (select 1 from [IdentityServer].[ClientRedirectUris] where Id = insrt.Id)
@@ -103,8 +81,8 @@ set identity_insert [IdentityServer].[ClientPostLogoutRedirectUris] on
 insert [IdentityServer].[ClientPostLogoutRedirectUris] ([Id], [PostLogoutRedirectUri], [ClientId])
 select * from (values 
 	(1, @apprenticePortalWebHost + N'/signout-callback-oidc', 2),
-	(2, @confirmWebHost + N'/signout-callback-oidc', 2),
-	(3, @apprenticeAccountWebHost + N'/signout-callback-oidc', 2),
+    (2, @apprenticeCommitmentsWebHost + N'/signout-callback-oidc', 2),
+	(3, @apprenticeAccountsWebHost + N'/signout-callback-oidc', 2),
 	(4, @apprenticeFeedbackWebHost + N'/signout-callback-oidc', 2))
 as insrt ([Id], [PostLogoutRedirectUri], [ClientId])
 where not exists (select 1 from [IdentityServer].[ClientPostLogoutRedirectUris] where Id = insrt.Id)
@@ -149,9 +127,9 @@ select * from (values
     N'{
     "ServiceName": "My apprenticeship",
     "ServiceTeam": "My apprenticeship service team",
-    "SupportUrl": "' + @confirmWebHost + '/",
+    "SupportUrl": "' + @apprenticeCommitmentsWebHost + '/",
     "CreateAccountUrl": null,
-    "PostPasswordResetReturnUrl": "' + @confirmWebHost + '/apprenticeships",
+    "PostPasswordResetReturnUrl": "' + @apprenticeCommitmentsWebHost + '/apprenticeships",
     "EmailTemplates": [{
             "Name": "SignUpInvitation",
             "TemplateId": " 4f04cf81-b291-4577-9452-ecab875ed6f8 "
