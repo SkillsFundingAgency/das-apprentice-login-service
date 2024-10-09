@@ -5,66 +5,31 @@ using SFA.DAS.LoginService.Types.GetClientById;
 using SFA.DAS.LoginService.Web.Controllers.CreateAccount.ViewModels;
 using System;
 using System.Threading.Tasks;
+using SFA.DAS.LoginService.Web.AppStart;
 
 namespace SFA.DAS.LoginService.Web.Controllers.CreateAccount
 {
     public class CreateAccountController : BaseController
     {
-        public CreateAccountController(IMediator mediator)
+        private readonly HomePageRedirect _homePageRedirect;
+
+        public CreateAccountController(IMediator mediator, HomePageRedirect homePageRedirect)
             : base(mediator)
         {
+            _homePageRedirect = homePageRedirect;
         }
 
         [HttpGet("/CreateAccount/{clientId}")]
         public async Task<IActionResult> Get(Guid clientId, string returnUrl)
         {
-            var client = await Mediator.Send(new GetClientByIdRequest { ClientId = clientId });
-            SetViewBagClientId(clientId);
-
-            var vm = new CreateAccountViewModel
-            {
-                ClientId = clientId,
-                Backlink = client.ServiceDetails.SupportUrl,
-                ReturnUrl = returnUrl,
-            };
-
-            return View("CreateAccount", vm);
+            return RedirectPermanent(_homePageRedirect.HomePage());
+            
         }
 
         [HttpPost("/CreateAccount/{clientId}")]
         public async Task<ActionResult> Post(Guid clientId, CreateAccountViewModel vm)
         {
-            var client = await Mediator.Send(new GetClientByIdRequest { ClientId = clientId });
-            vm.Backlink = client.ServiceDetails.SupportUrl;
-
-            if (!ModelState.IsValid)
-            {
-                return View("CreateAccount", vm);
-            }
-
-            if (vm.Password == vm.ConfirmPassword)
-            {
-                var response = await Mediator.Send(new CreateAccountRequest { Email = vm.Email, Password = vm.Password });
-                if (response.PasswordValid)
-                {
-                    return Redirect(vm.ReturnUrl);
-                }
-
-                if(response.DuplicateEmail)
-                    ModelState.AddModelError("Email", "This email address already has an apprentice account");
-                else
-                    ModelState.AddModelError("", "Sorry, we couldn't create an account.");
-
-                return View("CreateAccount", vm);
-            }
-
-            ModelState.AddModelError("Password", "Passwords should match");
-
-            return View("CreateAccount", new CreateAccountViewModel()
-            {
-                Password = vm.Password,
-                ConfirmPassword = vm.ConfirmPassword
-            });
+            return RedirectPermanent(_homePageRedirect.HomePage());
         }
 
         private void SetModelState(CreateAccountResponse response)

@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.LoginService.Web.UnitTests", "SFA.DAS.LoginService.Web.UnitTests\SFA.DAS.LoginService.Web.UnitTests.csproj", "{A839DC78-980E-4BDD-A094-4AC15BA3B82A}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.LoginService.Web", "SFA.DAS.LoginService.Web\SFA.DAS.LoginService.Web.csproj", "{1B61D1AA-4ABC-450A-BFDE-599D3EC31A80}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.LoginService.Application", "SFA.DAS.LoginService.Application\SFA.DAS.LoginService.Application.csproj", "{9CD6AEC3-2906-461F-8827-333FF85AB086}"
@@ -14,8 +12,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.LoginService.Application.UnitTests", "SFA.DAS.LoginService.Application.UnitTests\SFA.DAS.LoginService.Application.UnitTests.csproj", "{A5175E30-7D7D-4A12-9CF1-C66B69B6229E}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SFA.DAS.LoginService.Database", "SFA.DAS.LoginService.Database\SFA.DAS.LoginService.Database.sqlproj", "{0A541A6E-C679-4D1F-80BC-54CAEC6C734C}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.LoginService.Web.IntegrationTests", "SFA.DAS.LoginService.Web.IntegrationTests\SFA.DAS.LoginService.Web.IntegrationTests.csproj", "{C9DB6533-1CE8-4463-B32A-CEEFC6846CCF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.LoginService.EmailService", "SFA.DAS.LoginService.EmailService\SFA.DAS.LoginService.EmailService.csproj", "{C5A203A5-DC02-4092-A086-80FB67F706B5}"
 EndProject
@@ -41,10 +37,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A839DC78-980E-4BDD-A094-4AC15BA3B82A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A839DC78-980E-4BDD-A094-4AC15BA3B82A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A839DC78-980E-4BDD-A094-4AC15BA3B82A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A839DC78-980E-4BDD-A094-4AC15BA3B82A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1B61D1AA-4ABC-450A-BFDE-599D3EC31A80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1B61D1AA-4ABC-450A-BFDE-599D3EC31A80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B61D1AA-4ABC-450A-BFDE-599D3EC31A80}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -67,10 +59,6 @@ Global
 		{0A541A6E-C679-4D1F-80BC-54CAEC6C734C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A541A6E-C679-4D1F-80BC-54CAEC6C734C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0A541A6E-C679-4D1F-80BC-54CAEC6C734C}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{C9DB6533-1CE8-4463-B32A-CEEFC6846CCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C9DB6533-1CE8-4463-B32A-CEEFC6846CCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C9DB6533-1CE8-4463-B32A-CEEFC6846CCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C9DB6533-1CE8-4463-B32A-CEEFC6846CCF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C5A203A5-DC02-4092-A086-80FB67F706B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C5A203A5-DC02-4092-A086-80FB67F706B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5A203A5-DC02-4092-A086-80FB67F706B5}.Release|Any CPU.ActiveCfg = Release|Any CPU

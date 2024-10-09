@@ -12,6 +12,7 @@ using SFA.DAS.LoginService.Web.Infrastructure;
 using System;
 using SFA.DAS.LoginService.Application.Interfaces;
 using SFA.DAS.LoginService.Application.Services;
+using SFA.DAS.LoginService.Web.AppStart;
 
 namespace SFA.DAS.LoginService.Web
 {
@@ -82,6 +83,8 @@ namespace SFA.DAS.LoginService.Web
             _logger.LogInformation("NServiceBusConfigration: {@config}", nsbConfig?.SharedServiceBusEndpointUrl);
             services.AddSingleton(nsbConfig);
             services.AddNServiceBus();
+
+            services.AddSingleton(new HomePageRedirect(Configuration["ResourceEnvironmentName"]));
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
