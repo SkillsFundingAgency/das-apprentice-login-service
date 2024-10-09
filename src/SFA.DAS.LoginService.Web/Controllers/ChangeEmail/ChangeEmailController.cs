@@ -8,72 +8,39 @@ using SFA.DAS.LoginService.Web.Infrastructure;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.LoginService.Web.AppStart;
 
 namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
 {
     public class ChangeEmailController : BaseController
     {
-        public ChangeEmailController(IMediator mediator)
+        private readonly HomePageRedirect _homePageRedirect;
+
+        public ChangeEmailController(IMediator mediator, HomePageRedirect homePageRedirect)
             : base(mediator)
         {
+            _homePageRedirect = homePageRedirect;
         }
 
         [Authorize]
         [HttpGet("profile/{clientId}/changeemail")]
         public async Task<IActionResult> ChangeEmail(Guid clientId)
         {
-            var client = await Mediator.Send(new GetClientByIdRequest { ClientId = clientId });
-
-            var model = new ChangeEmailViewModel
-            {
-                Backlink = client.ServiceDetails.PostPasswordResetReturnUrl,
-            };
-
-            return View(model);
+            return RedirectPermanent(_homePageRedirect.HomePage());
         }
 
         [Authorize]
         [HttpPost("profile/{clientId}/changeemail")]
         public async Task<IActionResult> ChangeEmail([FromRoute] Guid clientId, [FromForm] ChangeEmailViewModel model)
         {
-            var client = await Mediator.Send(new GetClientByIdRequest { ClientId = clientId });
-            model.Backlink = client.ServiceDetails.PostPasswordResetReturnUrl;
-
-            var response = await Mediator.Send(new StartChangeEmailRequest
-            {
-                ClientId = clientId,
-                UserId = User.Claims.Subject(),
-                NewEmailAddress = model.NewEmailAddress,
-                ConfirmEmailAddress = model.ConfirmEmailAddress
-            });
-
-            if (response.HasErrors)
-            {
-                SetModelState(response);
-                return View("ChangeEmail", model);
-            }
-
-            return RedirectToAction("WaitToConfirmNewEmail", new
-            {
-                ClientId = clientId,
-                Email = model.NewEmailAddress,
-                Resend = model.Resend,
-            });
+            return RedirectPermanent(_homePageRedirect.HomePage());
         }
 
         [Authorize]
         [HttpGet("profile/{clientId}/waittoconfirmnewemail")]
         public IActionResult WaitToConfirmNewEmail([FromRoute] Guid clientId, [FromQuery] string email, [FromQuery] bool resend)
         {
-            var model = new ChangeEmailViewModel
-            {
-                Backlink = $"/profile/{clientId}/changeemail",
-                NewEmailAddress = email,
-                ConfirmEmailAddress = email,
-                Resend = resend,
-            };
-
-            return View(model);
+            return RedirectPermanent(_homePageRedirect.HomePage());
         }
 
         private void SetModelState(StartChangeEmailResponse response)

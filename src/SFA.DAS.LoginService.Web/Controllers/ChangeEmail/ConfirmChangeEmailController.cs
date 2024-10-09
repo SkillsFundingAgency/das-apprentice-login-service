@@ -10,59 +10,36 @@ using SFA.DAS.LoginService.Web.Infrastructure;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.LoginService.Web.AppStart;
 
 namespace SFA.DAS.LoginService.Web.Controllers.ChangeEmail
 {
     public class ConfirmChangeEmailController : BaseController
     {
-        public ConfirmChangeEmailController(IMediator mediator) : base(mediator)
+        private readonly HomePageRedirect _homePageRedirect;
+
+        public ConfirmChangeEmailController(IMediator mediator, HomePageRedirect homePageRedirect) : base(mediator)
         {
+            _homePageRedirect = homePageRedirect;
         }
 
         [HttpGet("profile/{clientId}/changeemail/confirm")]
         public IActionResult ConfirmChangeEmail(Guid clientId, [FromQuery] string email, [FromQuery] string token)
         {
-            return View(new ConfirmChangeEmailViewModel
-            {
-                ClientId = clientId,
-                NewEmailAddress = email,
-                Token = token,
-            });
+            return RedirectPermanent(_homePageRedirect.HomePage());
         }
 
         [HttpPost("profile/{clientId}/changeemail/confirm")]
         public async Task<IActionResult> ConfirmChangeEmail(Guid clientId, [FromForm] ConfirmChangeEmailViewModel model)
         {
-            model.ClientId = clientId;
-            var currentEmail = User.Identity.Name;
-
-            var response = await Mediator.Send(new ConfirmChangeEmailRequest
-            {
-                SubjectId = User.Claims.Subject(),
-                CurrentEmailAddress = currentEmail,
-                NewEmailAddress = model.NewEmailAddress,
-                Token = model.Token.Replace(" ", "+"),
-                Password = model.Password,
-            });
-
-            if (response.HasErrors)
-            {
-                SetModelState(response, model);
-                return View(model);
-            }
-
-            return RedirectToAction("ChangeEmailSuccessful", new { ClientId = clientId });
+            return RedirectPermanent(_homePageRedirect.HomePage());
         }
 
         [Authorize]
         [HttpGet("profile/{clientId}/changeemail/changeemailsuccessful")]
         public async Task<IActionResult> ChangeEmailSuccessful(Guid clientId)
         {
-            SetViewBagClientId(clientId);
-
-            var client = await Mediator.Send(new GetClientByIdRequest() { ClientId = clientId });
-
-            return View(new ChangeEmailSuccessfulViewModel() { ReturnUrl = client.ServiceDetails.PostPasswordResetReturnUrl, ServiceName = client.ServiceDetails.ServiceName });
+            return RedirectPermanent(_homePageRedirect.HomePage());
         }
 
         private void SetModelState(ConfirmChangeEmailResponse response, ConfirmChangeEmailViewModel model)
