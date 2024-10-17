@@ -9,10 +9,15 @@
         init: function() {
             if (!this.passwordInput) return false;
             document.addEventListener("click", this.togglePassword.bind(this));
+            document.addEventListener("keyup", this.togglePassword.bind(this));
         },
 
         togglePassword: function(event) {
-            if (event.target.id !== "show-hide") return false;
+            if (event.target.id !== "show-hide" && event.target.id !== "show-hide-label") return false;
+
+            if (event instanceof KeyboardEvent){
+                if (event.key !== ' ' && event.key !== 'Enter') return false
+            }
 
             var confirmPasswordInput = document.querySelector(
                 "[data-show-hide='confirm-password']"
